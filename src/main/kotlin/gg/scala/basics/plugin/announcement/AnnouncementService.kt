@@ -113,7 +113,9 @@ object AnnouncementService : Runnable
             .async()
             .runRepeating(
                 this,
-                0L, TimeUnit.SECONDS,
+                // we're starting this delayed because we don't want the
+                // initial announcement being sent EVERY time the new models are saved.
+                cached.iterationSpeed, cached.iterationTimeUnit,
                 cached.iterationSpeed, cached.iterationTimeUnit
             )
     }

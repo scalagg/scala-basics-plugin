@@ -24,6 +24,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
     init
     {
         updateAfterClick = true
+        placeholder = true
     }
 
     override fun getButtons(player: Player): Map<Int, Button>

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
  */
 class AnnouncementConfigMenu : Menu("Announcement Config")
 {
-    private val model = AnnouncementService.configModel()
+    private val model = AnnouncementService.configModel().copy()
     private var allowsUpdate = false
 
     init

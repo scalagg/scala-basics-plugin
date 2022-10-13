@@ -71,16 +71,7 @@ class AnnouncementMenu : PaginatedMenu()
                     "${CC.GREEN}Click to edit!"
                 )
                 .toButton { _, _ ->
-                    val model = AnnouncementService.configModel()
-                    model.announcements += Announcement(
-                        listOf("Announcement dummy text.")
-                    )
-
-                    AnnouncementService.applyKvUpdate(model)
-
-                    player.sendMessage(
-                        "${CC.GREEN}You've created a new announcement."
-                    )
+                    AnnouncementConfigMenu().openMenu(player)
                 }
         )
     }
@@ -118,10 +109,7 @@ class AnnouncementMenu : PaginatedMenu()
 
                                 player.sendMessage("${CC.RED}Deleted announcement #$index!")
                             }
-                        }
-                    } else
-                    {
-
+                        }.openMenu(player)
                     }
                 }
         }

@@ -18,12 +18,17 @@ import java.util.concurrent.TimeUnit
  */
 class AnnouncementConfigMenu : Menu("Announcement Config")
 {
-    val model = AnnouncementService.configModel()
+    private val model = AnnouncementService.configModel()
+    private var allowsUpdate = false
+
+    init
+    {
+        updateAfterClick = true
+    }
 
     override fun getButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
-        var allowsUpdate = false
 
         buttons[buttons.size] = ItemBuilder
             .of(Material.BOW)
@@ -68,35 +73,6 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
 
                         player.sendMessage("${CC.SEC}from")
                         player.sendMessage(oldLinePrefix)
-
-                        allowsUpdate = true
-                        openMenu(player)
-                    }
-                    .start(player)
-            }
-
-        buttons[buttons.size] = ItemBuilder
-            .of(Material.APPLE)
-            .name("${CC.B_GREEN}Iteration Speed")
-            .addToLore(
-                "${CC.WHITE}State:",
-                "${CC.GRAY}${model.iterationSpeed}",
-                "",
-                "${CC.GREEN}Click to edit."
-            )
-            .toButton { _, _ ->
-                player.closeInventory()
-
-                NumberPrompt()
-                    .acceptInput { input ->
-                        val oldLinePrefix = model.iterationSpeed
-                        model.iterationSpeed = input.toLong()
-
-                        player.sendMessage("${CC.SEC}Set speed to")
-                        player.sendMessage(model.iterationSpeed.toString())
-
-                        player.sendMessage("${CC.SEC}from")
-                        player.sendMessage(oldLinePrefix.toString())
 
                         allowsUpdate = true
                         openMenu(player)
@@ -188,9 +164,13 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
                 if (allowsUpdate) 5 else 8
             )
             .name("${
-                if (allowsUpdate) CC.B_GREEN else CC.GRAY
+                if (allowsUpdate) CC.B_GREEN else CC.RED
             }Save")
             .addToLore(
+                "${CC.WHITE}Save the changes you made",
+                "${CC.WHITE}in this menu to the cloud!",
+                "",
+                "${CC.GRAY}(and all other servers)",
                 "",
                 "${CC.GREEN}Click to save changes."
             )
@@ -200,6 +180,8 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
                     player.sendMessage("${CC.RED}No changes were made.")
                     return@toButton
                 }
+
+                allowsUpdate = false
 
                 AnnouncementService.applyKvUpdate(model)
                 player.sendMessage("${CC.GREEN}Changes made! You can leave the menu now.")

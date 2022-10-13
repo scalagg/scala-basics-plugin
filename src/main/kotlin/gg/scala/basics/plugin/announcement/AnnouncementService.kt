@@ -32,6 +32,8 @@ object AnnouncementService : Runnable
         plugin.aware.internal().connect()
     }
 
+    fun configModel() = this.cached
+
     @Configure
     fun configure()
     {
@@ -54,13 +56,20 @@ object AnnouncementService : Runnable
                 cached.announcements.first()
             }
 
-        val linesBeingSent = announcement
+        var linesBeingSent = announcement
             .lines.toMutableList()
 
         if (cached.padding)
         {
             linesBeingSent.add(0, "")
             linesBeingSent.add("")
+        }
+
+        if (cached.linePrefix.isNotEmpty())
+        {
+            linesBeingSent = linesBeingSent
+                .map { "${cached.linePrefix}$it" }
+                .toMutableList()
         }
 
         for (player in Players.all())

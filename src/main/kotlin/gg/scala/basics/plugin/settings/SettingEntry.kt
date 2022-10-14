@@ -11,6 +11,7 @@ import net.evilblock.cubed.util.bukkit.ItemBuilder
 interface SettingEntry : DisplayPredicate, Displayable
 {
     val id: String
-    val valueType: Class<SettingValue<*>>
+    val valueType: Class<out SettingValue>
     val item: ItemBuilder
+    val default: SettingValue
 }

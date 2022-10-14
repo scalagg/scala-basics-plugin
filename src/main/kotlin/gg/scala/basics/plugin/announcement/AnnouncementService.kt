@@ -3,6 +3,7 @@ package gg.scala.basics.plugin.announcement
 import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -74,6 +75,12 @@ object AnnouncementService : Runnable
 
         for (player in Players.all())
         {
+            val profile = BasicsProfileService
+                .find(player)
+                ?: continue
+
+
+
             linesBeingSent.forEach(player::sendMessage)
         }
     }

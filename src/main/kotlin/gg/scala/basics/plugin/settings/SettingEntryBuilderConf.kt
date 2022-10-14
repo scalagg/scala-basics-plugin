@@ -10,7 +10,8 @@ import org.bukkit.entity.Player
  */
 data class SettingEntryBuilderConf(
     var id: String = "",
-    var clazz: Class<SettingValue<*>>? = null,
+    var clazz: Class<out SettingValue>? = null,
+    var default: SettingValue? = null,
     var item: ItemBuilder = ItemBuilder(Material.AIR),
     var displayName: String = "",
     var displayPredicate: (Player) -> Boolean = { true },

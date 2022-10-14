@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
  * @author GrowlyX
  * @since 10/14/2022
  */
-enum class StateSettingValue : SettingValue<StateSettingValue>
+enum class StateSettingValue : SettingValue
 {
     ENABLED
     {
@@ -17,9 +17,6 @@ enum class StateSettingValue : SettingValue<StateSettingValue>
     {
         override val displayName = "Disabled"
     };
-
-    override val default: StateSettingValue
-        get() = ENABLED
 
     override fun display(player: Player) = true
 }

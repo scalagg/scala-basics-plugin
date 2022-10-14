@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions
  *
  * TODO: Move to commons plugin
  */
-object EnumUtils
+object SettingEnumInternal
 {
     fun <T : Enum<T>> getFirstConstant(enumClass: Class<T>): T?
     {

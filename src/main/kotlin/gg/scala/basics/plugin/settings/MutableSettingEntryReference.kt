@@ -1,6 +1,6 @@
 package gg.scala.basics.plugin.settings
 
-import gg.scala.basics.plugin.settings.utils.EnumUtils
+import gg.scala.basics.plugin.settings.utils.SettingEnumInternal
 
 /**
  * @author GrowlyX
@@ -23,7 +23,7 @@ data class MutableSettingEntryReference(
     {
         if (!display)
         {
-            return EnumUtils.getFirstConstant(T::class.java)!!
+            return SettingEnumInternal.getFirstConstant(T::class.java)!!
         }
 
         if (T::class.java.name != clazz)

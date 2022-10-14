@@ -25,7 +25,7 @@ object BroadcastCommand : ScalaCommand()
     fun onAlert(sender: CommandSender, message: String)
     {
         Bukkit.broadcastMessage(
-            "${CC.GRAY}[${CC.PRI}Alert${CC.GRAY}] ${translate(message)}"
+            "${CC.GRAY}[${CC.PRI}Alert${CC.GRAY}] ${CC.RESET}${translate(message)}"
         )
 
         sender performed "broadcasted local message"

@@ -23,12 +23,12 @@ object WhatServerCommand : ScalaCommand()
     {
         player.sendMessage(
             "${CC.SEC}You've been connected to ${CC.PRI}${Lemon.instance.settings.id}${CC.SEC}.",
-            "${CC.SEC}You've been connected to this server for ${
+            "${CC.SEC}You've been connected to this server for ${CC.PRI}${
                 DurationFormatUtils.formatDurationWords(
                     System.currentTimeMillis() - LoginTimeService.loginTime(player.bukkit()), 
                     true, true
                 )
-            }"
+            }${CC.SEC}."
         )
     }
 }

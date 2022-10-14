@@ -24,6 +24,14 @@ import org.bukkit.command.CommandSender
 object TeleportCommand : ScalaCommand()
 {
     @Default
+    fun onDefault(player: ScalaPlayer)
+    {
+        player.sendMessage(
+            "${CC.SEC}Usage: ${CC.PRI}/teleport ${CC.WHITE}<player> [target]"
+        )
+    }
+
+    @Default
     @CommandCompletion("@players")
     fun onDefault(
         sender: ScalaPlayer, player: LemonPlayer

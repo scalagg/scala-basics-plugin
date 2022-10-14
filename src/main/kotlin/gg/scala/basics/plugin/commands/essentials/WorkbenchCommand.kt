@@ -42,8 +42,7 @@ object WorkbenchCommand : ScalaCommand()
         sender: CommandSender, player: LemonPlayer
     )
     {
-        player.bukkit().inventory.clear()
-        player.bukkit().updateInventory()
+        player.bukkit().openWorkbench(player.bukkit().location, true)
 
         sender.sendMessage(
             "${CC.SEC}You've opened the workbench for ${player.getOriginalColoredName()}${CC.SEC}."

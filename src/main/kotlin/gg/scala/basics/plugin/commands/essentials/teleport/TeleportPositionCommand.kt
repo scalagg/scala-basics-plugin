@@ -25,6 +25,14 @@ import org.bukkit.command.CommandSender
 object TeleportPositionCommand : ScalaCommand()
 {
     @Default
+    fun onDefault(player: ScalaPlayer)
+    {
+        player.sendMessage(
+            "${CC.SEC}Usage: ${CC.PRI}/teleportposition ${CC.WHITE}<location> [target]"
+        )
+    }
+
+    @Default
     fun onDefault(
         sender: ScalaPlayer, location: Location
     )
@@ -42,7 +50,7 @@ object TeleportPositionCommand : ScalaCommand()
     @Default
     @CommandCompletion("@players")
     fun onDefault(
-        sender: CommandSender, player: LemonPlayer, location: Location
+        sender: CommandSender, location: Location, player: LemonPlayer
     )
     {
         val locationFormatted = "${location.x}, ${location.y}, ${location.z}${CC.SEC} in the world ${CC.PRI}${location.world.name}${CC.SEC}"

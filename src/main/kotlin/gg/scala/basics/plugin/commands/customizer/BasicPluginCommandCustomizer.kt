@@ -1,5 +1,7 @@
 package gg.scala.basics.plugin.commands.customizer
 
+import gg.scala.basics.plugin.profile.BasicsProfileService
+import gg.scala.cache.uuid.ScalaStoreUuidCache
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.annotations.commands.customizer.CommandManagerCustomizer
 import gg.scala.commons.command.ScalaCommandManager
@@ -16,6 +18,14 @@ object BasicPluginCommandCustomizer
     @CommandManagerCustomizer
     fun customize(manager: ScalaCommandManager)
     {
+        manager.commandCompletions
+            .registerAsyncCompletion("ignoring") {
+                val profile = BasicsProfileService.find(it.player)
+                    ?: return@registerAsyncCompletion listOf()
+
+                profile.ignoring.map(ScalaStoreUuidCache::username)
+            }
+
         manager.commandCompletions
             .registerAsyncCompletion("worlds") {
                 Bukkit.getWorlds().map(World::getName)

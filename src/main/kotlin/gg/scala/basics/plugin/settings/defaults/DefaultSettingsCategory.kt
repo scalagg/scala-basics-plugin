@@ -18,12 +18,13 @@ object DefaultSettingsCategory : SettingCategory
     override val items = listOf(
         entry {
             id = "announcements"
+            displayName = "Announcement Stream"
 
             clazz = StateSettingValue::class.java
             default = StateSettingValue.ENABLED
 
             description += "This setting toggles"
-            description += "announcement retrieval on all"
+            description += "announcement receiving on all"
             description += "of our servers."
 
             item = ItemBuilder.of(Material.FIREBALL)

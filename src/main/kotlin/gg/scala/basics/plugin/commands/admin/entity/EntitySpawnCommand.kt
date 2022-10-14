@@ -30,7 +30,6 @@ object EntitySpawnCommand : ScalaCommand()
         {
             val temp = sender.bukkit().location
             temp.x = temp.x.toInt() + 0.500
-            temp.y = temp.y.toInt() + 0.500
             temp.z = temp.z.toInt() + 0.500
             temp
         } else

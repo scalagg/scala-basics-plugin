@@ -21,6 +21,7 @@ import gg.scala.commons.core.plugin.PluginWebsite
 @PluginAuthor("Scala")
 @PluginWebsite("https://scala.gg")
 
+@PluginDependency("Lemon")
 @PluginDependency("scala-commons")
 class ScalaBasicsPlugin : ExtendedScalaPlugin()
 {

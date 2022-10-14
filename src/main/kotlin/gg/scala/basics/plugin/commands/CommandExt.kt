@@ -1,0 +1,35 @@
+package gg.scala.basics.plugin.commands
+
+import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.lemon.player.LemonPlayer
+import me.lucko.helper.utils.Players
+import net.evilblock.cubed.util.CC
+import org.bukkit.Bukkit
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+
+/**
+ * @author GrowlyX
+ * @since 10/13/2022
+ */
+fun LemonPlayer.bukkit() = Bukkit.getPlayer(this.uniqueId)!!
+
+infix fun ScalaPlayer.performed(message: String)
+{
+    bukkit().performed(message)
+}
+
+infix fun CommandSender.performed(message: String)
+{
+    Players.all()
+        .filter {
+            it.hasPermission("scbasics.notifications")
+        }
+        .forEach {
+            it.sendMessage(
+                "${CC.I_GRAY}[${
+                    if (this is Player) this.name else "Console"
+                }: ${CC.YELLOW}$message${CC.I_GRAY}]"
+            )
+        }
+}

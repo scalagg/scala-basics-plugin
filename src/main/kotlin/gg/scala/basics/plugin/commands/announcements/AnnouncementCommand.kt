@@ -1,4 +1,4 @@
-package gg.scala.basics.plugin.commands
+package gg.scala.basics.plugin.commands.announcements
 
 import gg.scala.basics.plugin.announcement.AnnouncementMenu
 import gg.scala.commons.acf.CommandHelp
@@ -18,7 +18,7 @@ import gg.scala.commons.issuer.ScalaPlayer
  * @since 10/12/2022
  */
 @AutoRegister
-@CommandAlias("announcement|announcements")
+@CommandAlias("announcement|announcements|ann")
 @CommandPermission("scbasics.command.announcements")
 object AnnouncementCommand : ScalaCommand()
 {

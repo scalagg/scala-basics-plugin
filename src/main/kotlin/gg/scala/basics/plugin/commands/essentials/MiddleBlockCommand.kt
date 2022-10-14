@@ -9,6 +9,10 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import net.evilblock.cubed.util.CC
 import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.entity.Player
+import org.bukkit.util.BlockIterator
+
 
 /**
  * @author GrowlyX
@@ -21,16 +25,20 @@ object MiddleBlockCommand : ScalaCommand()
     @CommandPermission("scbasics.command.middleblock")
     fun onDefault(player: ScalaPlayer)
     {
-        val temp = player.bukkit().eyeLocation
+        val block = getTargetBlock(player.bukkit())
 
-        if (temp.block == null || temp.block.type == Material.AIR)
+        if (block.type == Material.AIR)
         {
             throw ConditionFailedException("You must be staring at a block!")
         }
 
+        val temp = block.location
         temp.x = temp.x.toInt() + 0.500
-        temp.y = temp.y.toInt() + 2.000
+        temp.y = temp.y.toInt() + 1.000
         temp.z = temp.z.toInt() + 0.500
+
+        temp.pitch = player.bukkit().location.pitch
+        temp.yaw = player.bukkit().location.yaw
 
         player.teleport(temp)
 
@@ -39,5 +47,25 @@ object MiddleBlockCommand : ScalaCommand()
         )
 
         player performed "moved to middle of block"
+    }
+
+    private fun getTargetBlock(player: Player): Block
+    {
+        val iter = BlockIterator(player, 5)
+        var lastBlock = iter.next()
+
+        while (iter.hasNext())
+        {
+            lastBlock = iter.next()
+
+            if (lastBlock.type === Material.AIR)
+            {
+                continue
+            }
+
+            break
+        }
+
+        return lastBlock
     }
 }

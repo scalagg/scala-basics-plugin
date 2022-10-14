@@ -13,7 +13,6 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.util.BlockIterator
 
-
 /**
  * @author GrowlyX
  * @since 10/13/2022

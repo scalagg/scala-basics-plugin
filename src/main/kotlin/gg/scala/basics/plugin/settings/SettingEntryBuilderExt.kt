@@ -6,12 +6,12 @@ import org.bukkit.entity.Player
  * @author GrowlyX
  * @since 10/14/2022
  */
-inline fun entry(conf: SettingEntryBuilderConf.() -> Unit): SettingEntry<Any?>
+inline fun entry(conf: SettingEntryBuilderConf.() -> Unit): SettingEntry
 {
     val config = SettingEntryBuilderConf()
     config.conf()
 
-    return object : SettingEntry<Any?>
+    return object : SettingEntry
     {
         override val id = config.id
         override val valueType = config.clazz!!

@@ -1,4 +1,4 @@
-package gg.scala.basics.plugin.settings
+package gg.scala.basics.plugin.settings.interfaces
 
 import org.bukkit.entity.Player
 

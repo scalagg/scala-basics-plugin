@@ -1,12 +1,14 @@
-package gg.scala.basics.plugin.settings
+package gg.scala.basics.plugin.settings.utils
 
 import com.google.common.base.Preconditions
 
 /**
- * @author GrowlyX
- * @since 10/14/2022
+ * @author fakeneth
+ * @project prodity-commons
+ *
+ * TODO: Move to commons plugin
  */
-object SettingEnums
+object EnumUtils
 {
     fun <T : Enum<T>> getFirstConstant(enumClass: Class<T>): T?
     {

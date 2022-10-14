@@ -1,6 +1,7 @@
 package gg.scala.basics.plugin.settings
 
 import com.google.gson.JsonObject
+import gg.scala.basics.plugin.settings.interfaces.DisplayPredicate
 import me.lucko.helper.gson.GsonSerializable
 
 /**

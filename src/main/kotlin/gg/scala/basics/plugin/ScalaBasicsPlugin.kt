@@ -4,6 +4,7 @@ import gg.scala.aware.AwareBuilder
 import gg.scala.aware.codec.codecs.interpretation.AwareMessageCodec
 import gg.scala.aware.message.AwareMessage
 import gg.scala.basics.plugin.settings.SettingCategory
+import gg.scala.basics.plugin.settings.SettingContainer
 import gg.scala.commons.ExtendedScalaPlugin
 import gg.scala.commons.annotations.container.ContainerEnable
 import gg.scala.commons.core.plugin.Plugin
@@ -42,7 +43,11 @@ class ScalaBasicsPlugin : ExtendedScalaPlugin()
 
         PreConfigureSubTypeProcessor
             .register<SettingCategory> {
+                SettingContainer.categories().add(it)
 
+                logger.info(
+                    "[Player Settings] Registered settings factory ${it.javaClass.name}."
+                )
             }
     }
 }

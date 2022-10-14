@@ -29,7 +29,7 @@ object LoginTimeService
         .get(loginTime)
         .orElseGet {
             System.currentTimeMillis()
-        }
+        }!!
 
     @Configure
     fun configure()

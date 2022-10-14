@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.profile
 
+import gg.scala.basics.plugin.settings.MutableSettingEntryReference
 import gg.scala.store.controller.DataStoreObjectControllerCache
 import gg.scala.store.storage.storable.IDataStoreObject
 import gg.scala.store.storage.type.DataStoreStorageType
@@ -14,6 +15,13 @@ class BasicsProfile(
 ) : IDataStoreObject
 {
     val ignoring = mutableSetOf<UUID>()
+    val settings = mutableMapOf<String, MutableSettingEntryReference>()
+
+    inline fun <reified T : Enum<T>> setting(id: String) =
+        settings[id]?.map<T>()
+
+    inline fun <reified T : Enum<T>> setting(id: String, default: T) =
+        settings[id]?.map() ?: default
 
     fun save() = DataStoreObjectControllerCache
         .findNotNull<BasicsProfile>()

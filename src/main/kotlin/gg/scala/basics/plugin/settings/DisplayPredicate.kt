@@ -1,0 +1,12 @@
+package gg.scala.basics.plugin.settings
+
+import org.bukkit.entity.Player
+
+/**
+ * @author GrowlyX
+ * @since 10/14/2022
+ */
+interface DisplayPredicate
+{
+    fun display(player: Player): Boolean
+}

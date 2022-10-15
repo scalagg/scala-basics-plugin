@@ -3,7 +3,7 @@ package gg.scala.basics.plugin.settings.defaults
 import gg.scala.basics.plugin.settings.SettingCategory
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.basics.plugin.settings.entry
-import gg.scala.basics.plugin.settings.internal.MessagingSettingValue
+import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.flavor.service.Service
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import org.bukkit.Material
@@ -29,8 +29,20 @@ object DefaultSettingsCategory : SettingCategory
             description += "/message."
 
             item = ItemBuilder.of(Material.BOOK)
-        }
-        ,
+        },
+        entry {
+            id = "messages_sounds"
+            displayName = "Message sounds"
+
+            clazz = StateSettingValue::class.java
+            default = StateSettingValue.ENABLED
+
+            description += "Allows you to disable the pling"
+            description += "sound that is played when you"
+            description += "receive a private message."
+
+            item = ItemBuilder.of(Material.JUKEBOX)
+        },
         entry {
             id = "announcements"
             displayName = "Announcement Stream"

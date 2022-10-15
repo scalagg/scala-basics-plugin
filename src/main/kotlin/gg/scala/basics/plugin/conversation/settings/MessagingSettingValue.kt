@@ -1,4 +1,4 @@
-package gg.scala.basics.plugin.settings.internal
+package gg.scala.basics.plugin.conversation.settings
 
 import gg.scala.basics.plugin.settings.SettingValue
 import org.bukkit.Bukkit

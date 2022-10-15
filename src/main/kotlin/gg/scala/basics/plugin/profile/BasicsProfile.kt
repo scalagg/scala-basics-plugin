@@ -17,6 +17,8 @@ class BasicsProfile(
     val ignoring = mutableSetOf<UUID>()
     val settings = mutableMapOf<String, MutableSettingEntryReference>()
 
+    var lastRecipient: UUID? = null
+
     inline fun <reified T : Enum<T>> setting(id: String) =
         settings[id]?.map<T>()
 

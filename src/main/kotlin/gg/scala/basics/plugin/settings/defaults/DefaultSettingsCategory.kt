@@ -5,7 +5,9 @@ import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.basics.plugin.settings.entry
 import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.flavor.service.Service
+import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemBuilder
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -19,14 +21,18 @@ object DefaultSettingsCategory : SettingCategory
     override val items = listOf(
         entry {
             id = "messages"
-            displayName = "Private Messages"
+            displayName = "Direct messages"
 
             clazz = MessagingSettingValue::class.java
-            default = MessagingSettingValue.ENABLED
+            default = MessagingSettingValue.FRIENDS_ONLY
 
             description += "Allows you to disable"
-            description += "private messages through"
+            description += "direct messages through"
             description += "/message."
+            description += ""
+            description += "This setting is set to"
+            description += "${CC.BOLD}Friends Only${CC.WHITE} by default"
+            description += "for privacy purposes."
 
             item = ItemBuilder.of(Material.BOOK)
         },
@@ -45,7 +51,7 @@ object DefaultSettingsCategory : SettingCategory
         },
         entry {
             id = "announcements"
-            displayName = "Announcement Stream"
+            displayName = "Server announcements"
 
             clazz = StateSettingValue::class.java
             default = StateSettingValue.ENABLED

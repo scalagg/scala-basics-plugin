@@ -53,7 +53,7 @@ object PrivateConversationMessageResponder : (PrivateConversationMessage) -> Pri
                 default = MessagingSettingValue.ENABLED
             )
 
-        if (Bukkit.getPluginManager().isPluginEnabled("Friends"))
+        if (Bukkit.getPluginManager().isPluginEnabled("Friends") && !message.dispatcherOverridesChecks)
         {
             val friendsPlayer = KPlayerHandler.find(bukkitPlayer)
                 ?: return PrivateConversationMessageResponse(
@@ -63,7 +63,7 @@ object PrivateConversationMessageResponder : (PrivateConversationMessage) -> Pri
 
             if (
                 messagingSettingValue == MessagingSettingValue.FRIENDS_ONLY &&
-                !message.dispatcherOverridesChecks || !friendsPlayer.friends.containsKey(message.dispatcher)
+                !friendsPlayer.friends.containsKey(message.dispatcher)
             )
             {
                 return PrivateConversationMessageResponse(

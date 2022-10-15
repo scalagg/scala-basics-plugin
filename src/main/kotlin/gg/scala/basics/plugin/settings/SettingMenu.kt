@@ -140,7 +140,7 @@ class SettingMenu : Menu("Your Settings")
                         .addToLore(
                             "",
                             "${CC.YELLOW}${
-                                if (button.valueType.enumConstants.size == 2)
+                                if (available.size == 2)
                                     "Click to toggle!" else "Click to scroll through!"
                             }"
                         )

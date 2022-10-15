@@ -43,7 +43,7 @@ class SettingMenu : Menu("Preferences")
                 it.display(player)
             }
             .onEachIndexed { index, category ->
-                if (complete.isEmpty())
+                if (category.items.isEmpty())
                     return@onEachIndexed
 
                 val items = category.items

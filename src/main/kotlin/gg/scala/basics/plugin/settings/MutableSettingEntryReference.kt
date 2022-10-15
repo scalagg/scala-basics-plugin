@@ -1,6 +1,7 @@
 package gg.scala.basics.plugin.settings
 
 import gg.scala.basics.plugin.settings.utils.SettingEnumInternal
+import net.kyori.adventure.util.TriState
 
 /**
  * @author GrowlyX
@@ -11,18 +12,21 @@ data class MutableSettingEntryReference(
     var value: String
 )
 {
-    val display by lazy {
-        val clazzExists = kotlin
-            .runCatching { Class.forName(clazz) }
-            .getOrNull()
-
-        clazzExists != null
-    }
+    var display = TriState.NOT_SET
 
     inline fun <reified T : Enum<T>> map(): T
     {
-        if (!display)
+        if (display == TriState.FALSE || display == TriState.NOT_SET)
         {
+            if (display == TriState.NOT_SET)
+            {
+                display = TriState.byBoolean(
+                    kotlin
+                        .runCatching { Class.forName(clazz) }
+                        .getOrNull() != null
+                )
+            }
+
             return SettingEnumInternal.getFirstConstant(T::class.java)!!
         }
 

@@ -4,6 +4,7 @@ import gg.scala.basics.plugin.settings.MutableSettingEntryReference
 import gg.scala.basics.plugin.settings.SettingContainer
 import gg.scala.commons.persist.ProfileOrchestrator
 import gg.scala.flavor.service.Service
+import net.kyori.adventure.util.TriState
 import java.util.*
 
 /**
@@ -33,6 +34,11 @@ object BasicsProfileService : ProfileOrchestrator<BasicsProfile>()
                             )
                     }
                 }
+            }
+
+        profile.settings.values
+            .forEach {
+                it.display = TriState.NOT_SET
             }
     }
 

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  * @since 1/17/2022
  */
 @Service
-object PrivateConversationMessageAgent
+object PrivateConversationMessageService
 {
     private lateinit var agent: ConversationFactory<PrivateConversationMessage, PrivateConversationMessageResponse>
 

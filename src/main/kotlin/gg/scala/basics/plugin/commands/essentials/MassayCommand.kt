@@ -32,7 +32,7 @@ object MassayCommand : ScalaCommand()
     }
 
     @CommandAlias("masssay|sudoall")
-    @CommandPermission("cookie.command.sudoall")
+    @CommandPermission("scbasics.command.sudoall")
     fun onMassay(
         sender: CommandSender, type: SudoType, content: String
     )
@@ -48,7 +48,7 @@ object MassayCommand : ScalaCommand()
 
     @CommandAlias("sudo")
     @CommandCompletion("@players")
-    @CommandPermission("cookie.command.sudo")
+    @CommandPermission("scbasics.command.sudo")
     fun onSudo(
         sender: CommandSender, target: LemonPlayer, type: SudoType, content: String
     )

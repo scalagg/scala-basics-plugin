@@ -1,13 +1,12 @@
 package gg.scala.basics.plugin.commands.player.conversation
 
-import gg.scala.basics.plugin.conversation.PrivateConversationMessageAgent
+import gg.scala.basics.plugin.conversation.PrivateConversationMessageService
 import gg.scala.basics.plugin.conversation.message.PrivateConversationMessageResponseContext
 import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.filter.ChatMessageFilterHandler
-import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
@@ -128,7 +127,7 @@ object MessageCommand : ScalaCommand()
                     )
                 }
 
-                PrivateConversationMessageAgent.sendMessage(player, target, message)
+                PrivateConversationMessageService.sendMessage(player, target, message)
             }
     }
 }

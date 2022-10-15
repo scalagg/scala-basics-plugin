@@ -17,7 +17,7 @@ import org.bukkit.entity.Player
 object SpeedCommand : ScalaCommand()
 {
     @CommandAlias("speed")
-    @CommandPermission("cookie.command.speed")
+    @CommandPermission("scbasics.command.speed")
     fun onSpeed(player: Player, speed: Int)
     {
         if (speed > 10 || speed <= 0)

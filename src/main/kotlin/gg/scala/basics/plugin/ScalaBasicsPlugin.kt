@@ -26,6 +26,7 @@ import gg.scala.commons.preconfigure.PreConfigureSubTypeProcessor
 
 @PluginDependency("Lemon")
 @PluginDependency("scala-commons")
+@PluginDependency("cloudsync", soft = true)
 class ScalaBasicsPlugin : ExtendedScalaPlugin()
 {
     val aware by lazy {

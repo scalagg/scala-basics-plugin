@@ -2,7 +2,6 @@ package gg.scala.basics.plugin.commands.admin
 
 import gg.scala.basics.plugin.shutdown.ShutdownService
 import gg.scala.commons.command.ScalaCommand
-import gg.scala.lemon.handler.ServerHandler
 import gg.scala.commons.acf.CommandHelp
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.*
@@ -57,7 +56,7 @@ object ShutdownCommand : ScalaCommand()
     @Description("View the status of the current shutdown.")
     fun onStatus(player: Player)
     {
-        val shutdown = ServerHandler.shutdownRunnable
+        val shutdown = ShutdownService.shutdownRunnable
 
         if (shutdown != null)
         {

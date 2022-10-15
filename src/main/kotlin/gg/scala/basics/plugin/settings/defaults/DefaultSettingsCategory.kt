@@ -60,7 +60,7 @@ object DefaultSettingsCategory : SettingCategory
             description += "periodical server"
             description += "announcements."
 
-            item = ItemBuilder.of(Material.FIREBALL)
+            item = ItemBuilder.of(Material.ARROW)
         }
     )
 

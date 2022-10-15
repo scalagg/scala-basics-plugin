@@ -3,6 +3,7 @@ package gg.scala.basics.plugin.settings
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
+import net.evilblock.cubed.menu.pagination.PaginatedMenu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.bukkit.Tasks
@@ -51,6 +52,10 @@ class SettingMenu : Menu("Your Settings")
             .find(player)
             ?: return complete
 
+        (0..8).forEach {
+            complete[it] = PaginatedMenu.PLACEHOLDER
+        }
+
         SettingContainer.categories()
             .filter {
                 it.display(player)
@@ -65,7 +70,7 @@ class SettingMenu : Menu("Your Settings")
                     }
 
                 val color = colors[index]
-                var row = index * 9
+                var row = (index + 1) * 9
 
                 // we need to make sure this is a free slot
                 while (
@@ -171,6 +176,11 @@ class SettingMenu : Menu("Your Settings")
                         }
                 }
             }
+
+        val size = size(complete) + 8
+        (size - 8..size).forEach {
+            complete[it] = PaginatedMenu.PLACEHOLDER
+        }
 
         return complete
     }

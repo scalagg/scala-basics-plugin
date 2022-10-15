@@ -4,6 +4,7 @@ import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.profile.BasicsProfileService
+import gg.scala.basics.plugin.settings.StateSettingValue
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -79,9 +80,16 @@ object AnnouncementService : Runnable
                 .find(player)
                 ?: continue
 
+            val setting = profile
+                .setting(
+                    id = "announcements",
+                    default = StateSettingValue.ENABLED
+                )
 
-
-            linesBeingSent.forEach(player::sendMessage)
+            if (setting == StateSettingValue.ENABLED)
+            {
+                linesBeingSent.forEach(player::sendMessage)
+            }
         }
     }
 

@@ -1,11 +1,12 @@
 package gg.scala.basics.plugin.settings.interfaces
 
+import org.bukkit.entity.Player
+
 /**
  * @author GrowlyX
  * @since 10/14/2022
  */
-interface Displayable
+interface DisplayEnsure
 {
-    val displayName: String
-    val description: List<String>
+    fun display(player: Player): Boolean
 }

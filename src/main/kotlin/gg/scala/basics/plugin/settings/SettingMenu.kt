@@ -5,6 +5,7 @@ import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemBuilder
+import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player
  * @author GrowlyX
  * @since 10/14/2022
  */
-class SettingMenu : Menu("Preferences")
+class SettingMenu : Menu("Your Settings")
 {
     // yes, this is meant to be a list
     private val colors = listOf(
@@ -28,6 +29,18 @@ class SettingMenu : Menu("Preferences")
     init
     {
         updateAfterClick = true
+    }
+
+    override fun onClose(player: Player, manualClose: Boolean)
+    {
+        if (manualClose)
+        {
+            val profile = BasicsProfileService
+                .find(player)
+                ?: return
+
+            profile.save()
+        }
     }
 
     override fun getButtons(player: Player): Map<Int, Button>
@@ -71,7 +84,7 @@ class SettingMenu : Menu("Preferences")
                         }"
                     )
                     .setLore(
-                        category.description
+                        category.description.map { "${CC.WHITE}$it" }
                     )
                     .toButton()
 
@@ -84,8 +97,7 @@ class SettingMenu : Menu("Preferences")
                     items.size != rawIndex
                 )
                 {
-                    val position =
-                        row + ++buttonIndex
+                    val position = row + ++buttonIndex
 
                     if (buttonIndex % 9 == 0)
                     {
@@ -93,38 +105,70 @@ class SettingMenu : Menu("Preferences")
                         continue
                     }
 
-                    val button =
-                        items[rawIndex++]
+                    val button = items[rawIndex++]
+
+                    val status = profile.settings[button.id]
+                        ?: continue
+
+                    val available = button.valueType
+                        .enumConstants
+                        .filter { it.display(player) }
 
                     complete[position] = ItemBuilder
                         .copyOf(button.item)
                         .name(
-                            "${color.first}${CC.BOLD}${button.displayName}"
+                            "${CC.GREEN}${button.displayName}"
                         )
-                        .setLore(button.description)
+                        .setLore(button.description.map { "${CC.WHITE}$it" })
+                        .addToLore(
+                            "",
+                            "${CC.WHITE}Current setting:"
+                        )
                         .apply {
-                            val status = profile.settings[button.id]
-                                ?: return@apply
-
-                            addToLore("")
-
                             val current = status.value
 
-                            for (constant in button.valueType.enumConstants)
+                            for (constant in available)
                             {
                                 val enum = constant as Enum<*>
                                 val equipped = current == enum.name
 
                                 addToLore(
-                                    " ${if (equipped) CC.B_GREEN else CC.B_GRAY}■ ${CC.RESET}${constant.displayName}"
+                                    "${if (equipped) "${CC.GREEN}► " else CC.GRAY}${constant.displayName}"
                                 )
                             }
                         }
                         .addToLore(
                             "",
-                            "${CC.GREEN}Click to toggle!"
+                            "${CC.YELLOW}${
+                                if (button.valueType.enumConstants.size == 2)
+                                    "Click to toggle!" else "Click to scroll through!"
+                            }"
                         )
-                        .toButton()
+                        .toButton { _, _ ->
+                            val constants = available
+                                .map {
+                                    (it as Enum<*>).name
+                                }
+
+                            val currentIndex = constants
+                                .indexOf(status.value)
+                                .let {
+                                    if (it == -1) 0 else it
+                                }
+
+                            val reachedMaxIndex =
+                                currentIndex >= constants.size - 1
+
+                            if (reachedMaxIndex)
+                            {
+                                status.value = constants.first()
+                            } else
+                            {
+                                status.value = constants
+                                    .getOrNull(currentIndex + 1)
+                                    ?: constants.first()
+                            }
+                        }
                 }
             }
 

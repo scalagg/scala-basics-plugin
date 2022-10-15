@@ -4,7 +4,7 @@ import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.profile.BasicsProfileService
-import gg.scala.basics.plugin.settings.StateSettingValue
+import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -12,7 +12,6 @@ import me.lucko.helper.Schedulers
 import me.lucko.helper.scheduler.Task
 import me.lucko.helper.utils.Players
 import net.evilblock.cubed.serializers.Serializers
-import java.util.concurrent.TimeUnit
 
 /**
  * @author GrowlyX

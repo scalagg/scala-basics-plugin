@@ -1,5 +1,6 @@
-package gg.scala.basics.plugin.settings
+package gg.scala.basics.plugin.settings.defaults.values
 
+import gg.scala.basics.plugin.settings.SettingValue
 import org.bukkit.entity.Player
 
 /**

@@ -50,6 +50,11 @@ object AnnouncementService : Runnable
 
     override fun run()
     {
+        if (cached.announcements.isEmpty())
+        {
+            return
+        }
+
         val announcement = cached
             .announcements.getOrNull(currentIndex++)
             ?: kotlin.run {

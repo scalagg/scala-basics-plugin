@@ -25,7 +25,7 @@ data class MutableSettingEntryReference(
                         .runCatching { Class.forName(clazz) }
                         .getOrNull() != null
                 )
-                return map<T>()
+                return enumValueOf(value)
             }
 
             return SettingEnumInternal.getFirstConstant(T::class.java)!!

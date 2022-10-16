@@ -1,5 +1,7 @@
 package gg.scala.basics.plugin.commands
 
+import gg.scala.basics.plugin.profile.BasicsProfileService
+import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.player.LemonPlayer
 import me.lucko.helper.utils.Players
@@ -26,10 +28,21 @@ infix fun CommandSender.performed(message: String)
             it.hasPermission("scbasics.notifications")
         }
         .forEach {
-            it.sendMessage(
-                "${CC.I_GRAY}[${
-                    if (this is Player) this.name else "Console"
-                }: ${CC.YELLOW}$message${CC.I_GRAY}]"
+            val profile = BasicsProfileService.find(it)
+                ?: return@forEach
+
+            val settingValue = profile.setting(
+                id = "security-notifications",
+                default = StateSettingValue.ENABLED
             )
+
+            if (settingValue == StateSettingValue.ENABLED)
+            {
+                it.sendMessage(
+                    "${CC.I_GRAY}[${
+                        if (this is Player) this.name else "Console"
+                    }: ${CC.YELLOW}$message${CC.I_GRAY}]"
+                )
+            }
         }
 }

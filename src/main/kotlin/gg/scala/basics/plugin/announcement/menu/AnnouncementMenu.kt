@@ -1,5 +1,7 @@
-package gg.scala.basics.plugin.announcement
+package gg.scala.basics.plugin.announcement.menu
 
+import gg.scala.basics.plugin.announcement.Announcement
+import gg.scala.basics.plugin.announcement.AnnouncementService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.buttons.AddButton
 import net.evilblock.cubed.menu.buttons.TexturedHeadButton
@@ -10,7 +12,6 @@ import net.evilblock.cubed.util.bukkit.Constants
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import java.util.*
 
 /**
  * @author GrowlyX
@@ -45,7 +46,7 @@ class AnnouncementMenu : PaginatedMenu()
                 .toButton { _, _ ->
                     val model = AnnouncementService.configModel()
                     model.announcements += Announcement(
-                        listOf("Announcement dummy text.")
+                        mutableListOf("Announcement dummy text.")
                     )
 
                     AnnouncementService.applyKvUpdate(model)

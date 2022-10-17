@@ -5,5 +5,5 @@ package gg.scala.basics.plugin.announcement
  * @since 10/12/2022
  */
 data class Announcement(
-    val lines: List<String>
+    val lines: MutableList<String>
 )

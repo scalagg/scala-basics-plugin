@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 data class AnnouncementConfigModel(
     val announcements: MutableList<Announcement> =
         mutableListOf(
-            Announcement(listOf("Hello world, from basics."))
+            Announcement(mutableListOf("Hello world, from basics."))
         ),
     var padding: Boolean = false,
     var linePrefix: String = "",

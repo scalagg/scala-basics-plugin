@@ -1,6 +1,6 @@
 package gg.scala.basics.plugin.commands.announcements
 
-import gg.scala.basics.plugin.announcement.AnnouncementMenu
+import gg.scala.basics.plugin.announcement.menu.AnnouncementMenu
 import gg.scala.commons.acf.CommandHelp
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandPermission

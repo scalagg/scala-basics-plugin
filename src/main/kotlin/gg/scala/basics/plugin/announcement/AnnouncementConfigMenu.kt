@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.announcement
 
+import gg.scala.basics.plugin.announcement.menu.AnnouncementMenu
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
 import net.evilblock.cubed.util.CC

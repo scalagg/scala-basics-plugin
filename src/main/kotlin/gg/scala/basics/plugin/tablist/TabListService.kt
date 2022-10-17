@@ -48,16 +48,7 @@ object TabListService
             .subscribe(PlayerJoinEvent::class.java)
             .handler {
                 val audience = audiences.player(it.player)
-
-                if (cached.header != Component.empty())
-                {
-                    audience.sendPlayerListHeader(cached.header)
-                }
-
-                if (cached.footer != Component.empty())
-                {
-                    audience.sendPlayerListFooter(cached.footer)
-                }
+                audience.sendPlayerListHeaderAndFooter(cached.header, cached.footer)
             }
             .bindWith(plugin)
 

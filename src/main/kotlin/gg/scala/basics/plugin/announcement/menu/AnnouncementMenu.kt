@@ -111,6 +111,9 @@ class AnnouncementMenu : PaginatedMenu()
                                 player.sendMessage("${CC.RED}Deleted announcement #$index!")
                             }
                         }.openMenu(player)
+                    } else
+                    {
+                        AnnouncementLinesEditor(announcement).openMenu(player)
                     }
                 }
         }

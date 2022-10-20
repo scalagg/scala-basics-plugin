@@ -48,6 +48,6 @@ object FeedCommand : ScalaCommand()
             "${CC.SEC}You've fed ${player.getOriginalColoredName()}${CC.SEC}."
         )
 
-        player.bukkit() performed "fed ${player.name}"
+        sender performed "fed ${player.name}"
     }
 }

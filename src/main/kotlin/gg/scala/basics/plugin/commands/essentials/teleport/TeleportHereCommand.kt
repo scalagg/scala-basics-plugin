@@ -34,6 +34,6 @@ object TeleportHereCommand : ScalaCommand()
             "${CC.SEC}You've teleported ${player.getOriginalColoredName()}${CC.SEC} to you."
         )
 
-        player.bukkit() performed "teleported ${player.name} to themselves"
+        sender.bukkit() performed "teleported ${player.name} to themselves"
     }
 }

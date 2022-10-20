@@ -49,6 +49,6 @@ object HealCommand : ScalaCommand()
             "${CC.SEC}You've healed ${player.getOriginalColoredName()}${CC.SEC}."
         )
 
-        player.bukkit() performed "healed ${player.name}"
+        sender performed "healed ${player.name}"
     }
 }

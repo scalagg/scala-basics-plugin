@@ -50,6 +50,6 @@ object ClearCommand : ScalaCommand()
             "${CC.SEC}You've cleared ${player.getOriginalColoredName()}'s${CC.SEC} inventory."
         )
 
-        player.bukkit() performed "cleared ${player.name}'s inventory"
+        sender performed "cleared ${player.name}'s inventory"
     }
 }

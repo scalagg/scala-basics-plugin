@@ -48,6 +48,6 @@ object WorkbenchCommand : ScalaCommand()
             "${CC.SEC}You've opened the workbench for ${player.getOriginalColoredName()}${CC.SEC}."
         )
 
-        player.bukkit() performed "opened workbench for ${player.name}"
+        sender performed "opened workbench for ${player.name}"
     }
 }

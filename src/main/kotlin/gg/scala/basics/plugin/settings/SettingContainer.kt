@@ -10,7 +10,9 @@ object SettingContainer
 
     fun categories() = categories
 
-    fun buildEntry(conf: SettingEntryBuilderConf.() -> Unit): SettingEntry
+    fun buildEntry(
+        conf: SettingEntryBuilderConf.() -> Unit
+    ): SettingEntry
     {
         return entry(conf)
     }

@@ -12,6 +12,8 @@ import gg.scala.commons.core.plugin.PluginAuthor
 import gg.scala.commons.core.plugin.PluginDependency
 import gg.scala.commons.core.plugin.PluginWebsite
 import gg.scala.commons.preconfigure.PreConfigureSubTypeProcessor
+import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
 
 /**
  * @author GrowlyX

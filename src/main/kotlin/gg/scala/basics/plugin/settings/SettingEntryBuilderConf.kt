@@ -15,5 +15,6 @@ data class SettingEntryBuilderConf(
     var item: ItemBuilder = ItemBuilder(Material.AIR),
     var displayName: String = "",
     var displayPredicate: (Player) -> Boolean = { true },
+    var postChange: (Player) -> Unit = { },
     val description: MutableList<String> = mutableListOf()
 )

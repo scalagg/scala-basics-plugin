@@ -29,6 +29,8 @@ inline fun entry(conf: SettingEntryBuilderConf.() -> Unit): SettingEntry
             config.default!!
         }
 
+        override val postChange = config.postChange
+
         override fun display(player: Player) =
             config.displayPredicate.invoke(player)
 

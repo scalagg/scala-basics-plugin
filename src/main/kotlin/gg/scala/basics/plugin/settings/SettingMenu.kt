@@ -173,6 +173,9 @@ class SettingMenu : Menu("Your Settings")
                                     .getOrNull(currentIndex + 1)
                                     ?: constants.first()
                             }
+
+                            button.postChange(player)
+                            profile.save()
                         }
                 }
             }

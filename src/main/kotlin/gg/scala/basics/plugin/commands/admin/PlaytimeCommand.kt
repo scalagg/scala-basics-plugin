@@ -15,9 +15,13 @@ import org.bukkit.entity.Player
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.temporal.TemporalAdjusters
 import java.util.*
 import java.util.concurrent.CompletableFuture
+
 
 /**
  * @author GrowlyX
@@ -59,6 +63,23 @@ object PlaytimeCommand : ScalaCommand()
         }
     }
 
+    private fun startOfDay(): ZonedDateTime
+    {
+        return ZonedDateTime
+            .now(ZoneOffset.UTC)
+            .toLocalDate()
+            .atStartOfDay(ZoneOffset.UTC)
+    }
+
+    private fun endOfDay(): ZonedDateTime
+    {
+        return ZonedDateTime
+            .now(ZoneOffset.UTC)
+            .toLocalDate()
+            .atTime(LocalTime.MAX)
+            .atZone(ZoneOffset.UTC)
+    }
+
     private fun handlePlaytimeComputation(
         player: Player, target: LemonPlayer
     )
@@ -80,6 +101,9 @@ object PlaytimeCommand : ScalaCommand()
         val completePlaytimeSessions = target
             .pastLogins.size
 
+        val end = endOfDay()
+        val start = startOfDay()
+
         val currentWeek = target
             .pastLogins.filter {
                 val current = Instant
@@ -93,24 +117,41 @@ object PlaytimeCommand : ScalaCommand()
         val currentWeekPlaytime = currentWeek.values.sum()
         val currentWeekPlaytimeSessions = currentWeek.size
 
+        val currentDay = target
+            .pastLogins.filter {
+                val current = (it.key.toLongOrNull() ?: 1000L) / 1000L
+
+                return@filter start.toEpochSecond() < current
+                        && end.toEpochSecond() > current
+            }
+        val currentDayPlaytime = currentDay.values.sum()
+        val currentDayPlaytimeSessions = currentDay.size
+
         val coloredName = QuickAccess.fetchColoredName(target.uniqueId)
 
-        player.sendMessage("")
-        player.sendMessage(" ${CC.B_SEC}Playtime of $coloredName${CC.B_SEC}...")
+        player.sendMessage("${CC.B_SEC}Playtime of $coloredName${CC.B_SEC}:")
         player.sendMessage(
-            "  ${CC.SEC}This week ${CC.GRAY}(${currentWeekPlaytimeSessions} sessions)${CC.SEC}: ${CC.PRI}${
+            " ${CC.SEC}Today ${CC.GRAY}(${currentDayPlaytimeSessions} sessions)${CC.SEC}: ${CC.WHITE}${
+                DurationFormatUtils.formatDurationWords(
+                    currentDayPlaytime, true, true
+                )
+            }"
+        )
+
+        player.sendMessage(
+            " ${CC.SEC}This week ${CC.GRAY}(${currentWeekPlaytimeSessions} sessions)${CC.SEC}: ${CC.WHITE}${
                 DurationFormatUtils.formatDurationWords(
                     currentWeekPlaytime, true, true
                 )
             }"
         )
+
         player.sendMessage(
-            "  ${CC.SEC}All-time total ${CC.GRAY}(${completePlaytimeSessions} sessions)${CC.SEC}: ${CC.PRI}${
+            " ${CC.SEC}All-time total ${CC.GRAY}(${completePlaytimeSessions} sessions)${CC.SEC}: ${CC.WHITE}${
                 DurationFormatUtils.formatDurationWords(
                     completePlaytime, true, true
                 )
             }"
         )
-        player.sendMessage("")
     }
 }

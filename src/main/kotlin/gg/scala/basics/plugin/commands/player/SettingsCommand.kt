@@ -23,7 +23,7 @@ object SettingsCommand : ScalaCommand()
     @CommandAlias("settings|prefs|preferences|mysettings|myprefs")
     fun onPing(player: ScalaPlayer)
     {
-        SettingMenu().openMenu(player.bukkit())
+        SettingMenu(player.bukkit()).openMenu(player.bukkit())
     }
 
     @CommandPermission("scbasics.player-commands")

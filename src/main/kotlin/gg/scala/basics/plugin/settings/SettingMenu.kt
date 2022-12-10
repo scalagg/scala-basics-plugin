@@ -15,7 +15,9 @@ import org.bukkit.entity.Player
  * @author GrowlyX
  * @since 10/14/2022
  */
-class SettingMenu : Menu("Your Settings")
+class SettingMenu(
+    private val player: Player
+) : PaginatedMenu()
 {
     // yes, this is meant to be a list
     private val colors = listOf(
@@ -27,24 +29,62 @@ class SettingMenu : Menu("Your Settings")
         ChatColor.DARK_PURPLE to 10
     )
 
+    private val categories = SettingContainer
+        .categories()
+        .filter {
+            it.display(player)
+        }
+        .filter {
+            it.items.isNotEmpty()
+        }
+
+    private var category = 0
+
     init
     {
         updateAfterClick = true
     }
 
-    override fun onClose(player: Player, manualClose: Boolean)
+    override fun getGlobalButtons(player: Player): Map<Int, Button>?
     {
-        if (manualClose)
-        {
-            val profile = BasicsProfileService
-                .find(player)
-                ?: return
+        val buttons = mutableMapOf<Int, Button>()
 
-            profile.save()
+        for ((index, category) in categories.withIndex())
+        {
+            val color = colors[index]
+
+            val pane = ItemBuilder
+                .of(Material.STAINED_GLASS_PANE)
+                .data(color.second.toShort())
+                .name(
+                    "${color.first}${
+                        category.displayName
+                    }"
+                )
+                .setLore(
+                    category.description.map { "${CC.WHITE}$it" }
+                )
+                .apply {
+                    if (this@SettingMenu.category == index)
+                    {
+                        addToLore("", "${CC.GRAY}(Currently browsing)")
+                    }
+                }
+                .addToLore(
+                    "",
+                    "${CC.GREEN}Click to browse!"
+                )
+                .toButton { _, _ ->
+                    this.category = index
+                }
+
+            buttons[index] = pane
         }
+
+        return buttons
     }
 
-    override fun getButtons(player: Player): Map<Int, Button>
+    override fun getAllPagesButtons(player: Player): Map<Int, Button>
     {
         val complete = mutableMapOf<Int, Button>()
 
@@ -52,139 +92,85 @@ class SettingMenu : Menu("Your Settings")
             .find(player)
             ?: return complete
 
-        (0..8).forEach {
-            complete[it] = PaginatedMenu.PLACEHOLDER
-        }
+        val category = categories.getOrNull(category)
+            ?: return complete
 
-        SettingContainer.categories()
-            .filter {
-                it.display(player)
+        val items = category.items
+            .filter { entry ->
+                entry.display(player)
             }
-            .onEachIndexed { index, category ->
-                if (category.items.isEmpty())
-                    return@onEachIndexed
 
-                val items = category.items
-                    .filter { entry ->
-                        entry.display(player)
-                    }
+        for (button in items)
+        {
+            val status = profile.settings[button.id]
+                ?: continue
 
-                val color = colors[index]
-                var row = (index + 1) * 9
+            val available = button.valueType
+                .enumConstants
+                .filter { it.display(player) }
 
-                // we need to make sure this is a free slot
-                while (
-                    complete[row] != null
+            complete[complete.size] = ItemBuilder
+                .copyOf(button.item)
+                .name(
+                    "${CC.GREEN}${button.displayName}"
                 )
-                {
-                    row += 9
-                }
-
-                val pane = ItemBuilder
-                    .of(Material.STAINED_GLASS_PANE)
-                    .data(color.second.toShort())
-                    .name(
-                        "${color.first}${
-                            category.displayName
-                        }"
-                    )
-                    .setLore(
-                        category.description.map { "${CC.WHITE}$it" }
-                    )
-                    .toButton()
-
-                complete[row] = pane
-
-                var rawIndex = 0
-                var buttonIndex = 0
-
-                while (
-                    items.size != rawIndex
+                .setLore(button.description.map { "${CC.WHITE}$it" })
+                .addToLore(
+                    "",
+                    "${CC.WHITE}Current setting:"
                 )
-                {
-                    val position = row + ++buttonIndex
+                .apply {
+                    val current = status.value
 
-                    if (buttonIndex % 9 == 0)
+                    for (constant in available)
                     {
-                        complete[position] = pane
-                        continue
+                        val enum = constant as Enum<*>
+                        val equipped = current == enum.name
+
+                        addToLore(
+                            "${if (equipped) "${CC.GREEN}► " else CC.GRAY}${constant.displayName}"
+                        )
+                    }
+                }
+                .addToLore(
+                    "",
+                    "${CC.YELLOW}${
+                        if (available.size == 2)
+                            "Click to toggle!" else "Click to scroll through!"
+                    }"
+                )
+                .toButton { _, _ ->
+                    val constants = available
+                        .map {
+                            (it as Enum<*>).name
+                        }
+
+                    val currentIndex = constants
+                        .indexOf(status.value)
+                        .let {
+                            if (it == -1) 0 else it
+                        }
+
+                    val reachedMaxIndex =
+                        currentIndex >= constants.size - 1
+
+                    if (reachedMaxIndex)
+                    {
+                        status.value = constants.first()
+                    } else
+                    {
+                        status.value = constants
+                            .getOrNull(currentIndex + 1)
+                            ?: constants.first()
                     }
 
-                    val button = items[rawIndex++]
-
-                    val status = profile.settings[button.id]
-                        ?: continue
-
-                    val available = button.valueType
-                        .enumConstants
-                        .filter { it.display(player) }
-
-                    complete[position] = ItemBuilder
-                        .copyOf(button.item)
-                        .name(
-                            "${CC.GREEN}${button.displayName}"
-                        )
-                        .setLore(button.description.map { "${CC.WHITE}$it" })
-                        .addToLore(
-                            "",
-                            "${CC.WHITE}Current setting:"
-                        )
-                        .apply {
-                            val current = status.value
-
-                            for (constant in available)
-                            {
-                                val enum = constant as Enum<*>
-                                val equipped = current == enum.name
-
-                                addToLore(
-                                    "${if (equipped) "${CC.GREEN}► " else CC.GRAY}${constant.displayName}"
-                                )
-                            }
-                        }
-                        .addToLore(
-                            "",
-                            "${CC.YELLOW}${
-                                if (available.size == 2)
-                                    "Click to toggle!" else "Click to scroll through!"
-                            }"
-                        )
-                        .toButton { _, _ ->
-                            val constants = available
-                                .map {
-                                    (it as Enum<*>).name
-                                }
-
-                            val currentIndex = constants
-                                .indexOf(status.value)
-                                .let {
-                                    if (it == -1) 0 else it
-                                }
-
-                            val reachedMaxIndex =
-                                currentIndex >= constants.size - 1
-
-                            if (reachedMaxIndex)
-                            {
-                                status.value = constants.first()
-                            } else
-                            {
-                                status.value = constants
-                                    .getOrNull(currentIndex + 1)
-                                    ?: constants.first()
-                            }
-
-                            button.postChange(player)
-                            profile.save()
-                        }
+                    button.postChange(player)
+                    profile.save()
                 }
-            }
-
-        val size = size(complete) + 8
-        (size - 8..size).forEach {
-            complete[it] = PaginatedMenu.PLACEHOLDER
         }
 
         return complete
     }
+
+    override fun getPrePaginatedTitle(player: Player) = "Your Settings"
 }

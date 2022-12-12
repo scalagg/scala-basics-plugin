@@ -97,7 +97,7 @@ class AnnouncementMenu : PaginatedMenu()
                         if (announcement.conditions == null) "None" else announcement.conditions
                     }",
                     "",
-                    "${CC.GREEN}Click to edit.",
+                    "${CC.GREEN}Left-Click to edit.",
                     "${CC.GOLD}Shift-Click to apply condition.",
                     "${CC.RED}Right-Click to delete."
                 )
@@ -120,6 +120,7 @@ class AnnouncementMenu : PaginatedMenu()
                                 player.sendMessage("${CC.GREEN}Saved!")
                                 openMenu(player)
                             }
+                            .start(player)
                         return@toButton
                     }
 

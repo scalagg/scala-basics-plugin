@@ -11,6 +11,9 @@ import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import me.lucko.helper.Events
 import me.lucko.helper.Schedulers
+import me.lucko.helper.metadata.Metadata
+import me.lucko.helper.metadata.MetadataKey
+import me.lucko.helper.metadata.MetadataMap
 import me.lucko.helper.scheduler.Task
 import me.lucko.helper.utils.Players
 import net.evilblock.cubed.serializers.Serializers
@@ -37,6 +40,9 @@ object AnnouncementService : Runnable
 
     fun configModel() = this.cached
 
+    private val announcementKey = MetadataKey
+        .createIntegerKey("announcementIndex")
+
     @Configure
     fun configure()
     {
@@ -46,15 +52,6 @@ object AnnouncementService : Runnable
             ) {
                 reload()
             }
-
-        Events.subscribe(PlayerQuitEvent::class.java)
-            .handler {
-                it.player
-                    .removeMetadata(
-                        "announcement", this.plugin
-                    )
-            }
-            .bindWith(plugin)
 
         reload()
     }
@@ -82,27 +79,27 @@ object AnnouncementService : Runnable
                     } ?: true
                 }
 
-            val currentIndex = (player
-                .getMetadata("announcement")
-                .firstOrNull()
-                ?: kotlin.run {
-                    val meta = FixedMetadataValue(this.plugin, -1)
-                    player.setMetadata("announcement", meta)
+            val metadata = Metadata
+                .provideForPlayer(player)
 
-                    return@run meta
-                }).asInt()
+            val currentIndex = metadata
+                .getOrDefault(
+                    announcementKey, -1
+                )
+
+            metadata.put(
+                announcementKey, currentIndex + 1
+            )
 
             val announcement = announcements
                 .getOrNull(currentIndex + 1)
                 ?: kotlin.run {
-                    val meta = FixedMetadataValue(this.plugin, -1)
-                    player.setMetadata("announcement", meta)
+                    metadata.put(
+                        announcementKey, -1
+                    )
 
                     cached.announcements.first()
                 }
-
-            val meta = FixedMetadataValue(this.plugin, currentIndex + 1)
-            player.setMetadata("announcement", meta)
 
             var linesBeingSent = announcement
                 .lines.toMutableList()

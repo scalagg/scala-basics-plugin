@@ -10,6 +10,8 @@ import net.evilblock.cubed.menu.pagination.PaginatedMenu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Constants
 import net.evilblock.cubed.util.bukkit.ItemBuilder
+import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
+import net.kyori.adventure.key.Key
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -90,10 +92,37 @@ class AnnouncementMenu : PaginatedMenu()
                 .setLore(announcement.lines.map { "${CC.WHITE}$it" })
                 .addToLore(
                     "",
+                    "${CC.GRAY}Conditions:",
+                    "${CC.WHITE}${
+                        if (announcement.conditions == null) "None" else announcement.conditions
+                    }",
+                    "",
                     "${CC.GREEN}Click to edit.",
+                    "${CC.GOLD}Shift-Click to apply condition.",
                     "${CC.RED}Right-Click to delete."
                 )
                 .toButton { _, type ->
+                    if (type!!.isShiftClick)
+                    {
+                        if (announcement.conditions == null)
+                        {
+                            announcement.conditions = mutableListOf()
+                        }
+
+                        player.closeInventory()
+
+                        InputPrompt()
+                            .withText("${CC.GREEN}Enter a condition key (namespace:key)")
+                            .acceptInput { _, input ->
+                                announcement.conditions!! += Key.key(input)
+                                AnnouncementService.applyKvUpdate(model)
+
+                                player.sendMessage("${CC.GREEN}Saved!")
+                                openMenu(player)
+                            }
+                        return@toButton
+                    }
+
                     if (type!!.isRightClick)
                     {
                         ConfirmMenu(

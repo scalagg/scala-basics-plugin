@@ -3,15 +3,19 @@ package gg.scala.basics.plugin.announcement
 import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.basics.plugin.announcement.conditions.AnnouncementConditions
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import me.lucko.helper.Events
 import me.lucko.helper.Schedulers
 import me.lucko.helper.scheduler.Task
 import me.lucko.helper.utils.Players
 import net.evilblock.cubed.serializers.Serializers
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.metadata.FixedMetadataValue
 
 /**
  * @author GrowlyX
@@ -26,8 +30,6 @@ object AnnouncementService : Runnable
     private var task: Task? = null
     private var cached: AnnouncementConfigModel =
         AnnouncementConfigModel()
-
-    private var currentIndex = 0
 
     private val cache by lazy {
         plugin.aware.internal().connect()
@@ -45,6 +47,15 @@ object AnnouncementService : Runnable
                 reload()
             }
 
+        Events.subscribe(PlayerQuitEvent::class.java)
+            .handler {
+                it.player
+                    .removeMetadata(
+                        "announcement", this.plugin
+                    )
+            }
+            .bindWith(plugin)
+
         reload()
     }
 
@@ -55,34 +66,59 @@ object AnnouncementService : Runnable
             return
         }
 
-        val announcement = cached
-            .announcements.getOrNull(currentIndex++)
-            ?: kotlin.run {
-                currentIndex = 0
-                cached.announcements.first()
-            }
-
-        var linesBeingSent = announcement
-            .lines.toMutableList()
-
-        if (cached.padding)
-        {
-            linesBeingSent.add(0, "")
-            linesBeingSent.add("")
-        }
-
-        if (cached.linePrefix.isNotEmpty())
-        {
-            linesBeingSent = linesBeingSent
-                .map { "${cached.linePrefix}$it" }
-                .toMutableList()
-        }
-
         for (player in Players.all())
         {
             val profile = BasicsProfileService
                 .find(player)
                 ?: continue
+
+            val announcements = cached
+                .announcements.filter {
+                    it.conditions?.all { key ->
+                        AnnouncementConditions
+                            .condition(key)
+                            ?.shouldDisplay(player)
+                            ?: true
+                    } ?: true
+                }
+
+            val currentIndex = (player
+                .getMetadata("announcement")
+                .firstOrNull()
+                ?: kotlin.run {
+                    val meta = FixedMetadataValue(this.plugin, -1)
+                    player.setMetadata("announcement", meta)
+
+                    return@run meta
+                }).asInt()
+
+            val announcement = announcements
+                .getOrNull(currentIndex + 1)
+                ?: kotlin.run {
+                    val meta = FixedMetadataValue(this.plugin, -1)
+                    player.setMetadata("announcement", meta)
+
+                    cached.announcements.first()
+                }
+
+            val meta = FixedMetadataValue(this.plugin, currentIndex + 1)
+            player.setMetadata("announcement", meta)
+
+            var linesBeingSent = announcement
+                .lines.toMutableList()
+
+            if (cached.padding)
+            {
+                linesBeingSent.add(0, "")
+                linesBeingSent.add("")
+            }
+
+            if (cached.linePrefix.isNotEmpty())
+            {
+                linesBeingSent = linesBeingSent
+                    .map { "${cached.linePrefix}$it" }
+                    .toMutableList()
+            }
 
             val setting = profile
                 .setting(
@@ -120,7 +156,10 @@ object AnnouncementService : Runnable
         task?.closeAndReportException()
         task = null
 
-        currentIndex = 0
+        Players.all()
+            .forEach {
+                it.removeMetadata("announcement", this.plugin)
+            }
 
         this.cached = Serializers.gson
             .fromJson(

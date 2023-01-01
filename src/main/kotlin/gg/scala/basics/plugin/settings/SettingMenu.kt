@@ -19,6 +19,12 @@ class SettingMenu(
     private val player: Player
 ) : PaginatedMenu()
 {
+    companion object
+    {
+        @JvmStatic
+        var defaultCategory = 0
+    }
+
     // yes, this is meant to be a list
     private val colors = listOf(
         ChatColor.GOLD to 1,
@@ -38,7 +44,7 @@ class SettingMenu(
             it.items.isNotEmpty()
         }
 
-    private var category = 0
+    private var category = defaultCategory
 
     init
     {

@@ -17,4 +17,7 @@ interface SettingEntry : DisplayEnsure, DisplayAttributes
     val default: SettingValue
 
     val postChange: (Player) -> Unit
+
+    val customLogic: Boolean
+    val customLogicLambda: (Player) -> Unit
 }

@@ -121,31 +121,48 @@ class SettingMenu(
                     "${CC.GREEN}${button.displayName}"
                 )
                 .setLore(button.description.map { "${CC.WHITE}$it" })
-                .addToLore(
-                    "",
-                    "${CC.WHITE}Current setting:"
-                )
                 .apply {
-                    val current = status.value
-
-                    for (constant in available)
+                    if (!button.customLogic)
                     {
-                        val enum = constant as Enum<*>
-                        val equipped = current == enum.name
-
+                        val current = status.value
                         addToLore(
-                            "${if (equipped) "${CC.GREEN}► " else CC.GRAY}${constant.displayName}"
+                            "",
+                            "${CC.WHITE}Current setting:"
                         )
+
+                        for (constant in available)
+                        {
+                            val enum = constant as Enum<*>
+                            val equipped = current == enum.name
+
+                            addToLore(
+                                "${if (equipped) "${CC.GREEN}► " else CC.GRAY}${constant.displayName}"
+                            )
+                        }
                     }
                 }
-                .addToLore(
-                    "",
-                    "${CC.YELLOW}${
-                        if (available.size == 2)
-                            "Click to toggle!" else "Click to scroll through!"
-                    }"
-                )
+                .apply {
+                    if (button.customLogic)
+                    {
+                        addToLore("", "${CC.GREEN}Click to open!")
+                        return@apply
+                    }
+
+                    addToLore(
+                        "",
+                        "${CC.YELLOW}${
+                            if (available.size == 2)
+                                "Click to toggle!" else "Click to scroll through!"
+                        }"
+                    )
+                }
                 .toButton { _, _ ->
+                    if (button.customLogic)
+                    {
+                        button.customLogicLambda.invoke(player)
+                        return@toButton
+                    }
+
                     val constants = available
                         .map {
                             (it as Enum<*>).name

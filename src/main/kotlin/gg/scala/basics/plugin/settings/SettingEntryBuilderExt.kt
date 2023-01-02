@@ -31,6 +31,9 @@ inline fun entry(conf: SettingEntryBuilderConf.() -> Unit): SettingEntry
 
         override val postChange = config.postChange
 
+        override val customLogic = config.customLogic
+        override val customLogicLambda = config.customLogicLambda
+
         override fun display(player: Player) =
             config.displayPredicate.invoke(player)
 

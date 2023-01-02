@@ -16,5 +16,7 @@ data class SettingEntryBuilderConf(
     var displayName: String = "",
     var displayPredicate: (Player) -> Boolean = { true },
     var postChange: (Player) -> Unit = { },
+    var customLogic: Boolean = false,
+    var customLogicLambda: (Player) -> Unit = { },
     val description: MutableList<String> = mutableListOf()
 )

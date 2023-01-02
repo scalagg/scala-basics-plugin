@@ -22,7 +22,7 @@ class SettingMenu(
     companion object
     {
         @JvmStatic
-        var defaultCategory = 0
+        var defaultCategory = "General"
     }
 
     // yes, this is meant to be a list
@@ -44,14 +44,24 @@ class SettingMenu(
             it.items.isNotEmpty()
         }
 
-    private var category = defaultCategory
+    private var category = categories.toList()
+        .indexOf(
+            categories
+                .firstOrNull {
+                    it.displayName == defaultCategory
+                }
+                ?: categories.first()
+        )
+        .let {
+            if (it == -1) 0 else it
+        }
 
     init
     {
         updateAfterClick = true
     }
 
-    override fun getGlobalButtons(player: Player): Map<Int, Button>?
+    override fun getGlobalButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
 
@@ -144,7 +154,7 @@ class SettingMenu(
                 .apply {
                     if (button.customLogic)
                     {
-                        addToLore("", "${CC.GREEN}Click to open!")
+                        addToLore("", "${CC.YELLOW}Click to open menu!")
                         return@apply
                     }
 

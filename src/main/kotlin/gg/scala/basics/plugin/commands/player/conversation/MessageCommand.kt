@@ -12,6 +12,7 @@ import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Optional
+import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import net.evilblock.cubed.util.CC
@@ -26,7 +27,7 @@ import java.util.concurrent.CompletableFuture
 @AutoRegister
 object MessageCommand : ScalaCommand()
 {
-    @CommandAlias("reply|r|")
+    @CommandAlias("reply|r")
     @CommandPermission("scbasics.conversation-commands")
     fun onReply(
         player: Player, @Optional message: String?
@@ -52,7 +53,7 @@ object MessageCommand : ScalaCommand()
         }
 
         return onPrivateMessage(
-            player, profile.lastRecipient!!, message
+            player, AsyncLemonPlayer.of(profile.lastRecipient), message
         )
     }
 
@@ -60,74 +61,76 @@ object MessageCommand : ScalaCommand()
     @CommandPermission("scbasics.conversation-commands")
     @CommandAlias("message|msg|tell|t|whisper|w|pm|m")
     fun onPrivateMessage(
-        player: Player, target: UUID, message: String
+        player: Player, target: AsyncLemonPlayer, message: String
     ): CompletableFuture<Void>
     {
-        if (target == player.uniqueId)
-        {
-            throw ConditionFailedException("You cannot message yourself.")
-        }
-
-        return QuickAccess
-            .computeColoredName(
-                target, target.username()
-            )
-            .thenApply {
-                val profile = BasicsProfileService
-                    .find(player)
-                    ?: throw ConditionFailedException(
-                        "Your profile was incorrectly loaded."
-                    )
-
-                val messagingSettingValue = profile
-                    .setting(
-                        id = "messages",
-                        default = MessagingSettingValue.ENABLED
-                    )
-
-                if (messagingSettingValue == MessagingSettingValue.DISABLED)
-                {
-                    throw ConditionFailedException("You have private messages disabled.")
-                }
-
-                if (profile.ignoring.contains(target))
-                {
-                    throw ConditionFailedException("You cannot message a user that you are ignoring.")
-                }
-
-                if (
-                    ChatMessageFilterHandler.handleMessageFilter(
-                        player = player, message = message, target = target
-                    )
-                )
-                {
-                    throw ConditionFailedException("You cannot send filtered messages to $it${CC.RED}.")
-                }
-
-                return@thenApply it
+        return target.validatePlayers(player, false) { lemonPlayer ->
+            if (lemonPlayer.uniqueId == player.uniqueId)
+            {
+                throw ConditionFailedException("You cannot message yourself.")
             }
-            .thenCompose { colored ->
-                QuickAccess.online(target)
-                    .thenApply {
-                        Pair(colored, it)
+
+            QuickAccess
+                .computeColoredName(lemonPlayer.uniqueId, lemonPlayer.name)
+                .thenApply {
+                    val profile = BasicsProfileService
+                        .find(player)
+                        ?: throw ConditionFailedException(
+                            "Your profile was incorrectly loaded."
+                        )
+
+                    val messagingSettingValue = profile
+                        .setting(
+                            id = "messages",
+                            default = MessagingSettingValue.ENABLED
+                        )
+
+                    if (messagingSettingValue == MessagingSettingValue.DISABLED)
+                    {
+                        throw ConditionFailedException("You have private messages disabled.")
                     }
-            }
-            .thenAcceptAsync {
-                val online = it.second
-                val coloredName = it.first
 
-                if (!online)
-                {
-                    throw ConditionFailedException(
-                        String.format(
-                            PrivateConversationMessageResponseContext.TARGET_NOT_ONLINE
-                                .responseMessage,
-                            coloredName
+                    if (profile.ignoring.contains(lemonPlayer.uniqueId))
+                    {
+                        throw ConditionFailedException("You cannot message a user that you are ignoring.")
+                    }
+
+                    if (
+                        ChatMessageFilterHandler.handleMessageFilter(
+                            player = player, message = message, target = lemonPlayer.uniqueId
                         )
                     )
-                }
+                    {
+                        throw ConditionFailedException("You cannot send filtered messages to $it${CC.RED}.")
+                    }
 
-                PrivateConversationMessageService.sendMessage(player, target, message)
-            }
+                    return@thenApply it
+                }
+                .thenCompose { colored ->
+                    QuickAccess.online(lemonPlayer.uniqueId)
+                        .thenApply {
+                            Pair(colored, it)
+                        }
+                }
+                .thenAcceptAsync {
+                    val online = it.second
+                    val coloredName = it.first
+
+                    if (!online)
+                    {
+                        throw ConditionFailedException(
+                            String.format(
+                                PrivateConversationMessageResponseContext.TARGET_NOT_ONLINE
+                                    .responseMessage,
+                                coloredName
+                            )
+                        )
+                    }
+
+                    PrivateConversationMessageService
+                        .sendMessage(player, lemonPlayer.uniqueId, message)
+                }
+                .join()
+        }
     }
 }

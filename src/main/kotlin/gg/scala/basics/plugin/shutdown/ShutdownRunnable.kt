@@ -4,6 +4,7 @@ import gg.scala.lemon.Lemon
 import gg.scala.lemon.util.task.DiminutionRunnable
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.time.TimeUtil
+import org.bukkit.Bukkit
 
 /**
  * @author GrowlyX
@@ -23,6 +24,10 @@ class ShutdownRunnable(seconds: Int) : DiminutionRunnable(seconds)
 
     override fun onEnd()
     {
+        Bukkit.getOnlinePlayers().forEach {
+            it.kickPlayer("${CC.RED}The server is rebooting!")
+        }
+
         Lemon.instance.server.shutdown()
     }
 

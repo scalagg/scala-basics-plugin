@@ -4,7 +4,9 @@ import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.SettingCategory
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
+import gg.scala.basics.plugin.settings.defaults.values.TimeOfDaySettingValue
 import gg.scala.basics.plugin.settings.entry
+import gg.scala.basics.plugin.timeofday.TimeOfDayService
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.lemon.listener.PlayerListener
@@ -76,6 +78,22 @@ object DefaultSettingsCategory : SettingCategory
             description += "the server's global chat."
 
             item = ItemBuilder.of(Material.SIGN)
+        },
+        entry {
+            id = "time_of_day"
+            displayName = "Time of day"
+
+            clazz = TimeOfDaySettingValue::class.java
+            default = TimeOfDaySettingValue.Day
+
+            description += "Allows you to change"
+            description += "the time of day in-game."
+
+            postChange = { player ->
+                TimeOfDayService.toggleToDFromProfile(player)
+            }
+
+            item = ItemBuilder.of(Material.WATCH)
         }
     )
 

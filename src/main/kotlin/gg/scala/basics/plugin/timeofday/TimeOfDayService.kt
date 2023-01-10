@@ -72,7 +72,7 @@ object TimeOfDayService
         {
             TimeOfDaySettingValue.Sunset -> player.setPlayerTime(12500L, false)
             TimeOfDaySettingValue.Night -> player.setPlayerTime(21000L, false)
-            else -> player.setPlayerTime(12000L, false)
+            else -> player.setPlayerTime(1000L, false)
         }
     }
 }

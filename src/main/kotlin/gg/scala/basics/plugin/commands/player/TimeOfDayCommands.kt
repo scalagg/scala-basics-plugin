@@ -33,7 +33,7 @@ object TimeOfDayCommands : ScalaCommand()
         if (cooldown != null)
         {
             throw ConditionFailedException(
-                "Please wait ${"%.2f".format(((cooldown + 5000L) - System.currentTimeMillis()) / 1000.0)} more seconds before running this command again."
+                "Please wait ${"%.2f".format(((cooldown + 2000L) - System.currentTimeMillis()) / 1000.0)} more seconds before running this command again."
             )
         }
 
@@ -66,6 +66,6 @@ object TimeOfDayCommands : ScalaCommand()
         ensureCanPerform(player)
 
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Night)
-        player.sendMessage("${CC.GREEN}Your time has been set to day!")
+        player.sendMessage("${CC.GREEN}Your time has been set to night!")
     }
 }

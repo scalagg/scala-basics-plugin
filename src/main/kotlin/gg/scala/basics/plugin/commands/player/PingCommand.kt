@@ -33,7 +33,7 @@ object PingCommand : ScalaCommand()
             )
 
         player.sendMessage(
-            "${QuickAccess.coloredName(player.bukkit(), true)}'s${CC.SEC} ping is ${CC.PRI}${ping}ms${CC.SEC}."
+            "${CC.GREEN}You have a ping of ${CC.GOLD}${ping}ms${CC.GREEN}."
         )
     }
 
@@ -48,7 +48,7 @@ object PingCommand : ScalaCommand()
             )
 
         player.sendMessage(
-            "${QuickAccess.coloredName(target.bukkit(), true)}'s${CC.SEC} ping is ${CC.PRI}${ping}ms${CC.SEC}."
+            "${QuickAccess.coloredName(target.bukkit(), true)}${CC.GREEN} has a ping of ${CC.GOLD}${ping}ms${CC.GREEN}."
         )
     }
 }

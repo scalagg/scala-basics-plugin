@@ -28,15 +28,11 @@ object DefaultSettingsCategory : SettingCategory
             displayName = "Direct messages"
 
             clazz = MessagingSettingValue::class.java
-            default = MessagingSettingValue.FRIENDS_ONLY
+            default = MessagingSettingValue.ENABLED
 
             description += "Allows you to disable"
             description += "direct messages through"
             description += "/message."
-            description += ""
-            description += "This setting is set to"
-            description += "${CC.BOLD}Friends Only${CC.WHITE} by default"
-            description += "for privacy purposes."
 
             item = ItemBuilder.of(Material.BOOK)
         },

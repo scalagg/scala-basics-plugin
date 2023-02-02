@@ -4,6 +4,7 @@ import gg.scala.aware.conversation.ConversationContinuation
 import gg.scala.basics.plugin.conversation.message.PrivateConversationMessage
 import gg.scala.basics.plugin.conversation.message.PrivateConversationMessageResponse
 import gg.scala.basics.plugin.conversation.message.PrivateConversationMessageResponseContext
+import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.player.metadata.Metadata
 import gg.scala.lemon.util.CubedCacheUtil
@@ -44,18 +45,16 @@ object PrivateConversationMessageReceiver : (PrivateConversationMessage, Private
             return ConversationContinuation.END
         }
 
-        val lemonPlayer = PlayerHandler
-            .findPlayer(bukkitPlayer.uniqueId)
-            .orElse(null)
-
-        lemonPlayer.updateOrAddMetadata(
-            "last-recipient",
-            Metadata(message.targetedReceiver.toString())
-        )
-
         bukkitPlayer.sendMessage(
             "${CC.GRAY}(To ${fancyName}${CC.GRAY}): ${message.content}"
         )
+
+        val profile = BasicsProfileService
+            .find(bukkitPlayer)
+            ?: return ConversationContinuation.END
+
+        profile.lastRecipient = message.dispatcher
+        profile.save()
 
         return ConversationContinuation.END
     }

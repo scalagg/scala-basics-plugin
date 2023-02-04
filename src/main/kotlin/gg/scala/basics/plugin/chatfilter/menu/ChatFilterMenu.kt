@@ -5,6 +5,7 @@ import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.pagination.PaginatedMenu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemBuilder
+import net.evilblock.cubed.util.text.TextSplitter
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -34,7 +35,13 @@ class ChatFilterMenu : PaginatedMenu()
                     .name("${CC.PRI}${it.id}")
                     .addToLore(
                         "${CC.GRAY}Regex pattern:",
-                        "${CC.WHITE}${it.regex.pattern}",
+                    )
+                    .apply {
+                        addToLore(
+                            *TextSplitter.split(it.regex.pattern, CC.WHITE, CC.WHITE).toTypedArray()
+                        )
+                    }
+                    .addToLore(
                         "",
                         "${CC.WHITE}Test phrase: ${CC.WHITE}${it.testPhrase}"
                     )

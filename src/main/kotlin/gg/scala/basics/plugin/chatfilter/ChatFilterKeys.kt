@@ -8,7 +8,7 @@ import net.kyori.adventure.key.Key
  */
 object ChatFilterKeys
 {
-    private const val NAMESPACE = "ChatFilter"
+    private const val NAMESPACE = "chatfilter"
 
     val updateKey = Key
         .key(NAMESPACE, "update")

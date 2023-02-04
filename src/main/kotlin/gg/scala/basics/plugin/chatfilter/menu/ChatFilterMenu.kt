@@ -38,12 +38,14 @@ class ChatFilterMenu : PaginatedMenu()
                     )
                     .apply {
                         addToLore(
-                            *TextSplitter.split(it.regex.pattern, CC.WHITE, CC.WHITE).toTypedArray()
+                            *TextSplitter
+                                .split(16, 16, it.regex.pattern, CC.WHITE, CC.WHITE)
+                                .toTypedArray()
                         )
                     }
                     .addToLore(
                         "",
-                        "${CC.WHITE}Test phrase: ${CC.WHITE}${it.testPhrase}"
+                        "${CC.GRAY}Test phrase: ${CC.WHITE}${it.testPhrase}"
                     )
                     .toButton()
             }

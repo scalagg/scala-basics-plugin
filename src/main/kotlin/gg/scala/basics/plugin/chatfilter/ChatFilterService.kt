@@ -1,5 +1,8 @@
 package gg.scala.basics.plugin.chatfilter
 
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
@@ -7,7 +10,6 @@ import gg.scala.basics.plugin.cache.SharedAwareService
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
-import gg.scala.lemon.filter.ChatMessageFilterHandler
 import net.evilblock.cubed.serializers.Serializers
 
 /**
@@ -34,6 +36,27 @@ object ChatFilterService
             ) {
                 reload()
             }
+
+        Serializers.create {
+            registerTypeAdapter(
+                Regex::class.java,
+                object : TypeAdapter<Regex>()
+                {
+                    override fun write(writer: JsonWriter, regex: Regex)
+                    {
+                        writer.beginObject()
+                        writer.name("pattern").value(regex.pattern)
+                        writer.endObject()
+                    }
+
+                    override fun read(reader: JsonReader): Regex
+                    {
+                        reader.beginObject()
+                        return reader.nextString().toRegex()
+                    }
+                }
+            )
+        }
 
         reload()
     }

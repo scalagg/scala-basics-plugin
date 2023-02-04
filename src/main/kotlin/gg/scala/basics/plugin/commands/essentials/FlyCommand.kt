@@ -44,7 +44,7 @@ object FlyCommand : ScalaCommand()
         player.bukkit().toggleFlight()
 
         player.sendMessage(
-            "${CC.GREEN}You've ${if (player.bukkit().isFlying) "enabled" else "disabled"} flight."
+            "${if (player.bukkit().isFlying) CC.GREEN else CC.RED}You've ${if (player.bukkit().isFlying) "enabled" else "disabled"} flight."
         )
 
         player performed "${if (player.bukkit().isFlying) "enabled" else "disabled"} flight"

@@ -21,8 +21,9 @@ class SettingMenu(
 {
     companion object
     {
-        @JvmStatic
-        var defaultCategory = "General"
+        @JvmStatic var defaultCategory = "General"
+        @JvmStatic val stateSettingClazz =
+            "gg.scala.basics.plugin.settings.defaults.values.StateSettingValue"
     }
 
     // yes, this is meant to be a list
@@ -139,6 +140,16 @@ class SettingMenu(
                             "",
                             "${CC.WHITE}Current setting:"
                         )
+
+                        if (status.clazz == stateSettingClazz)
+                        {
+                            addToLore(
+                                "${if (current == "ENABLED") CC.GREEN else CC.RED}${
+                                    if (current == "ENABLED") "Enabled" else "Disabled"
+                                }"
+                            )
+                            return@apply
+                        }
 
                         for (constant in available)
                         {

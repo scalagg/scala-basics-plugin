@@ -1,6 +1,6 @@
 package gg.scala.basics.plugin.commands.admin
 
-import gg.scala.basics.plugin.chatfilter.ChatFilterService
+import gg.scala.basics.plugin.tablist.TabListService
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.acf.CommandHelp
 import gg.scala.commons.acf.annotation.*
@@ -49,7 +49,7 @@ object TabListCommand : ScalaCommand()
                         input.replace("<nl>", "\n")
                     )
 
-                val configuration = ChatFilterService.configModel()
+                val configuration = TabListService.configModel()
 
                 when (part)
                 {
@@ -57,7 +57,7 @@ object TabListCommand : ScalaCommand()
                     TabListPart.FOOTER -> configuration.footer = component
                 }
 
-                ChatFilterService.applyKvUpdate(configuration)
+                TabListService.applyKvUpdate(configuration)
 
                 player.sendMessage(
                     "${CC.GREEN}The tablist ${part.name} has been set to:",
@@ -72,7 +72,7 @@ object TabListCommand : ScalaCommand()
     @Description("Reset a tab list part value.")
     fun onReset(player: ScalaPlayer, part: TabListPart)
     {
-        val configuration = ChatFilterService.configModel()
+        val configuration = TabListService.configModel()
 
         when (part)
         {

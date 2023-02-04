@@ -8,6 +8,7 @@ import gg.scala.commons.acf.annotation.Default
 import gg.scala.commons.acf.annotation.Description
 import gg.scala.commons.acf.annotation.HelpCommand
 import gg.scala.commons.acf.annotation.Subcommand
+import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 
@@ -15,6 +16,7 @@ import gg.scala.commons.issuer.ScalaPlayer
  * @author GrowlyX
  * @since 2/4/2023
  */
+@AutoRegister
 @CommandAlias("chatfilter|cf")
 @CommandPermission("scbasics.command.chatfilter")
 object ChatFilterCommand : ScalaCommand()

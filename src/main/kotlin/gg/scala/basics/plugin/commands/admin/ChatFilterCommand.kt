@@ -4,6 +4,7 @@ import gg.scala.basics.plugin.chatfilter.ChatFilter
 import gg.scala.basics.plugin.chatfilter.ChatFilterService
 import gg.scala.basics.plugin.chatfilter.menu.ChatFilterMenu
 import gg.scala.commons.acf.CommandHelp
+import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
@@ -70,6 +71,40 @@ object ChatFilterCommand : ScalaCommand()
         {
             performRemoval()
         }
+    }
+
+    @Subcommand("add")
+    @Description("Add a chat filter.")
+    fun onAdd(
+        player: CommandSender, id: String,
+        pattern: String, testPhrase: String
+    )
+    {
+        if (ChatFilterService.configModel().findById(id) != null)
+        {
+            throw ConditionFailedException("The id $id is already in use!")
+        }
+
+        val regex = pattern.toRegex()
+
+        if (!regex.matches(testPhrase))
+        {
+            throw ConditionFailedException(
+                "Your test phrase does not match the provided pattern!"
+            )
+        }
+
+        val model = ChatFilterService.configModel()
+        model.chatFilters.add(
+            ChatFilter(id, regex, testPhrase)
+        )
+
+        ChatFilterService
+            .applyKvUpdate(model)
+
+        player.sendMessage(
+            "${CC.GREEN}You've added the chat filter entry ${CC.GRAY}(globally)${CC.GREEN}: ${CC.GOLD}$id"
+        )
     }
 }
 

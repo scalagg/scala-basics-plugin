@@ -4,6 +4,7 @@ import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.announcement.conditions.AnnouncementConditions
+import gg.scala.basics.plugin.cache.SharedAwareService
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.flavor.inject.Inject
@@ -33,10 +34,6 @@ object AnnouncementService : Runnable
     private var task: Task? = null
     private var cached: AnnouncementConfigModel =
         AnnouncementConfigModel()
-
-    private val cache by lazy {
-        plugin.aware.internal().connect()
-    }
 
     fun configModel() = this.cached
 
@@ -132,7 +129,8 @@ object AnnouncementService : Runnable
 
     private fun reload()
     {
-        val model = cache.sync()
+        val model = SharedAwareService
+            .cache().sync()
             .get(
                 AnnouncementKeys.storeKey
             )
@@ -140,7 +138,8 @@ object AnnouncementService : Runnable
         if (model == null)
         {
             cached = AnnouncementConfigModel()
-            cache.sync()
+            SharedAwareService
+                .cache().sync()
                 .set(
                     AnnouncementKeys.storeKey,
                     Serializers.gson.toJson(cached)
@@ -180,7 +179,8 @@ object AnnouncementService : Runnable
     )
     {
         cached = newModel
-        cache.sync()
+        SharedAwareService
+            .cache().sync()
             .set(
                 AnnouncementKeys.storeKey,
                 Serializers.gson.toJson(cached)

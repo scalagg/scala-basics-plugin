@@ -3,6 +3,7 @@ package gg.scala.basics.plugin.tablist
 import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.basics.plugin.cache.SharedAwareService
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -27,10 +28,6 @@ object TabListService
 
     private var cached: TabListConfigModel =
         TabListConfigModel()
-
-    private val cache by lazy {
-        plugin.aware.internal().connect()
-    }
 
     fun configModel() = this.cached
 
@@ -57,7 +54,8 @@ object TabListService
 
     private fun reload()
     {
-        val model = cache.sync()
+        val model = SharedAwareService
+            .cache().sync()
             .get(
                 TabListKeys.storeKey
             )
@@ -65,7 +63,8 @@ object TabListService
         if (model == null)
         {
             cached = TabListConfigModel()
-            cache.sync()
+            SharedAwareService
+                .cache().sync()
                 .set(
                     TabListKeys.storeKey,
                     Serializers.gson.toJson(cached)
@@ -87,7 +86,8 @@ object TabListService
     )
     {
         cached = newModel
-        cache.sync()
+        SharedAwareService
+            .cache().sync()
             .set(
                 TabListKeys.storeKey,
                 Serializers.gson.toJson(cached)

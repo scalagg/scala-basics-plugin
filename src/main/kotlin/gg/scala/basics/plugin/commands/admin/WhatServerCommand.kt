@@ -22,7 +22,7 @@ object WhatServerCommand : ScalaCommand()
     fun onWhatServer(player: ScalaPlayer)
     {
         player.sendMessage(
-            "${CC.GREEN}You've been connected to ${CC.PRI}${Lemon.instance.settings.id}${CC.GREEN}.",
+            "${CC.GREEN}You are on the server ${CC.PRI}${Lemon.instance.settings.id}${CC.GREEN}.",
             "${CC.SEC}You've been connected to this server for ${
                 DurationFormatUtils.formatDurationWords(
                     System.currentTimeMillis() - LoginTimeService.loginTime(player.bukkit()), 

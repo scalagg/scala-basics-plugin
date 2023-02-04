@@ -1,22 +1,17 @@
 package gg.scala.basics.plugin.commands.admin
 
-import gg.scala.basics.plugin.shutdown.ShutdownService
-import gg.scala.basics.plugin.tablist.TabListService
+import gg.scala.basics.plugin.chatfilter.ChatFilterService
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.acf.CommandHelp
-import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.*
 import gg.scala.commons.annotations.commands.AssignPermission
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.issuer.ScalaPlayer
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
-import net.evilblock.cubed.util.time.Duration
-import net.evilblock.cubed.util.time.TimeUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import org.bukkit.entity.Player
 
 /**
  * @author puugz
@@ -54,7 +49,7 @@ object TabListCommand : ScalaCommand()
                         input.replace("<nl>", "\n")
                     )
 
-                val configuration = TabListService.configModel()
+                val configuration = ChatFilterService.configModel()
 
                 when (part)
                 {
@@ -62,7 +57,7 @@ object TabListCommand : ScalaCommand()
                     TabListPart.FOOTER -> configuration.footer = component
                 }
 
-                TabListService.applyKvUpdate(configuration)
+                ChatFilterService.applyKvUpdate(configuration)
 
                 player.sendMessage(
                     "${CC.GREEN}The tablist ${part.name} has been set to:",
@@ -77,7 +72,7 @@ object TabListCommand : ScalaCommand()
     @Description("Reset a tab list part value.")
     fun onReset(player: ScalaPlayer, part: TabListPart)
     {
-        val configuration = TabListService.configModel()
+        val configuration = ChatFilterService.configModel()
 
         when (part)
         {

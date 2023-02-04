@@ -4,8 +4,10 @@ import gg.scala.basics.plugin.chatfilter.ChatFilterService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.pagination.PaginatedMenu
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.text.TextSplitter
+import net.md_5.bungee.api.chat.ClickEvent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -34,20 +36,26 @@ class ChatFilterMenu : PaginatedMenu()
                     .of(Material.BOOK)
                     .name("${CC.PRI}${it.id}")
                     .addToLore(
-                        "${CC.GRAY}Regex pattern:",
+                        "${CC.WHITE}Regex pattern:",
                     )
                     .apply {
                         addToLore(
-                            *TextSplitter
-                                .split(16, 16, it.regex.pattern, CC.WHITE, CC.WHITE)
-                                .toTypedArray()
+                            "${CC.GRAY}(click to copy)"
                         )
                     }
                     .addToLore(
                         "",
                         "${CC.GRAY}Test phrase: ${CC.WHITE}${it.testPhrase}"
                     )
-                    .toButton()
+                    .toButton { _, _ ->
+                        FancyMessage()
+                            .withMessage("${CC.YELLOW}Click to copy!")
+                            .andCommandOf(
+                                ClickEvent.Action.COPY_TO_CLIPBOARD,
+                                it.regex.pattern
+                            )
+                            .sendToPlayer(player)
+                    }
             }
 
         return buttons

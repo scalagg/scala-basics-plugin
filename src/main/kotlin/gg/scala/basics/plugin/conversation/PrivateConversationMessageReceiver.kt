@@ -54,6 +54,7 @@ object PrivateConversationMessageReceiver : (PrivateConversationMessage, Private
             ?: return ConversationContinuation.END
 
         profile.lastRecipient = message.targetedReceiver
+        profile.lastRecipientMessageTimestamp = System.currentTimeMillis()
         profile.save()
 
         return ConversationContinuation.END

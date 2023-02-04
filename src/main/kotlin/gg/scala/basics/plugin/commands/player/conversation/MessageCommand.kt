@@ -19,6 +19,7 @@ import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 /**
  * @author GrowlyX
@@ -27,6 +28,7 @@ import java.util.concurrent.CompletableFuture
 @AutoRegister
 object MessageCommand : ScalaCommand()
 {
+
     @CommandAlias("reply|r")
     @CommandPermission("scbasics.conversation-commands")
     fun onReply(
@@ -39,9 +41,12 @@ object MessageCommand : ScalaCommand()
                 "Your profile was incorrectly loaded."
             )
 
-        if (profile.lastRecipient == null)
+        if (
+            profile.lastRecipient == null ||
+            (profile.lastRecipientMessageTimestamp != null && System.currentTimeMillis() - profile.lastRecipientMessageTimestamp!! > TimeUnit.HOURS.toMillis(12L))
+        )
         {
-            throw ConditionFailedException("You have not messaged anyone in the past.")
+            throw ConditionFailedException("You have not messaged anyone recently!")
         }
 
         if (message == null)

@@ -122,6 +122,7 @@ object PrivateConversationMessageResponder : (PrivateConversationMessage) -> Pri
         }
 
         profile.lastRecipient = message.dispatcher
+        profile.lastRecipientMessageTimestamp = System.currentTimeMillis()
         profile.save()
 
         bukkitPlayer.sendMessage(

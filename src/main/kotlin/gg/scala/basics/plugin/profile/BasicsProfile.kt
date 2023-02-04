@@ -18,6 +18,7 @@ class BasicsProfile(
     val settings = mutableMapOf<String, MutableSettingEntryReference>()
 
     var lastRecipient: UUID? = null
+    var lastRecipientMessageTimestamp: Long? = null
 
     inline fun <reified T : Enum<T>> setting(id: String) =
         settings[id]?.map<T>()

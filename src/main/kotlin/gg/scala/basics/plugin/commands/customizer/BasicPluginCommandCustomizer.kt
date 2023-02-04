@@ -1,5 +1,7 @@
 package gg.scala.basics.plugin.commands.customizer
 
+import gg.scala.basics.plugin.chatfilter.ChatFilter
+import gg.scala.basics.plugin.chatfilter.ChatFilterService
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.cache.uuid.ScalaStoreUuidCache
 import gg.scala.commons.acf.ConditionFailedException
@@ -31,6 +33,11 @@ object BasicPluginCommandCustomizer
                 Bukkit.getWorlds().map(World::getName)
             }
 
+        manager.commandCompletions
+            .registerAsyncCompletion("chatfilters") {
+                ChatFilterService.configModel().chatFilters.map(ChatFilter::id)
+            }
+
         manager.commandContexts
             .registerContext(World::class.java) {
                 val arg = it.popFirstArg()
@@ -41,6 +48,18 @@ object BasicPluginCommandCustomizer
                     }
                     ?: throw ConditionFailedException(
                         "No world matching ${CC.YELLOW}$arg${CC.RED} could be found."
+                    )
+            }
+
+        manager.commandContexts
+            .registerContext(ChatFilter::class.java) {
+                val arg = it.popFirstArg()
+
+                ChatFilterService
+                    .configModel()
+                    .findById(arg)
+                    ?: throw ConditionFailedException(
+                        "No chat filter matching ${CC.YELLOW}$arg${CC.RED} could be found."
                     )
             }
     }

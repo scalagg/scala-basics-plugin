@@ -7,6 +7,7 @@ import gg.scala.basics.plugin.cache.SharedAwareService
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.filter.ChatMessageFilterHandler
 import net.evilblock.cubed.serializers.Serializers
 
 /**

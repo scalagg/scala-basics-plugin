@@ -1,7 +1,14 @@
 package gg.scala.basics.plugin.chatfilter
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
@@ -11,6 +18,8 @@ import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import net.evilblock.cubed.serializers.Serializers
+import java.lang.IllegalStateException
+import java.lang.reflect.Type
 
 /**
  * @author GrowlyX
@@ -40,19 +49,26 @@ object ChatFilterService
         Serializers.create {
             registerTypeAdapter(
                 Regex::class.java,
-                object : TypeAdapter<Regex>()
+                object : JsonSerializer<Regex>, JsonDeserializer<Regex>
                 {
-                    override fun write(writer: JsonWriter, regex: Regex)
+                    override fun serialize(
+                        p0: Regex, p1: Type?, p2: JsonSerializationContext?
+                    ): JsonElement
                     {
-                        writer.beginObject()
-                        writer.name("pattern").value(regex.pattern)
-                        writer.endObject()
+                        val jsonObject = JsonObject()
+                        jsonObject.addProperty("pattern", p0.pattern)
+                        return jsonObject
                     }
 
-                    override fun read(reader: JsonReader): Regex
+                    override fun deserialize(
+                        p0: JsonElement,
+                        p1: Type?,
+                        p2: JsonDeserializationContext?
+                    ): Regex
                     {
-                        reader.beginObject()
-                        return reader.nextString().toRegex()
+                        return p0.asJsonObject
+                            .get("pattern")
+                            .asString.toRegex()
                     }
                 }
             )

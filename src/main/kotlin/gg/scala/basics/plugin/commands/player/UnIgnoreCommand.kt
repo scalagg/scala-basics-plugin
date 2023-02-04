@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.commands.player
 
+import gg.scala.basics.plugin.commands.cachedBasicProfile
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
@@ -24,17 +25,14 @@ object UnIgnoreCommand : ScalaCommand()
     @CommandPermission("scbasics.player-commands")
     fun onUnIgnore(player: ScalaPlayer, target: AsyncLemonPlayer): CompletableFuture<Void>
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Your profile did not load in properly."
-            )
+        val profile = cachedBasicProfile(player)
 
         return target
             .validatePlayers(player.bukkit(), true) {
                 if (!profile.ignoring.contains(it.uniqueId))
                 {
                     throw ConditionFailedException(
-                        "You're not ignoring ${CC.YELLOW}${it.name}${CC.RED}!"
+                        "You're not ignoring ${CC.BOLD}${it.name}${CC.RED}!"
                     )
                 }
 

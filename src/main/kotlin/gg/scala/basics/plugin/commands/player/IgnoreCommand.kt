@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.commands.player
 
+import gg.scala.basics.plugin.commands.cachedBasicProfile
 import gg.scala.basics.plugin.ignorelist.IgnoreListFormatter
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.commons.acf.ConditionFailedException
@@ -30,10 +31,14 @@ object IgnoreCommand : ScalaCommand()
         player: ScalaPlayer, @Default("1") page: Int
     )
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Your profile did not load in properly."
+        val profile = cachedBasicProfile(player)
+
+        if (profile.ignoring.isEmpty())
+        {
+            throw ConditionFailedException(
+                "You are not ignoring anyone! Use ${CC.BOLD}/ignore <username>${CC.RED} to add a user to your ignore list!"
             )
+        }
 
         IgnoreListFormatter
             .display(
@@ -50,10 +55,7 @@ object IgnoreCommand : ScalaCommand()
         player: ScalaPlayer, lazyPlayer: AsyncLemonPlayer
     ): CompletableFuture<Void>
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Your profile did not load in properly."
-            )
+        val profile = cachedBasicProfile(player)
 
         return lazyPlayer
             .validatePlayers(player.bukkit(), false) {

@@ -2,6 +2,7 @@ package gg.scala.basics.plugin.commands
 
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
+import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.player.LemonPlayer
 import me.lucko.helper.utils.Players
@@ -15,6 +16,11 @@ import org.bukkit.entity.Player
  * @since 10/13/2022
  */
 fun LemonPlayer.bukkit() = Bukkit.getPlayer(this.uniqueId)!!
+
+fun cachedBasicProfile(player: ScalaPlayer) = BasicsProfileService.find(player.bukkit())
+    ?: throw ConditionFailedException(
+        "Your profile did not load in properly."
+    )
 
 infix fun ScalaPlayer.performed(message: String)
 {

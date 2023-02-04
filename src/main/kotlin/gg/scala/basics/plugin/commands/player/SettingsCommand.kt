@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.commands.player
 
+import gg.scala.basics.plugin.commands.cachedBasicProfile
 import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.SettingMenu
@@ -32,10 +33,7 @@ object SettingsCommand : ScalaCommand()
     )
     fun onSounds(player: ScalaPlayer)
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Sorry, your profile did not load properly."
-            )
+        val profile = cachedBasicProfile(player)
 
         val messagesRef = profile.settings["messages_sounds"]!!
         val mapped = messagesRef.map<StateSettingValue>()
@@ -65,10 +63,7 @@ object SettingsCommand : ScalaCommand()
     )
     fun onAnnouncements(player: ScalaPlayer)
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Sorry, your profile did not load properly."
-            )
+        val profile = cachedBasicProfile(player)
 
         val messagesRef = profile.settings["announcements"]!!
         val mapped = messagesRef.map<StateSettingValue>()
@@ -98,10 +93,7 @@ object SettingsCommand : ScalaCommand()
     )
     fun onGlobalChat(player: ScalaPlayer)
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Sorry, your profile did not load properly."
-            )
+        val profile = cachedBasicProfile(player)
 
         val messagesRef = profile.settings["global_chat"]!!
         val mapped = messagesRef.map<StateSettingValue>()
@@ -131,10 +123,7 @@ object SettingsCommand : ScalaCommand()
     )
     fun onDirectMessages(player: ScalaPlayer)
     {
-        val profile = BasicsProfileService.find(player.bukkit())
-            ?: throw ConditionFailedException(
-                "Sorry, your profile did not load properly."
-            )
+        val profile = cachedBasicProfile(player)
 
         val messageSettingValue = profile
             .setting(

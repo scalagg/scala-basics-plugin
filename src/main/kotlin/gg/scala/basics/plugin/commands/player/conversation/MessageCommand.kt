@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.commands.player.conversation
 
+import gg.scala.basics.plugin.commands.cachedBasicProfile
 import gg.scala.basics.plugin.conversation.PrivateConversationMessageService
 import gg.scala.basics.plugin.conversation.message.PrivateConversationMessageResponseContext
 import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
@@ -12,6 +13,7 @@ import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Optional
+import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
@@ -28,18 +30,13 @@ import java.util.concurrent.TimeUnit
 @AutoRegister
 object MessageCommand : ScalaCommand()
 {
-
     @CommandAlias("reply|r")
     @CommandPermission("scbasics.conversation-commands")
     fun onReply(
-        player: Player, @Optional message: String?
+        player: ScalaPlayer, @Optional message: String?
     ): CompletableFuture<Void>
     {
-        val profile = BasicsProfileService
-            .find(player)
-            ?: throw ConditionFailedException(
-                "Your profile was incorrectly loaded."
-            )
+        val profile = cachedBasicProfile(player)
 
         if (
             profile.lastRecipient == null ||
@@ -66,10 +63,10 @@ object MessageCommand : ScalaCommand()
     @CommandPermission("scbasics.conversation-commands")
     @CommandAlias("message|msg|tell|t|whisper|w|pm|m")
     fun onPrivateMessage(
-        player: Player, target: AsyncLemonPlayer, message: String
+        player: ScalaPlayer, target: AsyncLemonPlayer, message: String
     ): CompletableFuture<Void>
     {
-        return target.validatePlayers(player, false) { lemonPlayer ->
+        return target.validatePlayers(player.bukkit(), false) { lemonPlayer ->
             if (lemonPlayer.uniqueId == player.uniqueId)
             {
                 throw ConditionFailedException("You cannot message yourself.")
@@ -78,11 +75,7 @@ object MessageCommand : ScalaCommand()
             QuickAccess
                 .computeColoredName(lemonPlayer.uniqueId, lemonPlayer.name)
                 .thenApply {
-                    val profile = BasicsProfileService
-                        .find(player)
-                        ?: throw ConditionFailedException(
-                            "Your profile was incorrectly loaded."
-                        )
+                    val profile = cachedBasicProfile(player)
 
                     val messagingSettingValue = profile
                         .setting(
@@ -102,7 +95,7 @@ object MessageCommand : ScalaCommand()
 
                     if (
                         ChatMessageFilterHandler.handleMessageFilter(
-                            player = player, message = message, target = lemonPlayer.uniqueId
+                            player = player.bukkit(), message = message, target = lemonPlayer.uniqueId
                         )
                     )
                     {
@@ -133,7 +126,9 @@ object MessageCommand : ScalaCommand()
                     }
 
                     PrivateConversationMessageService
-                        .sendMessage(player, lemonPlayer.uniqueId, message)
+                        .sendMessage(
+                            player.bukkit(), lemonPlayer.uniqueId, message
+                        )
                 }
                 .join()
         }

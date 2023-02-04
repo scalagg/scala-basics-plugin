@@ -53,7 +53,7 @@ object PrivateConversationMessageReceiver : (PrivateConversationMessage, Private
             .find(bukkitPlayer)
             ?: return ConversationContinuation.END
 
-        profile.lastRecipient = message.dispatcher
+        profile.lastRecipient = message.targetedReceiver
         profile.save()
 
         return ConversationContinuation.END

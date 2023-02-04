@@ -45,6 +45,7 @@ object PrivateConversationMessageService
             coloredName, target, content
         )
 
+
         agent.distribute(message)
     }
 }

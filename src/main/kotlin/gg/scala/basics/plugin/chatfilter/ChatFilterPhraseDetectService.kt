@@ -22,7 +22,7 @@ object ChatFilterPhraseDetectService : MessagePhraseFilter
     override fun isFiltered(player: Player, word: String): Boolean
     {
         return ChatFilterService.configModel()
-            .filteredRegexes
+            .chatFilters
             .any {
                 it.regex.matches(word)
             }

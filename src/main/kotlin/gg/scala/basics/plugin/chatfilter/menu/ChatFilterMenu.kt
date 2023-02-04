@@ -28,10 +28,10 @@ class ChatFilterMenu : PaginatedMenu()
         val buttons = mutableMapOf<Int, Button>()
 
         ChatFilterService.configModel()
-            .filteredRegexes.forEach {
+            .chatFilters.forEach {
                 buttons[buttons.size] = ItemBuilder
                     .of(Material.BOOK)
-                    .name("${CC.PRI}#${buttons.size + 1}")
+                    .name("${CC.PRI}${it.id}")
                     .addToLore(
                         "${CC.GRAY}Regex pattern:",
                         "${CC.WHITE}${it.regex.pattern}",

@@ -11,6 +11,7 @@ import gg.scala.commons.acf.annotation.Subcommand
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import org.bukkit.command.CommandSender
 
 /**
  * @author GrowlyX
@@ -31,6 +32,13 @@ object ChatFilterCommand : ScalaCommand()
     @Subcommand("entries")
     @Description("View all chat filter entries.")
     fun onEntries(player: ScalaPlayer)
+    {
+        ChatFilterMenu().openMenu(player.bukkit())
+    }
+
+    @Subcommand("add")
+    @Description("View all chat filter entries.")
+    fun onAdd(player: CommandSender)
     {
         ChatFilterMenu().openMenu(player.bukkit())
     }

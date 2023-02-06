@@ -2,6 +2,7 @@ package gg.scala.basics.plugin.commands.customizer
 
 import gg.scala.basics.plugin.chatfilter.ChatFilter
 import gg.scala.basics.plugin.chatfilter.ChatFilterService
+import gg.scala.basics.plugin.disguise.DisguiseService
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.cache.uuid.ScalaStoreUuidCache
 import gg.scala.commons.acf.ConditionFailedException
@@ -20,6 +21,22 @@ object BasicPluginCommandCustomizer
     @CommandManagerCustomizer
     fun customize(manager: ScalaCommandManager)
     {
+        manager.commandConditions
+            .addCondition("requires-disguise") {
+                if (!DisguiseService.provider().isDisguised(it.issuer.player))
+                    throw ConditionFailedException(
+                        "You are not disguised! Disguise yourself using ${CC.BOLD}/disguise${CC.RED} to use this command!"
+                    )
+            }
+
+        manager.commandConditions
+            .addCondition("not-disguised") {
+                if (DisguiseService.provider().isDisguised(it.issuer.player))
+                    throw ConditionFailedException(
+                        "You are already disguised! Use ${CC.BOLD}/undisguise${CC.RED} to use this command again!"
+                    )
+            }
+
         manager.commandCompletions
             .registerAsyncCompletion("ignoring") {
                 val profile = BasicsProfileService.find(it.player)

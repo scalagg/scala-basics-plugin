@@ -50,6 +50,9 @@ class ChatFilterMenu : PaginatedMenu()
                     .toButton { _, _ ->
                         FancyMessage()
                             .withMessage("${CC.YELLOW}Click to copy!")
+                            .andHoverOf(
+                                "${CC.YELLOW}Click to copy!"
+                            )
                             .andCommandOf(
                                 ClickEvent.Action.COPY_TO_CLIPBOARD,
                                 it.regex.pattern

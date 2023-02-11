@@ -16,6 +16,7 @@ import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.nametag.NametagHandler
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.entity.EntityType
 import java.util.concurrent.CompletableFuture
 
@@ -56,26 +57,28 @@ object DisguiseCommands : ScalaCommand()
                     .setEntityType(EntityType.PLAYER)
                     .build()
 
-                val response = DisguiseService
-                    .provider()
-                    .disguise(player.bukkit(), disguise)
+                Tasks.sync {
+                    val response = DisguiseService
+                        .provider()
+                        .disguise(player.bukkit(), disguise)
 
-                when (response)
-                {
-                    DisguiseResponse.SUCCESS ->
+                    when (response)
                     {
-                        player.sendMessage("Disguise is successful.")
+                        DisguiseResponse.SUCCESS ->
+                        {
+                            player.sendMessage("Disguise is successful.")
 
-                        PlayerHandler.findPlayer(player.uniqueId)
-                            .ifPresent { lemonPlayer ->
-                                lemonPlayer.disguiseRankUniqueId = RankHandler
-                                    .getDefaultRank().uuid
-                            }
+                            PlayerHandler.findPlayer(player.uniqueId)
+                                .ifPresent { lemonPlayer ->
+                                    lemonPlayer.disguiseRankUniqueId = RankHandler
+                                        .getDefaultRank().uuid
+                                }
 
-                        QuickAccess.reloadPlayer(player.bukkit().uniqueId, false)
+                            QuickAccess.reloadPlayer(player.bukkit().uniqueId, false)
+                        }
+                        DisguiseResponse.FAIL_NAME_ALREADY_ONLINE -> player.sendMessage("There's already an online player with that nickname.")
+                        else -> player.sendMessage("Disguise is unsuccessful with the reason $response")
                     }
-                    DisguiseResponse.FAIL_NAME_ALREADY_ONLINE -> player.sendMessage("There's already an online player with that nickname.")
-                    else -> player.sendMessage("Disguise is unsuccessful with the reason $response")
                 }
             }
     }

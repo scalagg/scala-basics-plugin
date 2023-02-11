@@ -40,7 +40,7 @@ object UnIgnoreCommand : ScalaCommand()
                 profile.save().join()
 
                 player.sendMessage(
-                    "${CC.SEC}You've removed ${CC.PRI}${it.name}${CC.SEC} from your ignore-list."
+                    "${CC.RED}You are no longer ignoring ${CC.WHITE}${it.name}${CC.RED}!"
                 )
             }
     }

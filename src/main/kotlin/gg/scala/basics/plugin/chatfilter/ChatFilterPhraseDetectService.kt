@@ -21,7 +21,7 @@ object ChatFilterPhraseDetectService : MessagePhraseFilter
 
     override fun isFiltered(player: Player, word: String): Boolean
     {
-        return ChatFilterService.configModel()
+        return ChatFilterService.cached()
             .chatFilters
             .any {
                 it.regex.matches(word)

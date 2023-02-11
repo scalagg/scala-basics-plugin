@@ -30,7 +30,7 @@ class ChatFilterMenu : PaginatedMenu()
     {
         val buttons = mutableMapOf<Int, Button>()
 
-        ChatFilterService.configModel()
+        ChatFilterService.cached()
             .chatFilters.forEach {
                 buttons[buttons.size] = ItemBuilder
                     .of(Material.BOOK)

@@ -46,12 +46,12 @@ class AnnouncementMenu : PaginatedMenu()
                     "${CC.GREEN}Click to create!"
                 )
                 .toButton { _, _ ->
-                    val model = AnnouncementService.configModel()
+                    val model = AnnouncementService.cached()
                     model.announcements += Announcement(
                         mutableListOf("Announcement dummy text.")
                     )
 
-                    AnnouncementService.applyKvUpdate(model)
+                    AnnouncementService.sync(model)
 
                     player.sendMessage(
                         "${CC.GREEN}You've created a new announcement."
@@ -82,7 +82,7 @@ class AnnouncementMenu : PaginatedMenu()
     override fun getAllPagesButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
-        val model = AnnouncementService.configModel()
+        val model = AnnouncementService.cached()
 
         for ((index, announcement) in model.announcements.withIndex())
         {
@@ -115,7 +115,7 @@ class AnnouncementMenu : PaginatedMenu()
                             .withText("${CC.GREEN}Enter a condition key (namespace:key)")
                             .acceptInput { _, input ->
                                 announcement.conditions!! += Key.key(input)
-                                AnnouncementService.applyKvUpdate(model)
+                                AnnouncementService.sync(model)
 
                                 player.sendMessage("${CC.GREEN}Saved!")
                                 openMenu(player)
@@ -136,7 +136,7 @@ class AnnouncementMenu : PaginatedMenu()
                             if (it)
                             {
                                 model.announcements.removeAt(index)
-                                AnnouncementService.applyKvUpdate(model)
+                                AnnouncementService.sync(model)
 
                                 player.sendMessage("${CC.RED}Deleted announcement #$index!")
                             }

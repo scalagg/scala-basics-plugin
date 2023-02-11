@@ -49,11 +49,11 @@ object ChatFilterCommand : ScalaCommand()
     fun onRemove(player: CommandSender, filter: ChatFilter)
     {
         val performRemoval = {
-            val model = ChatFilterService.configModel()
+            val model = ChatFilterService.cached()
             model.removeWithId(filter.id)
 
             ChatFilterService
-                .applyKvUpdate(model)
+                .sync(model)
 
             player.sendMessage(
                 "${CC.GREEN}You've removed the chat filter entry: ${CC.GOLD}${filter.id}"
@@ -80,7 +80,7 @@ object ChatFilterCommand : ScalaCommand()
         pattern: String, testPhrase: String
     )
     {
-        if (ChatFilterService.configModel().findById(id) != null)
+        if (ChatFilterService.cached().findById(id) != null)
         {
             throw ConditionFailedException("The id $id is already in use!")
         }
@@ -94,13 +94,12 @@ object ChatFilterCommand : ScalaCommand()
             )
         }
 
-        val model = ChatFilterService.configModel()
+        val model = ChatFilterService.cached()
         model.chatFilters.add(
             ChatFilter(id, regex, testPhrase)
         )
 
-        ChatFilterService
-            .applyKvUpdate(model)
+        ChatFilterService.sync(model)
 
         player.sendMessage(
             "${CC.GREEN}You've added the chat filter entry ${CC.GRAY}(globally)${CC.GREEN}: ${CC.GOLD}$id"

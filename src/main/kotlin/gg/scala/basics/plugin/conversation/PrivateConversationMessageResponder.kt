@@ -47,6 +47,17 @@ object PrivateConversationMessageResponder : (PrivateConversationMessage) -> Pri
                 PrivateConversationMessageResponseContext.TARGET_NOT_ONLINE
             )
 
+        if (
+            bukkitPlayer.hasMetadata("vanished") &&
+            !message.dispatcherOverridesChecks
+        )
+        {
+            return PrivateConversationMessageResponse(
+                message.uniqueId, lemonPlayer.getColoredName(ignoreMinequest = true),
+                PrivateConversationMessageResponseContext.VANISHED
+            )
+        }
+
         val messagingSettingValue = profile
             .setting(
                 id = "messages",
@@ -92,17 +103,6 @@ object PrivateConversationMessageResponder : (PrivateConversationMessage) -> Pri
             return PrivateConversationMessageResponse(
                 message.uniqueId, lemonPlayer.getColoredName(ignoreMinequest = true),
                 PrivateConversationMessageResponseContext.TARGET_IGNORING_SENDER
-            )
-        }
-
-        if (
-            bukkitPlayer.hasMetadata("vanished") &&
-            !message.dispatcherOverridesChecks
-        )
-        {
-            return PrivateConversationMessageResponse(
-                message.uniqueId, lemonPlayer.getColoredName(ignoreMinequest = true),
-                PrivateConversationMessageResponseContext.VANISHED
             )
         }
 

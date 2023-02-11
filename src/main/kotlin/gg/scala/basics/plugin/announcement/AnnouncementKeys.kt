@@ -1,18 +1,13 @@
 package gg.scala.basics.plugin.announcement
 
-import net.kyori.adventure.key.Key
+import gg.scala.commons.persist.datasync.DataSyncKeys
 
 /**
  * @author GrowlyX
  * @since 10/12/2022
  */
-object AnnouncementKeys
+object AnnouncementKeys : DataSyncKeys
 {
-    val updateKey = Key
-        .key("announcements", "update")
-        .toString()
-
-    val storeKey = Key
-        .key("announcements", "configuration")
-        .toString()
+    override fun store() = keyOf("announcements", "configuration")
+    override fun sync() = keyOf("announcements", "update")
 }

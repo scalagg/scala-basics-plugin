@@ -30,8 +30,8 @@ class AnnouncementLinesEditor(
         announcement.lines.clear()
         announcement.lines.addAll(list)
 
-        AnnouncementService.applyKvUpdate(
-            AnnouncementService.configModel()
+        AnnouncementService.sync(
+            AnnouncementService.cached()
         )
 
         player.sendMessage(

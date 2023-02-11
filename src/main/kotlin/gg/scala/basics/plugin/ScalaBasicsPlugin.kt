@@ -3,6 +3,7 @@ package gg.scala.basics.plugin
 import gg.scala.aware.AwareBuilder
 import gg.scala.aware.codec.codecs.interpretation.AwareMessageCodec
 import gg.scala.aware.message.AwareMessage
+import gg.scala.basics.plugin.chatfilter.configureChatFilterSerializers
 import gg.scala.basics.plugin.settings.SettingCategory
 import gg.scala.basics.plugin.settings.SettingContainer
 import gg.scala.commons.ExtendedScalaPlugin
@@ -12,8 +13,6 @@ import gg.scala.commons.core.plugin.PluginAuthor
 import gg.scala.commons.core.plugin.PluginDependency
 import gg.scala.commons.core.plugin.PluginWebsite
 import gg.scala.commons.preconfigure.PreConfigureSubTypeProcessor
-import org.bukkit.Bukkit
-import org.bukkit.plugin.java.JavaPlugin
 
 /**
  * @author GrowlyX
@@ -42,6 +41,7 @@ class ScalaBasicsPlugin : ExtendedScalaPlugin()
     @ContainerEnable
     fun containerEnable()
     {
+        configureChatFilterSerializers()
         aware.connect().toCompletableFuture().join()
 
         PreConfigureSubTypeProcessor

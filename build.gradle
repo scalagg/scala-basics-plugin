@@ -38,8 +38,8 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
 
-    compileOnly "gg.scala.commons:bukkit:3.0.5"
-    kapt "gg.scala.commons:bukkit:3.0.5"
+    compileOnly "gg.scala.commons:bukkit:3.1.1"
+    kapt "gg.scala.commons:bukkit:3.1.1"
 
     compileOnly "gg.scala.friends:scala-friends:2.0.0"
 

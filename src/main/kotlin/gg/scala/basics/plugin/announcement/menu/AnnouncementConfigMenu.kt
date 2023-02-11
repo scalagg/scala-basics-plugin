@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
  */
 class AnnouncementConfigMenu : Menu("Announcement Config")
 {
-    private val model = AnnouncementService.configModel().copy()
+    private val model = AnnouncementService.cached().copy()
     private var allowsUpdate = false
 
     init
@@ -185,7 +185,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
 
                 allowsUpdate = false
 
-                AnnouncementService.applyKvUpdate(model)
+                AnnouncementService.sync(model)
                 player.sendMessage("${CC.GREEN}Changes made! You can leave the menu now.")
             }
 

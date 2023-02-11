@@ -49,7 +49,7 @@ object TabListCommand : ScalaCommand()
                         input.replace("<nl>", "\n")
                     )
 
-                val configuration = TabListService.configModel()
+                val configuration = TabListService.cached()
 
                 when (part)
                 {
@@ -57,7 +57,7 @@ object TabListCommand : ScalaCommand()
                     TabListPart.FOOTER -> configuration.footer = component
                 }
 
-                TabListService.applyKvUpdate(configuration)
+                TabListService.sync(configuration)
 
                 player.sendMessage(
                     "${CC.GREEN}The tablist ${part.name} has been set to:",
@@ -72,7 +72,7 @@ object TabListCommand : ScalaCommand()
     @Description("Reset a tab list part value.")
     fun onReset(player: ScalaPlayer, part: TabListPart)
     {
-        val configuration = TabListService.configModel()
+        val configuration = TabListService.cached()
 
         when (part)
         {

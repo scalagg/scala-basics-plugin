@@ -52,7 +52,7 @@ object BasicPluginCommandCustomizer
 
         manager.commandCompletions
             .registerAsyncCompletion("chatfilters") {
-                ChatFilterService.configModel().chatFilters.map(ChatFilter::id)
+                ChatFilterService.cached().chatFilters.map(ChatFilter::id)
             }
 
         manager.commandContexts
@@ -73,7 +73,7 @@ object BasicPluginCommandCustomizer
                 val arg = it.popFirstArg()
 
                 ChatFilterService
-                    .configModel()
+                    .cached()
                     .findById(arg)
                     ?: throw ConditionFailedException(
                         "No chat filter matching ${CC.YELLOW}$arg${CC.RED} could be found."

@@ -87,7 +87,7 @@ object IgnoreCommand : ScalaCommand()
                 profile.save().join()
 
                 player.sendMessage(
-                    "${CC.SEC}You're now ignoring ${rank.color}${it.name}${CC.SEC}!"
+                    "${CC.GREEN}You are now ignoring ${rank.color}${it.name}${CC.GREEN}!"
                 )
             }
     }

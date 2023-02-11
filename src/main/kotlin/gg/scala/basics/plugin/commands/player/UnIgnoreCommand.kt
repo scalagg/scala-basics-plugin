@@ -10,6 +10,7 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
+import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.util.CC
 import java.util.concurrent.CompletableFuture
 
@@ -40,7 +41,9 @@ object UnIgnoreCommand : ScalaCommand()
                 profile.save().join()
 
                 player.sendMessage(
-                    "${CC.RED}You are no longer ignoring ${CC.WHITE}${it.name}${CC.RED}!"
+                    "${CC.RED}You are no longer ignoring ${CC.WHITE}${
+                        QuickAccess.fetchColoredName(it.uniqueId)
+                    }${CC.RED}!"
                 )
             }
     }

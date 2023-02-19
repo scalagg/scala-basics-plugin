@@ -3,13 +3,20 @@ package gg.scala.basics.plugin.commands.player
 import com.google.common.cache.CacheBuilder
 import gg.scala.basics.plugin.settings.defaults.values.TimeOfDaySettingValue
 import gg.scala.basics.plugin.timeofday.TimeOfDayService
+import gg.scala.commons.acf.CommandIssuer
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandPermission
+import gg.scala.commons.acf.annotation.PreCommand
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import me.lucko.helper.Events
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.Color
+import net.evilblock.cubed.util.Color.translate
+import org.bukkit.Bukkit
+import org.bukkit.event.block.BlockPlaceEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -25,10 +32,10 @@ object TimeOfDayCommands : ScalaCommand()
         .expireAfterWrite(2L, TimeUnit.SECONDS)
         .build<UUID, Long>()!!
 
-    private fun ensureCanPerform(player: ScalaPlayer)
+    @PreCommand
+    fun preCommand(player: CommandIssuer)
     {
-        val cooldown = commandCooldown
-            .getIfPresent(player.uniqueId)
+        val cooldown = commandCooldown.getIfPresent(player.uniqueId)
 
         if (cooldown != null)
         {
@@ -45,8 +52,6 @@ object TimeOfDayCommands : ScalaCommand()
     @CommandAlias("day")
     fun onDay(player: ScalaPlayer)
     {
-        ensureCanPerform(player)
-
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Day)
         player.sendMessage("${CC.GREEN}Your time has been set to day!")
     }
@@ -54,8 +59,6 @@ object TimeOfDayCommands : ScalaCommand()
     @CommandAlias("sunset")
     fun onSunset(player: ScalaPlayer)
     {
-        ensureCanPerform(player)
-
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Sunset)
         player.sendMessage("${CC.GREEN}Your time has been set to sunset!")
     }
@@ -63,8 +66,6 @@ object TimeOfDayCommands : ScalaCommand()
     @CommandAlias("night")
     fun onNight(player: ScalaPlayer)
     {
-        ensureCanPerform(player)
-
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Night)
         player.sendMessage("${CC.GREEN}Your time has been set to night!")
     }

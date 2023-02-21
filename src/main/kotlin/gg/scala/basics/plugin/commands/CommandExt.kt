@@ -17,10 +17,13 @@ import org.bukkit.entity.Player
  */
 fun LemonPlayer.bukkit() = Bukkit.getPlayer(this.uniqueId)!!
 
-fun cachedBasicProfile(player: ScalaPlayer) = BasicsProfileService.find(player.bukkit())
+fun cachedBasicProfile(player: ScalaPlayer) = BasicsProfileService
+    .find(player.bukkit())
     ?: throw ConditionFailedException(
         "Your profile did not load in properly."
     )
+
+fun profileOf(player: Player) = BasicsProfileService.find(player)
 
 infix fun ScalaPlayer.performed(message: String)
 {

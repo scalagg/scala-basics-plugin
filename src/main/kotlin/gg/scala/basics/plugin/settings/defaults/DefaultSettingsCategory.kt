@@ -3,6 +3,7 @@ package gg.scala.basics.plugin.settings.defaults
 import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.SettingCategory
+import gg.scala.basics.plugin.settings.defaults.values.entity.EntityVisibilitySettingValue
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.basics.plugin.settings.defaults.values.TimeOfDaySettingValue
 import gg.scala.basics.plugin.settings.entry
@@ -90,6 +91,26 @@ object DefaultSettingsCategory : SettingCategory
             }
 
             item = ItemBuilder.of(Material.WATCH)
+        },
+        entry {
+            id = "entity_render_distance"
+            displayName = "Entity render distance"
+
+            clazz = EntityVisibilitySettingValue::class.java
+            default = EntityVisibilitySettingValue.High
+
+            description += "Represents the distance"
+            description += "requirement you have to"
+            description += "meet before NPC and hologram"
+            description += "entities are loaded in."
+
+            postChange = { player ->
+                player.sendMessage(
+                    "${CC.GRAY}[Note] ${CC.GREEN}You may have to re-log for your changes to be put into effect!"
+                )
+            }
+
+            item = ItemBuilder.of(Material.MOB_SPAWNER)
         }
     )
 

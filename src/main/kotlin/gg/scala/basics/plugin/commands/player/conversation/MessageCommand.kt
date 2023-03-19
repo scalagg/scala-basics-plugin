@@ -14,6 +14,7 @@ import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Optional
 import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.lemon.command.annotations.NoManualSelection
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
@@ -63,7 +64,9 @@ object MessageCommand : ScalaCommand()
     @CommandPermission("scbasics.conversation-commands")
     @CommandAlias("message|msg|tell|t|whisper|w|pm|m")
     fun onPrivateMessage(
-        player: ScalaPlayer, target: AsyncLemonPlayer, message: String
+        player: ScalaPlayer,
+        @NoManualSelection target: AsyncLemonPlayer,
+        message: String
     ): CompletableFuture<Void>
     {
         return target.validatePlayers(player.bukkit(), false) { lemonPlayer ->

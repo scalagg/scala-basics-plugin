@@ -11,6 +11,7 @@ import gg.scala.commons.acf.annotation.Default
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.lemon.command.annotations.NoManualSelection
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.util.CC
@@ -52,7 +53,7 @@ object IgnoreCommand : ScalaCommand()
     @Default
     @CommandCompletion("@players")
     fun onIgnore(
-        player: ScalaPlayer, lazyPlayer: AsyncLemonPlayer
+        player: ScalaPlayer, @NoManualSelection lazyPlayer: AsyncLemonPlayer
     ): CompletableFuture<Void>
     {
         val profile = cachedBasicProfile(player)

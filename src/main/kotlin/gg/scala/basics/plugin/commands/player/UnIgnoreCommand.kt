@@ -9,6 +9,7 @@ import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.lemon.command.annotations.NoManualSelection
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.util.CC
@@ -24,7 +25,7 @@ object UnIgnoreCommand : ScalaCommand()
     @CommandCompletion("@ignoring")
     @CommandAlias("unignore|unblock")
     @CommandPermission("scbasics.player-commands")
-    fun onUnIgnore(player: ScalaPlayer, target: AsyncLemonPlayer): CompletableFuture<Void>
+    fun onUnIgnore(player: ScalaPlayer, @NoManualSelection target: AsyncLemonPlayer): CompletableFuture<Void>
     {
         val profile = cachedBasicProfile(player)
 

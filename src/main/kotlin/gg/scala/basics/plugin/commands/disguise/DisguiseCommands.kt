@@ -10,6 +10,7 @@ import gg.scala.commons.acf.annotation.Conditions
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.lemon.command.annotations.NoManualSelection
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.handler.RankHandler
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
@@ -47,7 +48,7 @@ object DisguiseCommands : ScalaCommand()
     @Conditions("not-disguised")
     @CommandAlias("disguise|dis")
     @CommandPermission("scbasics.command.disguise")
-    fun onDisguise(player: ScalaPlayer, target: AsyncLemonPlayer): CompletableFuture<Void>
+    fun onDisguise(player: ScalaPlayer, @NoManualSelection target: AsyncLemonPlayer): CompletableFuture<Void>
     {
         return target
             .validatePlayers(player.bukkit(), true) {

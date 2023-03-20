@@ -19,9 +19,9 @@ import java.util.*
 @Repeating(20L)
 object RainbowNametagService : Runnable
 {
-    private var index = 0
+    var index = 0
 
-    private val options = listOf(
+    val options = listOf(
         ChatColor.DARK_RED,
         ChatColor.RED,
         ChatColor.GOLD,
@@ -36,7 +36,7 @@ object RainbowNametagService : Runnable
         ChatColor.LIGHT_PURPLE
     )
 
-    private var currentColor = options.first()
+    var currentColor = options.first()
 
     override fun run()
     {

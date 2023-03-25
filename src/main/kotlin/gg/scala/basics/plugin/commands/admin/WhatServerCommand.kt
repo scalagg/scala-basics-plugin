@@ -18,7 +18,7 @@ import org.apache.commons.lang.time.DurationFormatUtils
 object WhatServerCommand : ScalaCommand()
 {
     @CommandPermission("scbasics.command.whatserver")
-    @CommandAlias("whatserveramion|whatserver|wsc")
+    @CommandAlias("whatserveramion|whatserver|wsc|whereami")
     fun onWhatServer(player: ScalaPlayer)
     {
         player.sendMessage(

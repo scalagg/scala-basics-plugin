@@ -4,7 +4,6 @@ import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.SettingCategory
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.basics.plugin.settings.entry
-import gg.scala.cloudsync.spigot.services.CloudSyncListenerService
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import net.evilblock.cubed.serversync.ServerSyncUtilities
@@ -32,7 +31,7 @@ object DefaultAdminSettingsCategory : SettingCategory
             description += "cloudsync plugin update"
             description += "notifications."
 
-            item = ItemBuilder.of(Material.GOLD_PICKAXE)
+            item = ItemBuilder.of(Material.GOLDEN_APPLE)
         },
         entry {
             id = "ss_notifications"
@@ -45,7 +44,7 @@ object DefaultAdminSettingsCategory : SettingCategory
             description += "serversync update"
             description += "notifications."
 
-            item = ItemBuilder.of(Material.GOLD_SPADE)
+            item = ItemBuilder.of(Material.GOLDEN_CARROT)
         }
     )
 

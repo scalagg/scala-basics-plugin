@@ -33,7 +33,7 @@ object SetMaxPlayersCommand : ScalaCommand()
                 sender.sendMessage("${CC.RED}We were unable to update the max player slots!")
             }
             .onSuccess {
-                sender.sendMessage("${CC.GREEN}The max player slots has been set to ${CC.WHITE}$slots${CC.GREEN} from ${CC.WHITE}$slots${CC.GREEN}!")
+                sender.sendMessage("${CC.GREEN}The max player slots has been set to ${CC.WHITE}$slots${CC.GREEN} from ${CC.WHITE}$previous${CC.GREEN}!")
             }
     }
 

@@ -10,6 +10,7 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.time.Duration
 import net.evilblock.cubed.util.time.TimeUtil
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 /**
@@ -31,7 +32,7 @@ object ShutdownCommand : ScalaCommand()
     @AssignPermission
     @Subcommand("initiate|start")
     @Description("Initiate a server shutdown.")
-    fun onInitiate(player: Player, @Name("time") time: Duration)
+    fun onInitiate(player: CommandSender, @Name("time") time: Duration)
     {
         if (time.isPermanent())
         {
@@ -54,7 +55,7 @@ object ShutdownCommand : ScalaCommand()
     @AssignPermission
     @Subcommand("status")
     @Description("View the status of the current shutdown.")
-    fun onStatus(player: Player)
+    fun onStatus(player: CommandSender)
     {
         val shutdown = ShutdownService.shutdownRunnable
 
@@ -76,7 +77,7 @@ object ShutdownCommand : ScalaCommand()
     @AssignPermission
     @Subcommand("cancel|stop")
     @Description("Cancel the current shutdown.")
-    fun onCancel(player: Player)
+    fun onCancel(player: CommandSender)
     {
         ShutdownService.cancelShutdown()
     }

@@ -27,9 +27,10 @@ object FlyCommand : ScalaCommand()
     private fun Player.toggleFlight()
     {
         apply {
-            if (isFlying)
+            if (allowFlight)
             {
                 isFlying = false
+                allowFlight = false
             } else
             {
                 allowFlight = true

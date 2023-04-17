@@ -21,12 +21,19 @@ object AnnouncementConditions
     lateinit var plugin: ScalaBasicsPlugin
 
     fun condition(key: Key) = conditions[key.toString()]
+        ?: conditions[key.namespace()]
 
     @Configure
     fun configure()
     {
         PreConfigureSubTypeProcessor
             .register<AnnouncementDisplayCondition> {
+                if (it.contextualKey())
+                {
+                    conditions[it.contextualKeyNamespace()] = it
+                    return@register
+                }
+
                 conditions[it.key().toString()] = it
             }
     }

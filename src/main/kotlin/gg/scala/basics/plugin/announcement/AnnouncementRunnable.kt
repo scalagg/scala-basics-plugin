@@ -30,7 +30,12 @@ object AnnouncementRunnable : Runnable
                     it.conditions?.all { key ->
                         AnnouncementConditions
                             .condition(key)
-                            ?.shouldDisplay(player)
+                            ?.let { condition ->
+                                if (condition.contextualKey())
+                                    condition.contextualDisplay(player, key)
+                                else
+                                    condition.shouldDisplay(player)
+                            }
                             ?: true
                     } ?: true
                 }

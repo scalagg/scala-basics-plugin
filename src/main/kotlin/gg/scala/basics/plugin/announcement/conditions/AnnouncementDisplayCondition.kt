@@ -9,6 +9,10 @@ import org.bukkit.entity.Player
  */
 interface AnnouncementDisplayCondition
 {
+    fun contextualKey(): Boolean = false
+    fun contextualKeyNamespace(): String = ""
+    fun contextualDisplay(player: Player, key: Key): Boolean = false
+
     fun key(): Key
     fun shouldDisplay(player: Player): Boolean
 }

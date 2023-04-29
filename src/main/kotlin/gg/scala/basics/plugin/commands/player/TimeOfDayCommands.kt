@@ -32,10 +32,9 @@ object TimeOfDayCommands : ScalaCommand()
         .expireAfterWrite(2L, TimeUnit.SECONDS)
         .build<UUID, Long>()!!
 
-    @PreCommand
-    fun preCommand(player: CommandIssuer)
+    fun preCommand(player: ScalaPlayer)
     {
-        val cooldown = commandCooldown.getIfPresent(player.uniqueId)
+        val cooldown = commandCooldown.getIfPresent(player.bukkit().uniqueId)
 
         if (cooldown != null)
         {
@@ -45,13 +44,14 @@ object TimeOfDayCommands : ScalaCommand()
         }
 
         commandCooldown.put(
-            player.uniqueId, System.currentTimeMillis()
+            player.bukkit().uniqueId, System.currentTimeMillis()
         )
     }
 
     @CommandAlias("day")
     fun onDay(player: ScalaPlayer)
     {
+        preCommand(player)
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Day)
         player.sendMessage("${CC.GREEN}Your time has been set to day!")
     }
@@ -59,6 +59,7 @@ object TimeOfDayCommands : ScalaCommand()
     @CommandAlias("sunset")
     fun onSunset(player: ScalaPlayer)
     {
+        preCommand(player)
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Sunset)
         player.sendMessage("${CC.GREEN}Your time has been set to sunset!")
     }
@@ -66,6 +67,7 @@ object TimeOfDayCommands : ScalaCommand()
     @CommandAlias("night")
     fun onNight(player: ScalaPlayer)
     {
+        preCommand(player)
         TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Night)
         player.sendMessage("${CC.GREEN}Your time has been set to night!")
     }

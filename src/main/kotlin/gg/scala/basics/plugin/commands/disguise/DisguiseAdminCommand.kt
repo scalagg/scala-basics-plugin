@@ -8,6 +8,7 @@ import gg.scala.basics.plugin.disguise.sessionserver.SessionServerResponse
 import gg.scala.commons.acf.CommandHelp
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.*
+import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.flavor.inject.Inject
 import net.evilblock.cubed.serializers.Serializers
@@ -21,6 +22,7 @@ import java.util.concurrent.CompletableFuture
  * @author GrowlyX
  * @since 5/14/2023
  */
+@AutoRegister
 @CommandAlias("dga|disguiseadmin")
 @CommandPermission("scbasics.command.disguiseadmin")
 object DisguiseAdminCommand : ScalaCommand()
@@ -53,7 +55,9 @@ object DisguiseAdminCommand : ScalaCommand()
                     .gson.fromJson(
                         pair, PlayerInfo::class.java
                     )
-                    ?: return@forEach
+                    ?: return@forEach run {
+                        sender.sendMessage("${CC.RED}Failed to load for: $pair")
+                    }
 
                 DisguiseService
                     .disguiseProfileExists(playerInfo.id)

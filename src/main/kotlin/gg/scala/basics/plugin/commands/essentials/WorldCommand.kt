@@ -11,6 +11,7 @@ import gg.scala.commons.acf.annotation.Subcommand
 import gg.scala.commons.annotations.commands.AssignPermission
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
+import gg.scala.commons.issuer.ScalaPlayer
 import net.evilblock.cubed.util.CC
 import org.bukkit.*
 import org.bukkit.command.CommandSender
@@ -34,6 +35,25 @@ object WorldCommand : ScalaCommand()
     fun onHelp(help: CommandHelp)
     {
         help.showHelp()
+    }
+
+    @AssignPermission
+    @Subcommand("goto")
+    @Description("Go to an existing world.")
+    fun onGoToWorld(
+        sender: ScalaPlayer,
+        world: String
+    )
+    {
+        sender.teleport(
+            Bukkit.getServer()
+                .getWorld(
+                    world
+                )
+                .spawnLocation
+        )
+
+        sender.sendMessage("${CC.GREEN}Teleported to world $world.")
     }
 
     @AssignPermission

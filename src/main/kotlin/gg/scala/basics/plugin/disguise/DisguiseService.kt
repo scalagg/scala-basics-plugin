@@ -472,24 +472,26 @@ object DisguiseService
                 player.sendMessage("${CC.RED}You're not disguised right now!")
             },
             unDisguiseComplete = {
-                provider().undisguise(player)
+                Tasks.sync {
+                    provider().undisguise(player)
 
-                PlayerHandler.findPlayer(player.uniqueId)
-                    .ifPresent { lemonPlayer ->
-                        lemonPlayer.disguiseRankUniqueId = null
-                    }
+                    PlayerHandler.findPlayer(player.uniqueId)
+                        .ifPresent { lemonPlayer ->
+                            lemonPlayer.disguiseRankUniqueId = null
+                        }
 
-                player.removeMetadata(
-                    "disguised",
-                    plugin
-                )
+                    player.removeMetadata(
+                        "disguised",
+                        plugin
+                    )
 
-                QuickAccess.reloadPlayer(
-                    player.uniqueId,
-                    recalculateGrants = false
-                )
+                    QuickAccess.reloadPlayer(
+                        player.uniqueId,
+                        recalculateGrants = false
+                    )
 
-                postUnDisguise()
+                    postUnDisguise()
+                }
             }
         )
 

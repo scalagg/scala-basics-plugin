@@ -8,10 +8,10 @@ import gg.scala.commons.library.model.Library
  * @since 2/5/2023
  */
 @Library(
-    groupId = "com.github.GrowlyX",
+    groupId = "dev.iiahmed",
     artifactId = "ModernDisguise",
-    version = "f3ce1738ef",
-    repository = "https://jitpack.io/"
+    version = "1.5",
+    repository = "https://repo.gravemc.net/releases/"
 )
 @LibraryLoader
 object BasicsLibraryLoader

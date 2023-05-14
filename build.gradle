@@ -47,7 +47,7 @@ dependencies {
     compileOnly "gg.scala.lemon:bukkit:1.5.6"
     compileOnly "gg.scala.spigot:server:1.1.0"
 
-    compileOnly "com.github.GrowlyX:ModernDisguise:f3ce1738ef"
+    compileOnly "dev.iiahmed:ModernDisguise:1.5"
     compileOnly "gg.scala.cloudsync:spigot:1.0.3"
 }
 

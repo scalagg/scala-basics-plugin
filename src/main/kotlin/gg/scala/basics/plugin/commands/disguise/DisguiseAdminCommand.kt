@@ -1,9 +1,8 @@
 package gg.scala.basics.plugin.commands.disguise
 
-import dev.iiahmed.disguise.SkinAPI
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.disguise.DisguiseService
-import gg.scala.basics.plugin.disguise.PlayerInfo
+import gg.scala.basics.plugin.disguise.PlayerDataPair
 import gg.scala.basics.plugin.disguise.sessionserver.SessionServerResponse
 import gg.scala.commons.acf.CommandHelp
 import gg.scala.commons.acf.ConditionFailedException
@@ -51,20 +50,20 @@ object DisguiseAdminCommand : ScalaCommand()
 
         file.readLines()
             .forEach { pair ->
-                val playerInfo = Serializers
+                val playerDataPair = Serializers
                     .gson.fromJson(
-                        pair, PlayerInfo::class.java
+                        pair, PlayerDataPair::class.java
                     )
                     ?: return@forEach run {
                         sender.sendMessage("${CC.RED}Failed to load for: $pair")
                     }
 
                 DisguiseService
-                    .disguiseProfileExists(playerInfo.id)
+                    .disguiseProfileExists(playerDataPair.id)
                     .thenCompose {
                         if (it)
                         {
-                            sender.sendMessage("${CC.RED}Profile exists for: ${playerInfo.username}")
+                            sender.sendMessage("${CC.RED}Profile exists for: ${playerDataPair.username}")
                             return@thenCompose CompletableFuture
                                 .completedFuture(null)
                         }
@@ -72,7 +71,7 @@ object DisguiseAdminCommand : ScalaCommand()
                         val sessionServerResp = Serializers
                             .gson
                             .fromJson(
-                                URL("https://sessionserver.mojang.com/session/minecraft/profile/${playerInfo.id}?unsigned=false")
+                                URL("https://sessionserver.mojang.com/session/minecraft/profile/${playerDataPair.id}?unsigned=false")
                                     .readText(),
                                 SessionServerResponse::class.java
                             )
@@ -82,7 +81,7 @@ object DisguiseAdminCommand : ScalaCommand()
                         DisguiseService
                             .saveDisguiseProfile(sessionServerResp)
                             .thenRun {
-                                sender.sendMessage("${CC.GREEN}Saved profile for: ${playerInfo.username}")
+                                sender.sendMessage("${CC.GREEN}Saved profile for: ${playerDataPair.username}")
                             }
                     }
             }

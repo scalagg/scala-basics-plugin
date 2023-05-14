@@ -72,40 +72,41 @@ object DisguiseService
                             bukkitPlayer.sendMessage("${CC.RED}You were forcefully undisguised as your disguise's real account logged on the server.")
                         })
                     }
+                    .thenComposeAsync { _ ->
+                        getApplicantProfileMapping(it.player.uniqueId)
+                            .thenApplyAsync { response ->
+                                if (response == null)
+                                {
+                                    val profile = BasicsProfileService
+                                        .find(it.player)
+                                        ?: return@thenApplyAsync
 
-                getApplicantProfileMapping(it.player.uniqueId)
-                    .thenApplyAsync { response ->
-                        if (response == null)
-                        {
-                            val profile = BasicsProfileService
-                                .find(it.player)
-                                ?: return@thenApplyAsync
+                                    val autoDisguise = profile.setting(
+                                        id = "auto_disguise",
+                                        default = StateSettingValue.ENABLED
+                                    )
 
-                            val autoDisguise = profile.setting(
-                                id = "auto_disguise",
-                                default = StateSettingValue.ENABLED
-                            )
-
-                            if (autoDisguise == StateSettingValue.ENABLED)
-                            {
-                                disguiseWithRandomSelection(
-                                    player = it.player,
-                                    postDisguise = { ssr ->
-                                        it.player.sendMessage(
-                                            "${CC.GREEN}You've logged onto the server as ${CC.WHITE}${ssr.name}${CC.GREEN} due to your automatic disguise setting."
-                                        )
+                                    if (autoDisguise == StateSettingValue.ENABLED)
+                                    {
+                                        disguiseWithRandomSelection(
+                                            player = it.player,
+                                            postDisguise = { ssr ->
+                                                it.player.sendMessage(
+                                                    "${CC.GREEN}You've logged onto the server as ${CC.WHITE}${ssr.name}${CC.GREEN} due to your automatic disguise setting."
+                                                )
+                                            }
+                                        ).join()
                                     }
-                                ).join()
+
+                                    return@thenApplyAsync
+                                }
+
+                                completeProfileApplication(it.player, response) {
+                                    it.player.sendMessage(
+                                        "${CC.GREEN}You've logged onto this server as ${CC.WHITE}${response.name}${CC.GREEN} due to your disguise."
+                                    )
+                                }
                             }
-
-                            return@thenApplyAsync
-                        }
-
-                        completeProfileApplication(it.player, response) {
-                            it.player.sendMessage(
-                                "${CC.GREEN}You've logged onto this server as ${CC.WHITE}${response.name}${CC.GREEN} due to your disguise."
-                            )
-                        }
                     }
             }
     }
@@ -211,7 +212,6 @@ object DisguiseService
 
                     setDisguiseProfileInUseFor(applicant, it.second)
                         .thenCompose { _ ->
-                            // TODO: something can go wrong here?
                             mapApplicantToProfile(
                                 applicant,
                                 UUIDUtil.formatUUID(it.second.id)!!

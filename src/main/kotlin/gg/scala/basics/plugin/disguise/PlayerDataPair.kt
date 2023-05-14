@@ -6,7 +6,7 @@ import java.util.UUID
  * @author GrowlyX
  * @since 5/14/2023
  */
-data class PlayerInfo(
+data class PlayerDataPair(
     val username: String,
     val id: UUID
 )

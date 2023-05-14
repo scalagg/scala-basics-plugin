@@ -60,7 +60,7 @@ object DisguiseService
 
                         completeProfileApplication(it.player, response) {
                             it.player.sendMessage(
-                                "${CC.GREEN}You've been disguised on this server as ${CC.PRI}${response.name}${CC.GREEN}."
+                                "${CC.GREEN}You've logged onto this server as ${CC.WHITE}${response.name}${CC.GREEN} due to your disguise."
                             )
                         }
                     }
@@ -180,7 +180,7 @@ object DisguiseService
                 }
         }
 
-    private fun getApplicantProfileMapping(
+    fun getApplicantProfileMapping(
         applicant: UUID
     ) = CompletableFuture
         .supplyAsync {
@@ -262,6 +262,16 @@ object DisguiseService
                     UUIDUtil
                         .formatUUID(profile.id)
                         .toString()
+                )
+        }
+
+    fun getUsedProfile(uniqueId: UUID) = CompletableFuture
+        .supplyAsync {
+            ScalaCommonsSpigot.instance.kvConnection
+                .sync()
+                .hget(
+                    "disguise:in-use",
+                    uniqueId.toString()
                 )
         }
 

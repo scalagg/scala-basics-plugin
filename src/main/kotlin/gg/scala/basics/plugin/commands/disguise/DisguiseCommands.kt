@@ -3,6 +3,7 @@ package gg.scala.basics.plugin.commands.disguise
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.disguise.DisguiseService
 import gg.scala.commons.acf.annotation.CommandAlias
+import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Conditions
 import gg.scala.commons.annotations.commands.AutoRegister
@@ -10,6 +11,10 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.flavor.inject.Inject
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
+import gg.scala.lemon.util.QuickAccess
+import gg.scala.lemon.util.QuickAccess.username
+import net.evilblock.cubed.util.CC
+import java.util.*
 
 /**
  * @author GrowlyX
@@ -25,6 +30,34 @@ object DisguiseCommands : ScalaCommand()
     @CommandPermission("scbasics.command.undisguise")
     fun onUnDisguise(player: ScalaPlayer) = DisguiseService
         .undisguise(player.bukkit())
+
+    @CommandAlias("checkdisguise")
+    @CommandCompletion("@players")
+    @CommandPermission("scbasics.command.checkdisguise")
+    fun onCheckDisguise(player: ScalaPlayer, target: AsyncLemonPlayer) =
+        target.validatePlayers(player.bukkit(), true) {
+            DisguiseService
+                .getUsedProfile(it.uniqueId)
+                .thenAccept { resp ->
+                    if (resp == null)
+                    {
+                        player.sendMessage(
+                            "${CC.RED}This user is not disguised!"
+                        )
+                        return@thenAccept
+                    }
+
+                    val playerId = UUID.fromString(resp)
+                    val server = QuickAccess.server(playerId)
+                        .join()
+
+                    player.sendMessage(
+                        "${CC.GREEN}${playerId.username()} is disguised as ${it.name} and is ${
+                            if (server == null) "offline" else "playing on ${server.id} ${CC.GRAY}(${server.region.display})${CC.GREEN}"
+                        }."
+                    )
+                }
+        }
 
     @Conditions("not-disguised")
     @CommandAlias("disguise|dis")

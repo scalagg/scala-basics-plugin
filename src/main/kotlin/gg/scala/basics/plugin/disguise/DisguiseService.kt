@@ -4,8 +4,9 @@ import dev.iiahmed.disguise.Disguise
 import dev.iiahmed.disguise.DisguiseManager
 import dev.iiahmed.disguise.DisguiseResponse
 import gg.scala.basics.plugin.ScalaBasicsPlugin
-import gg.scala.basics.plugin.commands.disguise.DisguiseCommands
 import gg.scala.basics.plugin.disguise.sessionserver.SessionServerResponse
+import gg.scala.basics.plugin.profile.BasicsProfileService
+import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -18,6 +19,7 @@ import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Tasks
 import net.evilblock.cubed.util.bukkit.uuid.UUIDUtil
+import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
@@ -51,11 +53,52 @@ object DisguiseService
         Events
             .subscribe(PlayerJoinEvent::class.java)
             .handler {
+                getUsedProfile(it.player.uniqueId)
+                    .thenComposeAsync { usedProfile ->
+                        if (usedProfile == null)
+                        {
+                            return@thenComposeAsync CompletableFuture
+                                .completedFuture(null)
+                        }
+
+                        val bukkitPlayer = Bukkit
+                            .getPlayer(
+                                UUID.fromString(usedProfile)
+                            )
+                            ?: return@thenComposeAsync CompletableFuture
+                                .completedFuture(null)
+
+                        undisguise(bukkitPlayer, postUnDisguise = {
+                            bukkitPlayer.sendMessage("${CC.RED}You were forcefully undisguised as your disguise's real account logged on the server.")
+                        })
+                    }
+
                 getApplicantProfileMapping(it.player.uniqueId)
-                    .thenApply { response ->
+                    .thenApplyAsync { response ->
                         if (response == null)
                         {
-                            return@thenApply
+                            val profile = BasicsProfileService
+                                .find(it.player)
+                                ?: return@thenApplyAsync
+
+                            val autoDisguise = profile.setting(
+                                id = "auto_disguise",
+                                default = StateSettingValue.ENABLED
+                            )
+
+                            if (autoDisguise == StateSettingValue.ENABLED)
+                            {
+                                disguiseWithRandomSelection(
+                                    player = it.player,
+                                    postDisguise = { ssr ->
+                                        it.player.sendMessage(
+                                            "${CC.GREEN}You've logged onto the server as ${CC.WHITE}${ssr.name}${CC.GREEN} due to your automatic disguise setting."
+                                        )
+                                    }
+                                ).join()
+                            }
+
+                            return@thenApplyAsync
                         }
 
                         completeProfileApplication(it.player, response) {
@@ -399,7 +442,12 @@ object DisguiseService
         )
     }
 
-    fun undisguise(player: Player) =
+    fun undisguise(
+        player: Player,
+        postUnDisguise: () -> Unit = {
+            player.sendMessage("${CC.GREEN}You've been undisguised!")
+        }
+    ) =
         runUnDisguisePipeline(
             applicant = player.uniqueId,
             applicantNotDisguised = {
@@ -423,24 +471,28 @@ object DisguiseService
                     recalculateGrants = false
                 )
 
-                player.sendMessage("${CC.GREEN}You've been undisguised!")
+                postUnDisguise()
             }
         )
 
-    fun disguiseWithRandomSelection(player: Player) =
-        runDisguisePipelineWithRandomSelection(
-            applicant = player.uniqueId,
-            profileInUse = {
-                player.sendMessage("${CC.RED}Your random disguise is already taken! Please try running this command again.")
-            },
-            profileApplicationComplete = {
-                completeProfileApplication(player, it) {
-                    player.sendMessage(
-                        "${CC.SEC}You've been disguised as ${CC.PRI}${it.name}${CC.GRAY}."
-                    )
-                }
+    fun disguiseWithRandomSelection(
+        player: Player,
+        postDisguise: (SessionServerResponse) -> Unit = { ssr ->
+            player.sendMessage(
+                "${CC.SEC}You've been disguised as ${CC.PRI}${ssr.name}${CC.SEC}."
+            )
+        }
+    ) = runDisguisePipelineWithRandomSelection(
+        applicant = player.uniqueId,
+        profileInUse = {
+            player.sendMessage("${CC.RED}Your random disguise is already taken! Please try running this command again.")
+        },
+        profileApplicationComplete = { ssr ->
+            completeProfileApplication(player, ssr) {
+                postDisguise(ssr)
             }
-        )
+        }
+    )
 
     fun completeProfileApplication(
         player: Player, it: SessionServerResponse, success: () -> Unit

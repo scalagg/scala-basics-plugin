@@ -3,6 +3,7 @@ package gg.scala.basics.plugin.commands.essentials
 import gg.scala.commons.acf.CommandHelp
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
+import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Default
 import gg.scala.commons.acf.annotation.Description
@@ -39,6 +40,7 @@ object WorldCommand : ScalaCommand()
 
     @AssignPermission
     @Subcommand("goto")
+    @CommandCompletion("@worlds")
     @Description("Go to an existing world.")
     fun onGoToWorld(
         sender: ScalaPlayer,

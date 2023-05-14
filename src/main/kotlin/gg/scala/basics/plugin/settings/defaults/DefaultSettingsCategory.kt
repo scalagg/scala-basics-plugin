@@ -93,6 +93,25 @@ object DefaultSettingsCategory : SettingCategory
             item = ItemBuilder.of(Material.WATCH)
         },
         entry {
+            id = "auto_disguise"
+            displayName = "Auto Disguise"
+
+            clazz = StateSettingValue::class.java
+            default = StateSettingValue.ENABLED
+
+            description += "Allows you to disguise"
+            description += "yourself automatically"
+            description += "when you join the network."
+
+            displayPredicate = {
+                it.hasPermission("scbasics.disguise.automatic")
+            }
+
+            item = ItemBuilder
+                .of(Material.POTION)
+                .data(8270)
+        },
+        entry {
             id = "entity_render_distance"
             displayName = "Entity render distance"
 

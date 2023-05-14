@@ -4,6 +4,7 @@ import dev.iiahmed.disguise.Disguise
 import dev.iiahmed.disguise.DisguiseManager
 import dev.iiahmed.disguise.DisguiseResponse
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.basics.plugin.disguise.events.AsyncPlayerDisguiseEvent
 import gg.scala.basics.plugin.disguise.sessionserver.SessionServerResponse
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
@@ -206,6 +207,20 @@ object DisguiseService
                     if (used)
                     {
                         profileInUse(it.second)
+                        return@context CompletableFuture
+                            .completedFuture(null)
+                    }
+
+                    val event = AsyncPlayerDisguiseEvent(
+                        player = Bukkit.getPlayer(applicant),
+                        profile = it.second
+                    )
+
+                    event.callEvent()
+
+                    if (event.isCancelled)
+                    {
+                        // We're assuming the event handled anything needed for cancellation
                         return@context CompletableFuture
                             .completedFuture(null)
                     }

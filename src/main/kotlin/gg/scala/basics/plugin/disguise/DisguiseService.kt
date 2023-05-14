@@ -109,7 +109,7 @@ object DisguiseService
 
                 setProfileNoLongerInUse(profileId)
                     .thenCompose {
-                        removeApplicantProfileMapping(profileId)
+                        removeApplicantProfileMapping(applicant)
                     }
                     .thenRun(unDisguiseComplete)
             }

@@ -192,6 +192,11 @@ object DisguiseService
                 )
         }
         .thenApplyAsync {
+            if (it == null)
+            {
+                return@thenApplyAsync null
+            }
+
             val uniqueId = UUID.fromString(it)
 
             getExistingDisguiseProfile(uniqueId)

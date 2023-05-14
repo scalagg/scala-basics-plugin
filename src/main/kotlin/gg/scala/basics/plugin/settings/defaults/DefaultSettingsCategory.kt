@@ -97,7 +97,7 @@ object DefaultSettingsCategory : SettingCategory
             displayName = "Auto Disguise"
 
             clazz = StateSettingValue::class.java
-            default = StateSettingValue.ENABLED
+            default = StateSettingValue.DISABLED
 
             description += "Allows you to disguise"
             description += "yourself automatically"

@@ -87,7 +87,10 @@ object DisguiseService
                                         default = StateSettingValue.ENABLED
                                     )
 
-                                    if (autoDisguise == StateSettingValue.ENABLED)
+                                    if (
+                                        autoDisguise == StateSettingValue.ENABLED &&
+                                        it.player.hasPermission("scbasics.disguise.automatic")
+                                    )
                                     {
                                         disguiseWithRandomSelection(
                                             player = it.player,

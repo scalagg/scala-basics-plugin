@@ -34,6 +34,7 @@ object DisguiseCommands : ScalaCommand()
     @Inject
     lateinit var plugin: ScalaBasicsPlugin
 
+
     @Conditions("requires-disguise")
     @CommandAlias("undisguise|ud|undis")
     @CommandPermission("scbasics.command.undisguise")

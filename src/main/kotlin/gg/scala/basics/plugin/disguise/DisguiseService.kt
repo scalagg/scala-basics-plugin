@@ -5,16 +5,21 @@ import dev.iiahmed.disguise.DisguiseManager
 import dev.iiahmed.disguise.DisguiseResponse
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.commands.disguise.DisguiseCommands
+import gg.scala.basics.plugin.disguise.sessionserver.SessionServerResponse
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.handler.RankHandler
 import gg.scala.lemon.util.QuickAccess
+import net.evilblock.cubed.ScalaCommonsSpigot
+import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 /**
  * @author GrowlyX
@@ -38,6 +43,31 @@ object DisguiseService
         DisguiseManager.setPlugin(plugin)
         provider
     }
+
+    fun saveDisguiseProfile(
+        sessionServerResponse: SessionServerResponse
+    ) = CompletableFuture
+        .runAsync {
+            ScalaCommonsSpigot.instance.kvConnection
+                .sync()
+                .hset(
+                    "disguise:profiles",
+                    sessionServerResponse.id.toString(),
+                    Serializers.gson.toJson(sessionServerResponse)
+                )
+        }
+
+    fun disguiseProfileExists(
+        uniqueId: UUID
+    ) = CompletableFuture
+        .supplyAsync {
+            ScalaCommonsSpigot.instance.kvConnection
+                .sync()
+                .hexists(
+                    "disguise:profiles",
+                    uniqueId.toString()
+                )
+        }
 
     fun disguise(player: Player, name: String)
     {

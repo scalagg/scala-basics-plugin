@@ -26,12 +26,7 @@ object DisguiseCommands : ScalaCommand()
     @Inject
     lateinit var plugin: ScalaBasicsPlugin
 
-    @CommandAlias("undisguise|ud|undis")
-    @CommandPermission("scbasics.command.undisguise")
-    fun onUnDisguise(player: ScalaPlayer) = DisguiseService
-        .undisguise(player.bukkit())
-
-    @CommandAlias("checkdisguise")
+    @CommandAlias("checkdisguise|checkdis")
     @CommandCompletion("@players")
     @CommandPermission("scbasics.command.checkdisguise")
     fun onCheckDisguise(player: ScalaPlayer, target: AsyncLemonPlayer) =
@@ -59,15 +54,21 @@ object DisguiseCommands : ScalaCommand()
                 }
         }
 
-    @Conditions("not-disguised")
-    @CommandAlias("disguise|dis")
+    @Conditions("not-game-server")
+    @CommandAlias("undisguise|ud|undis|nick")
+    @CommandPermission("scbasics.command.undisguise")
+    fun onUnDisguise(player: ScalaPlayer) = DisguiseService
+        .undisguise(player.bukkit())
+
+    @Conditions("not-disguised|not-game-server")
+    @CommandAlias("disguise|dis|unnick")
     @CommandPermission("scbasics.command.disguise")
     fun onDisguise(player: ScalaPlayer) =
         DisguiseService
             .disguiseWithRandomSelection(player.bukkit())
 
-    @Conditions("not-disguised")
-    @CommandAlias("disguisemanual")
+    @CommandAlias("disguisemanual|manualnick")
+    @Conditions("not-disguised|not-game-server")
     @CommandPermission("scbasics.command.disguise.manual")
     fun onDisguiseManual(player: ScalaPlayer, user: AsyncLemonPlayer) =
         user.validatePlayers(player.bukkit(), true) {

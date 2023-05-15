@@ -6,6 +6,7 @@ import gg.scala.basics.plugin.disguise.DisguiseService
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.cache.uuid.ScalaStoreUuidCache
 import gg.scala.commons.acf.ConditionFailedException
+import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.annotations.commands.customizer.CommandManagerCustomizer
 import gg.scala.commons.command.ScalaCommandManager
 import net.evilblock.cubed.util.CC
@@ -34,6 +35,14 @@ object BasicPluginCommandCustomizer
                 if (DisguiseService.provider().isDisguised(it.issuer.player))
                     throw ConditionFailedException(
                         "You are already disguised! Use ${CC.BOLD}/undisguise${CC.RED} to use this command again!"
+                    )
+            }
+
+        manager.commandConditions
+            .addCondition("not-game-server") {
+                if ("hub" !in ServerSync.getLocalGameServer().groups)
+                    throw ConditionFailedException(
+                        "You can only run this command in a lobby."
                     )
             }
 

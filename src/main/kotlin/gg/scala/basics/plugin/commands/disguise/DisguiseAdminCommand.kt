@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.commands.disguise
 
+import dev.iiahmed.disguise.Disguise
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.disguise.DisguiseService
 import gg.scala.basics.plugin.disguise.PlayerDataPair
@@ -9,10 +10,12 @@ import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.*
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
+import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.flavor.inject.Inject
 import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import org.bukkit.command.ConsoleCommandSender
+import org.bukkit.entity.EntityType
 import java.io.File
 import java.net.URL
 import java.util.concurrent.CompletableFuture
@@ -33,6 +36,31 @@ object DisguiseAdminCommand : ScalaCommand()
     @HelpCommand
     fun onHelp(help: CommandHelp) =
         help.showHelp()
+
+    @Subcommand("iamnowafucking")
+    @Description("I am now a fucking... PIG!")
+    fun onIAmNowAFucking(player: ScalaPlayer, type: EntityType)
+    {
+        DisguiseService.provider().disguise(
+            player.bukkit(),
+            Disguise
+                .builder()
+                .setEntityType(type)
+                .build()
+        )
+
+        player.sendMessage(
+            "${CC.GREEN}You're now a fucking ${type.name}!"
+        )
+    }
+
+    @Subcommand("iamnolongerafucking")
+    @Description("I am no longer a fucking pig... :(")
+    fun onIAmNoLongerAFucking(player: ScalaPlayer)
+    {
+        DisguiseService.provider().undisguise(player.bukkit())
+        player.sendMessage("${CC.RED}Your entity disguise was reset.")
+    }
 
     @Subcommand("import")
     @Description("Import disguises from a pre-defined list.")

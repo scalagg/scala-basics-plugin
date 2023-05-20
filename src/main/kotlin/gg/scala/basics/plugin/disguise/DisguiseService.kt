@@ -15,11 +15,15 @@ import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.handler.RankHandler
 import gg.scala.lemon.util.QuickAccess
 import me.lucko.helper.Events
+import me.lucko.helper.Schedulers
+import me.lucko.helper.utils.Players
 import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Tasks
 import net.evilblock.cubed.util.bukkit.uuid.UUIDUtil
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
@@ -39,6 +43,9 @@ object DisguiseService
     @Inject
     lateinit var plugin: ScalaBasicsPlugin
 
+    @Inject
+    lateinit var audiences: BukkitAudiences
+
     private val provider by lazy {
         DisguiseManager.getProvider()
     }
@@ -50,6 +57,25 @@ object DisguiseService
     {
         DisguiseManager.setPlugin(plugin)
         provider
+
+        Schedulers
+            .async()
+            .runRepeating(Runnable {
+                Players
+                    .all()
+                    .filter { it.hasMetadata("disguised") }
+                    .forEach { player ->
+                        audiences
+                            .player(player)
+                            .sendActionBar(
+                                LegacyComponentSerializer
+                                    .legacySection()
+                                    .deserialize(
+                                        "${CC.GREEN}You are currently nicked! ${CC.GRAY}(/unnick)"
+                                    )
+                            )
+                    }
+            }, 0L, 10L)
 
         Events
             .subscribe(PlayerJoinEvent::class.java)
@@ -543,7 +569,11 @@ object DisguiseService
 
                 else ->
                 {
-                    player.sendMessage("${CC.RED}Error: Failed to disguise due to: ${response.name.lowercase().replace("_", " ")}")
+                    player.sendMessage(
+                        "${CC.RED}Error: Failed to disguise due to: ${
+                            response.name.lowercase().replace("_", " ")
+                        }"
+                    )
                 }
             }
         }

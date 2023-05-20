@@ -55,13 +55,13 @@ object DisguiseCommands : ScalaCommand()
         }
 
     @Conditions("not-game-server")
-    @CommandAlias("undisguise|ud|undis|nick")
+    @CommandAlias("undisguise|ud|undis|unnick")
     @CommandPermission("scbasics.command.undisguise")
     fun onUnDisguise(player: ScalaPlayer) = DisguiseService
         .undisguise(player.bukkit())
 
     @Conditions("not-disguised|not-game-server")
-    @CommandAlias("disguise|dis|unnick")
+    @CommandAlias("disguise|dis|nick")
     @CommandPermission("scbasics.command.disguise")
     fun onDisguise(player: ScalaPlayer) =
         DisguiseService

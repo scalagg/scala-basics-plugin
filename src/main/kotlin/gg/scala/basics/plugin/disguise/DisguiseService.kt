@@ -23,6 +23,7 @@ import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Tasks
 import net.evilblock.cubed.util.bukkit.uuid.UUIDUtil
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
@@ -120,9 +121,9 @@ object DisguiseService
                                     {
                                         disguiseWithRandomSelection(
                                             player = it.player,
-                                            postDisguise = { ssr ->
+                                            postDisguise = { _ ->
                                                 it.player.sendMessage(
-                                                    "${CC.GREEN}You've logged onto the server as ${CC.WHITE}${ssr.name}${CC.GREEN} due to your automatic disguise setting."
+                                                    "${CC.GREEN}You've logged onto the server with a new identity due to your automatic nick setting."
                                                 )
                                             }
                                         ).join()
@@ -133,7 +134,7 @@ object DisguiseService
 
                                 completeProfileApplication(it.player, response) {
                                     it.player.sendMessage(
-                                        "${CC.GREEN}You've logged onto this server as ${CC.WHITE}${response.name}${CC.GREEN} due to your disguise."
+                                        "${CC.GREEN}You've logged onto this server with a fake identity due to your active nick."
                                     )
                                 }
                             }
@@ -515,6 +516,12 @@ object DisguiseService
                         player.uniqueId,
                         recalculateGrants = false
                     )
+
+                    audiences
+                        .player(player)
+                        .sendActionBar(
+                            Component.text()
+                        )
 
                     postUnDisguise()
                 }

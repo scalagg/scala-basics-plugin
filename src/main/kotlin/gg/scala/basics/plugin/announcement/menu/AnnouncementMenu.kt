@@ -105,10 +105,12 @@ class AnnouncementMenu : PaginatedMenu()
                         announcement.conditions!!
                             .forEach {
                                 addToLore(
-                                    if (it.namespace().startsWith("ctx"))
-                                        "${CC.WHITE} - ${CC.GRAY}(ctx) ${CC.WHITE}${it.namespace().removePrefix("ctx")}:${it.value()}"
+                                    (if (it.namespace().startsWith("ctx"))
+                                        "${CC.WHITE} - ${CC.GRAY}(ctx)"
                                     else
-                                        "${CC.WHITE} - $it"
+                                        "${CC.WHITE} - ") + " ${
+                                            if (it.namespace().contains("_not_")) "${CC.RED}(NOT) " else "${CC.GREEN}(AND) "
+                                        }${CC.WHITE}${it.namespace().removePrefix("ctx").removePrefix("_not_")}:${it.value()}"
                                 )
                             }
                     }

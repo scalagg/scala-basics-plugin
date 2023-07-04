@@ -5,6 +5,7 @@ import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import me.lucko.helper.metadata.Metadata
 import me.lucko.helper.utils.Players
+import net.kyori.adventure.key.Key
 
 /**
  * @author GrowlyX
@@ -27,20 +28,30 @@ object AnnouncementRunnable : Runnable
 
             val announcements = AnnouncementService.cached()
                 .announcements.filter {
-                    it.conditions?.all { key ->
-                        AnnouncementConditions
-                            .let { conditions ->
-                                if (key.namespace().contains("ctx"))
-                                    conditions.contextual(key) else conditions.condition(key)
-                            }
-                            ?.let { condition ->
-                                if (condition.contextualKey())
-                                    condition.contextualDisplay(player, key)
-                                else
-                                    condition.shouldDisplay(player)
-                            }
-                            ?: true
-                    } ?: true
+                    it.conditions
+                        ?.all { key ->
+                            AnnouncementConditions
+                                .let { conditions ->
+                                    if (key.namespace().startsWith("ctx"))
+                                        conditions.contextual(key) else conditions.condition(key)
+                                }
+                                ?.let { condition ->
+                                    val id = if (condition.contextualKey())
+                                        condition.contextualDisplay(
+                                            player,
+                                            Key.key(
+                                                key.namespace().removePrefix("ctx").removePrefix("_not_"),
+                                                key.value()
+                                            )
+                                        )
+                                    else
+                                        condition.shouldDisplay(player)
+
+                                    if (key.namespace().removePrefix("ctx").startsWith("_not_")) !id else id
+                                }
+                                ?: true
+                        }
+                        ?: true
                 }
 
             val metadata = Metadata

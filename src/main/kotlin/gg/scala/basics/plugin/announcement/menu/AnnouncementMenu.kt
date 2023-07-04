@@ -93,16 +93,45 @@ class AnnouncementMenu : PaginatedMenu()
                 .addToLore(
                     "",
                     "${CC.GRAY}Conditions:",
-                    "${CC.WHITE}${
-                        if (announcement.conditions == null) "None" else announcement.conditions
-                    }",
+                )
+                .apply {
+                    if (announcement.conditions.isNullOrEmpty())
+                    {
+                        addToLore(
+                            "${CC.RED}None"
+                        )
+                    } else
+                    {
+                        announcement.conditions!!
+                            .forEach {
+                                addToLore(
+                                    if (it.namespace().startsWith("ctx"))
+                                        "${CC.WHITE} - ${CC.GRAY}(ctx) ${CC.WHITE}${it.namespace().removePrefix("ctx")}:${it.value()}"
+                                    else
+                                        "${CC.WHITE} - $it"
+                                )
+                            }
+                    }
+                }
+                .addToLore(
                     "",
                     "${CC.GREEN}Left-Click to edit.",
                     "${CC.GOLD}Shift-Click to apply condition.",
-                    "${CC.RED}Right-Click to delete."
+                    "${CC.RED}Shift-Right-Click to clear condition.",
+                    "${CC.D_RED}Right-Click to delete."
                 )
                 .toButton { _, type ->
-                    if (type!!.isShiftClick)
+                    if (type!!.isShiftClick && type!!.isRightClick)
+                    {
+                        announcement.conditions?.clear()
+                        AnnouncementService.sync(model)
+                        openMenu(player)
+
+                        player.sendMessage("${CC.RED}Cleared conditions.")
+                        return@toButton
+                    }
+
+                    if (type.isShiftClick)
                     {
                         if (announcement.conditions == null)
                         {

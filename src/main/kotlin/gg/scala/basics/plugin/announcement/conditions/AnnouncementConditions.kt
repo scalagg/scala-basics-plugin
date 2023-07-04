@@ -20,6 +20,9 @@ object AnnouncementConditions
     @Inject
     lateinit var plugin: ScalaBasicsPlugin
 
+    fun contextual(key: Key) =
+        conditions[key.namespace().removePrefix("ctx")]
+
     fun condition(key: Key) = conditions[key.toString()]
         ?: conditions[key.namespace()]
 

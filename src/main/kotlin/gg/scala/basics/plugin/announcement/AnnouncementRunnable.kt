@@ -29,7 +29,10 @@ object AnnouncementRunnable : Runnable
                 .announcements.filter {
                     it.conditions?.all { key ->
                         AnnouncementConditions
-                            .condition(key)
+                            .let { conditions ->
+                                if (key.namespace().contains("ctx"))
+                                    conditions.contextual(key) else conditions.condition(key)
+                            }
                             ?.let { condition ->
                                 if (condition.contextualKey())
                                     condition.contextualDisplay(player, key)

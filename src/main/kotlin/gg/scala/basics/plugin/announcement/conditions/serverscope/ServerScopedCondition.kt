@@ -18,6 +18,6 @@ object ServerScopedCondition : AnnouncementDisplayCondition
     override fun contextualDisplay(player: Player, key: Key) =
         key.value() in ServerSync.getLocalGameServer().groups
 
-    override fun key() = Key.key("i", "i")
+    override fun key() = Key.key("", "")
     override fun shouldDisplay(player: Player) = false
 }

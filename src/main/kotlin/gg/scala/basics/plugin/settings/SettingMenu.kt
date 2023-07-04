@@ -83,9 +83,7 @@ class SettingMenu(
                 )
                 .apply {
                     if (this@SettingMenu.category == index)
-                    {
-                        addToLore("", "${CC.GRAY}(Currently browsing)")
-                    }
+                        glow()
                 }
                 .addToLore(
                     "",

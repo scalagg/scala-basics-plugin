@@ -33,7 +33,9 @@ class SettingMenu(
         ChatColor.GREEN to 5,
         ChatColor.DARK_AQUA to 9,
         ChatColor.LIGHT_PURPLE to 2,
-        ChatColor.DARK_PURPLE to 10
+        ChatColor.DARK_PURPLE to 10,
+        ChatColor.BLUE to 11,
+        ChatColor.AQUA to 3,
     )
 
     private val categories = SettingContainer

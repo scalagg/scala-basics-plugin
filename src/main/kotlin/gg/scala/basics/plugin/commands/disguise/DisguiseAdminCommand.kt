@@ -12,6 +12,7 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.flavor.inject.Inject
+import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import org.bukkit.command.ConsoleCommandSender
@@ -60,6 +61,33 @@ object DisguiseAdminCommand : ScalaCommand()
     {
         DisguiseService.provider().undisguise(player.bukkit())
         player.sendMessage("${CC.RED}Your entity disguise was reset.")
+    }
+
+    @Subcommand("export")
+    fun onExport(sender: ConsoleCommandSender)
+    {
+        File(plugin.dataFolder, "export.json")
+            .apply {
+                if (!exists())
+                {
+                    plugin.dataFolder.mkdirs()
+                    createNewFile()
+                }
+            }
+            .writeText(
+                Serializers.gson.toJson(
+                    ScalaCommonsSpigot.instance.kvConnection
+                        .sync()
+                        .hgetall("disguise:profiles")
+                        .mapValues {
+                            Serializers.gson.fromJson(it.value, SessionServerResponse::class.java)
+                        }
+                        .mapValues { it.value.name }
+                        .values
+                )
+            )
+
+     sender.sendMessage("ddone!")
     }
 
     @Subcommand("import")

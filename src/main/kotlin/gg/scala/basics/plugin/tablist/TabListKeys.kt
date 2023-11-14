@@ -9,6 +9,9 @@ import net.kyori.adventure.key.Key
  */
 object TabListKeys : DataSyncKeys
 {
+    @Deprecated("newStore()")
     override fun store() = keyOf("tablist", "configuration")
+
+    override fun newStore() = "tablist"
     override fun sync() = keyOf("tablist", "update")
 }

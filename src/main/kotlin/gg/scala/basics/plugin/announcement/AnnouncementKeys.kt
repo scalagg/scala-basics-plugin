@@ -9,5 +9,6 @@ import gg.scala.commons.persist.datasync.DataSyncKeys
 object AnnouncementKeys : DataSyncKeys
 {
     override fun store() = keyOf("announcements", "configuration")
+    override fun newStore() = "announcements"
     override fun sync() = keyOf("announcements", "update")
 }

@@ -15,6 +15,7 @@ import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Optional
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.command.annotations.NoManualSelection
+import gg.scala.lemon.player.punishment.category.PunishmentCategory
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
@@ -73,6 +74,11 @@ object MessageCommand : ScalaCommand()
             if (lemonPlayer.uniqueId == player.uniqueId)
             {
                 throw ConditionFailedException("You cannot message yourself.")
+            }
+
+            if (lemonPlayer.activePunishments[PunishmentCategory.MUTE] != null)
+            {
+                throw ConditionFailedException("You cannot send private messages to players when you are muted!")
             }
 
             QuickAccess

@@ -36,15 +36,15 @@ object PrivateConversationMessageService
 
     fun sendMessage(player: Player, target: UUID, content: String)
     {
-        val coloredName = PlayerHandler.find(player.uniqueId)!!
-            .getColoredName(ignoreMinequest = true)
+        val coloredName = PlayerHandler.find(player.uniqueId)
+            ?.getColoredName(ignoreMinequest = true)
+            ?: return
 
         val message = PrivateConversationMessage(
             player.uniqueId,
             player.hasPermission("scstaff.staff-member"),
             coloredName, target, content
         )
-
 
         agent.distribute(message)
     }

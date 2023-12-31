@@ -8,6 +8,7 @@ import net.kyori.adventure.key.Key
  * @since 10/12/2022
  */
 data class Announcement(
+    val id: Int,
     val lines: MutableList<String>,
-    val conditions: MutableList<AnnouncementKey> = mutableListOf()
+    val conditions: MutableMap<String, AnnouncementKey> = mutableMapOf()
 )

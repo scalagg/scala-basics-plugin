@@ -50,7 +50,8 @@ class AnnouncementMenu : PaginatedMenu()
                 )
                 .toButton { _, _ ->
                     val model = AnnouncementService.cached()
-                    model.announcements += Announcement(
+                    model.announcements[model.announcements.size] = Announcement(
+                        model.announcements.size,
                         mutableListOf("Announcement dummy text.")
                     )
 
@@ -87,7 +88,7 @@ class AnnouncementMenu : PaginatedMenu()
         val buttons = mutableMapOf<Int, Button>()
         val model = AnnouncementService.cached()
 
-        for ((index, announcement) in model.announcements.withIndex())
+        for ((index, announcement) in model.announcements.entries)
         {
             buttons[buttons.size] = ItemBuilder
                 .of(Material.PAPER)
@@ -105,7 +106,7 @@ class AnnouncementMenu : PaginatedMenu()
                         )
                     } else
                     {
-                        announcement.conditions
+                        announcement.conditions.values
                             .forEach {
                                 addToLore(
                                     (if (it.contextual)
@@ -152,7 +153,7 @@ class AnnouncementMenu : PaginatedMenu()
                                 .acceptInput { _, input ->
                                     val parts = input.split(":")
 
-                                    announcement.conditions += AnnouncementKey(parts[0], parts[1])
+                                    announcement.conditions[parts[0]] = AnnouncementKey(parts[0], parts[1])
                                     AnnouncementService.sync(model)
 
                                     player.sendMessage("${CC.GREEN}Saved!")
@@ -174,7 +175,7 @@ class AnnouncementMenu : PaginatedMenu()
                         ) {
                             if (it)
                             {
-                                model.announcements.removeAt(index)
+                                model.announcements.remove(index)
                                 AnnouncementService.sync(model)
 
                                 player.sendMessage("${CC.RED}Deleted announcement #$index!")

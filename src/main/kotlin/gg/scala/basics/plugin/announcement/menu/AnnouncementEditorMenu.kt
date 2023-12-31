@@ -27,8 +27,9 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
     override fun getAllPagesButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
+        val model = AnnouncementService.cached()
 
-        for (condition in announcement.conditions)
+        for ((i, condition) in announcement.conditions.entries)
         {
             buttons[buttons.size] =
                 ItemBuilder.of(Material.WOOL)
@@ -71,8 +72,11 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
 
                                     player.sendMessage("${CC.GREEN}Updated the condition of this announcement key")
 
+                                    announcement.conditions[i] = condition
+                                    model.announcements[announcement.id] = announcement
+
                                     AnnouncementService.sync(
-                                        AnnouncementService.cached()
+                                        model
                                     )
 
                                     AnnouncementEditorMenu(announcement).openMenu(player)
@@ -83,8 +87,11 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
                             {
                                 condition.contextual = !condition.contextual
 
+                                announcement.conditions[i] = condition
+                                model.announcements[announcement.id] = announcement
+
                                 AnnouncementService.sync(
-                                    AnnouncementService.cached()
+                                    model
                                 )
                             } else
                             {
@@ -95,8 +102,11 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
 
                                         player.sendMessage("${CC.GREEN}Added another condition to this announcement key")
 
+                                        announcement.conditions[i] = condition
+                                        model.announcements[announcement.id] = announcement
+
                                         AnnouncementService.sync(
-                                            AnnouncementService.cached()
+                                            model
                                         )
 
                                         AnnouncementEditorMenu(announcement).openMenu(player)

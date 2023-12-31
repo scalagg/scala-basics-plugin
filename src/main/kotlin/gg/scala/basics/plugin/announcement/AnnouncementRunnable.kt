@@ -31,7 +31,7 @@ object AnnouncementRunnable : Runnable
 
             val announcements = AnnouncementService.cached()
                 .announcements.filter {
-                    it.conditions.all { key ->
+                    it.value.conditions.values.all { key ->
                             AnnouncementConditions
                                 .let { conditions ->
                                     if (key.contextual)
@@ -71,13 +71,13 @@ object AnnouncementRunnable : Runnable
             if (announcements.isEmpty()) return
 
             val announcement = announcements
-                .getOrNull(currentIndex + 1)
+                .getOrDefault(currentIndex + 1, null)
                 ?: kotlin.run {
                     metadata.put(
                         AnnouncementService.announcementKey, -1
                     )
 
-                    AnnouncementService.cached().announcements.first()
+                    AnnouncementService.cached().announcements.values.first()
                 }
 
             var linesBeingSent = announcement

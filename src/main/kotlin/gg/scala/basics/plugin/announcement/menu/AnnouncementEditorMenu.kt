@@ -28,9 +28,7 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
     {
         val buttons = mutableMapOf<Int, Button>()
 
-        if (announcement.conditions == null) return buttons
-
-        for (condition in announcement.conditions!!)
+        for (condition in announcement.conditions)
         {
             buttons[buttons.size] =
                 ItemBuilder.of(Material.WOOL)
@@ -53,7 +51,7 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
                             InputPrompt()
                                 .withText("${CC.GREEN}Type in the condition that you want to make this key!")
                                 .acceptInput { _, s ->
-                                    when (s)
+                                    when (s.lowercase())
                                     {
                                         "and" ->
                                         {

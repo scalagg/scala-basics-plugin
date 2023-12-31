@@ -9,5 +9,5 @@ import net.kyori.adventure.key.Key
  */
 data class Announcement(
     val lines: MutableList<String>,
-    var conditions: MutableList<AnnouncementKey>? = null
+    val conditions: MutableList<AnnouncementKey> = mutableListOf()
 )

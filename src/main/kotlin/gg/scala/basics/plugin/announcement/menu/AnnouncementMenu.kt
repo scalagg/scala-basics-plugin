@@ -98,14 +98,14 @@ class AnnouncementMenu : PaginatedMenu()
                     "${CC.GRAY}Conditions:",
                 )
                 .apply {
-                    if (announcement.conditions.isNullOrEmpty())
+                    if (announcement.conditions.isEmpty())
                     {
                         addToLore(
                             "${CC.RED}None"
                         )
                     } else
                     {
-                        announcement.conditions!!
+                        announcement.conditions
                             .forEach {
                                 addToLore(
                                     (if (it.contextual)
@@ -129,7 +129,7 @@ class AnnouncementMenu : PaginatedMenu()
                 .toButton { _, type ->
                     if (type!! == ClickType.DROP)
                     {
-                        announcement.conditions?.clear()
+                        announcement.conditions.clear()
                         AnnouncementService.sync(model)
                         openMenu(player)
 
@@ -145,11 +145,6 @@ class AnnouncementMenu : PaginatedMenu()
                             return@toButton
                         } else
                         {
-                            if (announcement.conditions == null)
-                            {
-                                announcement.conditions = mutableListOf()
-                            }
-
                             player.closeInventory()
 
                             InputPrompt()
@@ -157,7 +152,7 @@ class AnnouncementMenu : PaginatedMenu()
                                 .acceptInput { _, input ->
                                     val parts = input.split(":")
 
-                                    announcement.conditions!! += AnnouncementKey(parts[0], parts[1])
+                                    announcement.conditions += AnnouncementKey(parts[0], parts[1])
                                     AnnouncementService.sync(model)
 
                                     player.sendMessage("${CC.GREEN}Saved!")

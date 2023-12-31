@@ -31,7 +31,7 @@ object AnnouncementRunnable : Runnable
 
             val announcements = AnnouncementService.cached()
                 .announcements.filter {
-                    it.conditions?.all { key ->
+                    it.conditions.all { key ->
                             AnnouncementConditions
                                 .let { conditions ->
                                     if (key.contextual)
@@ -54,7 +54,6 @@ object AnnouncementRunnable : Runnable
                                 }
                                 ?: true
                         }
-                        ?: true
                 }
 
             val metadata = Metadata

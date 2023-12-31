@@ -1,10 +1,13 @@
 package gg.scala.basics.plugin.announcement
 
 import gg.scala.basics.plugin.announcement.conditions.AnnouncementConditions
+import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
+import gg.scala.basics.plugin.announcement.keys.LogicCondition
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import me.lucko.helper.metadata.Metadata
 import me.lucko.helper.utils.Players
+import net.evilblock.cubed.util.bukkit.Tasks
 import net.kyori.adventure.key.Key
 
 /**
@@ -28,30 +31,29 @@ object AnnouncementRunnable : Runnable
 
             val announcements = AnnouncementService.cached()
                 .announcements.filter {
-                    it.conditions
-                        ?.all { key ->
+                    it.value.conditions.values.all { key ->
                             AnnouncementConditions
                                 .let { conditions ->
-                                    if (key.namespace().startsWith("ctx"))
+                                    if (key.contextual)
                                         conditions.contextual(key) else conditions.condition(key)
                                 }
                                 ?.let { condition ->
                                     val id = if (condition.contextualKey())
                                         condition.contextualDisplay(
                                             player,
-                                            Key.key(
-                                                key.namespace().removePrefix("ctx").removePrefix("_not_"),
-                                                key.value()
+                                            AnnouncementKey(
+                                                key.namespace,
+                                                key.value
                                             )
                                         )
                                     else
                                         condition.shouldDisplay(player)
 
-                                    if (key.namespace().removePrefix("ctx").startsWith("_not_")) !id else id
+                                    if (key.isCondition(LogicCondition.Not)) !id
+                                    if (key.isCondition(LogicCondition.Or)) (id || key.checkReference(player)) else id
                                 }
                                 ?: true
                         }
-                        ?: true
                 }
 
             val metadata = Metadata
@@ -66,14 +68,16 @@ object AnnouncementRunnable : Runnable
                 AnnouncementService.announcementKey, currentIndex + 1
             )
 
+            if (announcements.isEmpty()) return
+
             val announcement = announcements
-                .getOrNull(currentIndex + 1)
+                .getOrDefault(currentIndex + 1, null)
                 ?: kotlin.run {
                     metadata.put(
                         AnnouncementService.announcementKey, -1
                     )
 
-                    AnnouncementService.cached().announcements.first()
+                    AnnouncementService.cached().announcements.values.first()
                 }
 
             var linesBeingSent = announcement

@@ -2,6 +2,8 @@ package gg.scala.basics.plugin.announcement.menu
 
 import gg.scala.basics.plugin.announcement.Announcement
 import gg.scala.basics.plugin.announcement.AnnouncementService
+import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
+import gg.scala.basics.plugin.announcement.keys.LogicCondition
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.buttons.AddButton
 import net.evilblock.cubed.menu.buttons.TexturedHeadButton
@@ -14,6 +16,7 @@ import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
 import net.kyori.adventure.key.Key
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.ClickType
 
 /**
  * @author GrowlyX
@@ -47,7 +50,8 @@ class AnnouncementMenu : PaginatedMenu()
                 )
                 .toButton { _, _ ->
                     val model = AnnouncementService.cached()
-                    model.announcements += Announcement(
+                    model.announcements[model.announcements.size] = Announcement(
+                        model.announcements.size,
                         mutableListOf("Announcement dummy text.")
                     )
 
@@ -84,7 +88,7 @@ class AnnouncementMenu : PaginatedMenu()
         val buttons = mutableMapOf<Int, Button>()
         val model = AnnouncementService.cached()
 
-        for ((index, announcement) in model.announcements.withIndex())
+        for ((index, announcement) in model.announcements.entries)
         {
             buttons[buttons.size] = ItemBuilder
                 .of(Material.PAPER)
@@ -95,37 +99,38 @@ class AnnouncementMenu : PaginatedMenu()
                     "${CC.GRAY}Conditions:",
                 )
                 .apply {
-                    if (announcement.conditions.isNullOrEmpty())
+                    if (announcement.conditions.isEmpty())
                     {
                         addToLore(
                             "${CC.RED}None"
                         )
                     } else
                     {
-                        announcement.conditions!!
+                        announcement.conditions.values
                             .forEach {
                                 addToLore(
-                                    (if (it.namespace().startsWith("ctx"))
+                                    (if (it.contextual)
                                         "${CC.WHITE} - ${CC.GRAY}(ctx)"
                                     else
                                         "${CC.WHITE} - ") + " ${
-                                            if (it.namespace().contains("_not_")) "${CC.RED}(NOT) " else "${CC.GREEN}(AND) "
-                                        }${CC.WHITE}${it.namespace().removePrefix("ctx").removePrefix("_not_")}:${it.value()}"
+                                             it.getMenuPrefix()
+                                        }${CC.WHITE}${it.namespace}:${it.value}"
                                 )
                             }
                     }
                 }
                 .addToLore(
                     "",
-                    "${CC.GREEN}Left-Click to edit.",
+                    "${CC.GREEN}Left-Click to edit lines.",
+                    "${CC.D_GREEN}Shift-Left-Click to edit conditions",
                     "${CC.GOLD}Shift-Click to apply condition.",
-                    "${CC.RED}Shift-Right-Click to clear condition.",
+                    "${CC.RED}Q to clear conditions.",
                     "${CC.D_RED}Right-Click to delete."
                 )
                 .toButton { _, type ->
-                    if (type!!.isShiftClick && type!!.isRightClick)
+                    if (type!! == ClickType.DROP)
                     {
-                        announcement.conditions?.clear()
+                        announcement.conditions.clear()
                         AnnouncementService.sync(model)
                         openMenu(player)
 
@@ -135,27 +140,31 @@ class AnnouncementMenu : PaginatedMenu()
 
                     if (type.isShiftClick)
                     {
-                        if (announcement.conditions == null)
+                        if (type.isLeftClick)
                         {
-                            announcement.conditions = mutableListOf()
+                            AnnouncementEditorMenu(announcement).openMenu(player)
+                            return@toButton
+                        } else
+                        {
+                            player.closeInventory()
+
+                            InputPrompt()
+                                .withText("${CC.GREEN}Enter a condition key (namespace:key)")
+                                .acceptInput { _, input ->
+                                    val parts = input.split(":")
+
+                                    announcement.conditions[parts[0]] = AnnouncementKey(parts[0], parts[1])
+                                    AnnouncementService.sync(model)
+
+                                    player.sendMessage("${CC.GREEN}Saved!")
+                                    openMenu(player)
+                                }
+                                .start(player)
+                            return@toButton
                         }
-
-                        player.closeInventory()
-
-                        InputPrompt()
-                            .withText("${CC.GREEN}Enter a condition key (namespace:key)")
-                            .acceptInput { _, input ->
-                                announcement.conditions!! += Key.key(input)
-                                AnnouncementService.sync(model)
-
-                                player.sendMessage("${CC.GREEN}Saved!")
-                                openMenu(player)
-                            }
-                            .start(player)
-                        return@toButton
                     }
 
-                    if (type!!.isRightClick)
+                    if (type.isRightClick)
                     {
                         ConfirmMenu(
                             title = "Deleting announcement #$index",
@@ -166,7 +175,7 @@ class AnnouncementMenu : PaginatedMenu()
                         ) {
                             if (it)
                             {
-                                model.announcements.removeAt(index)
+                                model.announcements.remove(index)
                                 AnnouncementService.sync(model)
 
                                 player.sendMessage("${CC.RED}Deleted announcement #$index!")

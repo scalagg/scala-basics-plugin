@@ -7,10 +7,8 @@ import java.util.concurrent.TimeUnit
  * @since 10/12/2022
  */
 data class AnnouncementConfigModel(
-    val announcements: MutableList<Announcement> =
-        mutableListOf(
-            Announcement(mutableListOf("Hello world, from basics."))
-        ),
+    val announcements: MutableMap<Int, Announcement> =
+        mutableMapOf(0 to Announcement(0, mutableListOf("Hello world, from Basics!"))),
     var padding: Boolean = false,
     var linePrefix: String = "",
     var iterationSpeed: Long = 1L,

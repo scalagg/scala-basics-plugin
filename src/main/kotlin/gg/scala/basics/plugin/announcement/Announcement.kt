@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.announcement
 
+import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
 import net.kyori.adventure.key.Key
 
 /**
@@ -7,6 +8,7 @@ import net.kyori.adventure.key.Key
  * @since 10/12/2022
  */
 data class Announcement(
+    val id: Int,
     val lines: MutableList<String>,
-    var conditions: MutableList<Key>? = null
+    val conditions: MutableMap<String, AnnouncementKey> = mutableMapOf()
 )

@@ -27,11 +27,14 @@ class AnnouncementLinesEditor(
 
     override fun onSave(player: Player, list: List<String>)
     {
+        val model = AnnouncementService.cached()
+
         announcement.lines.clear()
         announcement.lines.addAll(list)
+        model.announcements[announcement.id] = announcement
 
         AnnouncementService.sync(
-            AnnouncementService.cached()
+            model
         )
 
         player.sendMessage(

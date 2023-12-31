@@ -9,12 +9,12 @@ data class AnnouncementKey(
     val value: String,
     var logicCondition: LogicCondition = LogicCondition.And,
     val contextual: Boolean = false,
-    val referenceKeyString: String? = null
+    val referenceKeyString: String = "null"
 )
 {
     fun checkReference(player: Player): Boolean
     {
-        if (referenceKeyString == null)
+        if (referenceKeyString == "null")
         {
             return false
         }

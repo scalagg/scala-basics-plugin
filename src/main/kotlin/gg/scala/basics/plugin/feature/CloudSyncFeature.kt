@@ -24,7 +24,7 @@ object CloudSyncFeature
         CloudSyncDiscoveryService
             .discoverable.assets
             .apply {
-                add("gg.scala.basics.plugin:scala-basics-plugin:scala-basics-plugin")
+                add("gg.scala.basics.plugin:scala-basics-plugin:scala-basics-plugin:gradle-dev")
             }
 
         CloudSyncListenerService

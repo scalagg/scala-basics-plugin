@@ -17,7 +17,11 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
     init
     {
         updateAfterClick = true
-        placeholder = true
+    }
+
+    override fun size(buttons: Map<Int, Button>): Int
+    {
+        return 27
     }
 
     override fun getAllPagesButtons(player: Player): Map<Int, Button>
@@ -32,35 +36,75 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
                 ItemBuilder.of(Material.WOOL)
                     .data(condition.logicCondition.data)
                     .addToLore(
-                        "${CC.GRAY}Condition Type: &f${condition.logicCondition.color}${condition.logicCondition.displayName}",
-                        "${CC.GRAY}Contextual: &f${if (condition.contextual) "${CC.GREEN}Yes" else "${CC.RED}No"}",
-                        "${CC.GRAY}Namespace: &f${condition.namespace}",
-                        "${CC.GRAY}Value: &f${condition.value}",
+                        "${CC.GRAY}Condition Type: ${CC.WHITE}${condition.logicCondition.color}${condition.logicCondition.displayName}",
+                        "${CC.GRAY}Contextual: ${CC.WHITE}${if (condition.contextual) "${CC.GREEN}Yes" else "${CC.RED}No"}",
+                        "${CC.GRAY}Namespace: ${CC.WHITE}${condition.namespace}",
+                        "${CC.GRAY}Value: ${CC.WHITE}${condition.value}",
+                        "${CC.GRAY}Reference: ${CC.WHITE}${if (condition.referenceKeyString == null) "${CC.RED}None" else "${CC.WHITE}${condition.referenceKeyString}"}",
                         "",
-                        "${CC.GREEN}Left-Click to change condition type"
+                        "${CC.GREEN}Left-Click to change condition type",
+                        "${CC.YELLOW}Right-Click to change reference condition",
+                        "${CC.RED}Shift-Right-Click to change contextual status"
                     )
-                    .name("${CC.GRAY}Condition #${buttons.size}")
-                    .toButton { _, _ ->
-                        InputPrompt()
-                            .withText("${CC.GREEN}Type in the condition that you want to make this key!")
-                            .acceptInput { _, s ->
-                                when (s)
-                                {
-                                    "not" -> {
-                                        condition.logicCondition = LogicCondition.Not
+                    .name("${CC.WHITE}Condition #${buttons.size}")
+                    .toButton { _, type ->
+                        if (type!!.isLeftClick)
+                        {
+                            InputPrompt()
+                                .withText("${CC.GREEN}Type in the condition that you want to make this key!")
+                                .acceptInput { _, s ->
+                                    when (s)
+                                    {
+                                        "and" ->
+                                        {
+                                            condition.logicCondition = LogicCondition.And
+                                        }
+
+                                        "not" ->
+                                        {
+                                            condition.logicCondition = LogicCondition.Not
+                                        }
+
+                                        "or" ->
+                                        {
+                                            condition.logicCondition = LogicCondition.Or
+                                        }
                                     }
 
-                                    "or" -> {
-                                        condition.logicCondition = LogicCondition.Or
-                                    }
-                                }
+                                    player.sendMessage("${CC.GREEN}Updated the condition of this announcement key")
 
-                                player.sendMessage("${CC.GREEN}Updated the condition of this announcement key")
+                                    AnnouncementService.sync(
+                                        AnnouncementService.cached()
+                                    )
+
+                                    AnnouncementEditorMenu(announcement).openMenu(player)
+                                }.start(player)
+                        } else if (type.isRightClick)
+                        {
+                            if (type.isShiftClick)
+                            {
+                                condition.contextual = !condition.contextual
 
                                 AnnouncementService.sync(
                                     AnnouncementService.cached()
                                 )
+                            } else
+                            {
+                                InputPrompt()
+                                    .withText("${CC.GREEN}Enter another condition to used in OR/XOR statements...")
+                                    .acceptInput { _, s ->
+                                        condition.referenceKeyString = s
+
+                                        player.sendMessage("${CC.GREEN}Added another condition to this announcement key")
+
+                                        AnnouncementService.sync(
+                                            AnnouncementService.cached()
+                                        )
+
+                                        AnnouncementEditorMenu(announcement).openMenu(player)
+                                    }.start(player)
                             }
+                        }
                     }
         }
 

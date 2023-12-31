@@ -7,6 +7,7 @@ import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import me.lucko.helper.metadata.Metadata
 import me.lucko.helper.utils.Players
+import net.evilblock.cubed.util.bukkit.Tasks
 import net.kyori.adventure.key.Key
 
 /**
@@ -30,8 +31,7 @@ object AnnouncementRunnable : Runnable
 
             val announcements = AnnouncementService.cached()
                 .announcements.filter {
-                    it.conditions
-                        ?.all { key ->
+                    it.conditions?.all { key ->
                             AnnouncementConditions
                                 .let { conditions ->
                                     if (key.contextual)
@@ -68,6 +68,8 @@ object AnnouncementRunnable : Runnable
             metadata.put(
                 AnnouncementService.announcementKey, currentIndex + 1
             )
+
+            if (announcements.isEmpty()) return
 
             val announcement = announcements
                 .getOrNull(currentIndex + 1)

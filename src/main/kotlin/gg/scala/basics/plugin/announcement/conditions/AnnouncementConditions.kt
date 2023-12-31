@@ -2,7 +2,9 @@ package gg.scala.basics.plugin.announcement.conditions
 
 import com.google.gson.LongSerializationPolicy
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.basics.plugin.announcement.conditions.serverscope.RankWeightCondition
 import gg.scala.basics.plugin.announcement.conditions.serverscope.ServerScopedCondition
+import gg.scala.basics.plugin.announcement.conditions.serverscope.TimestampCondition
 import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
 import gg.scala.commons.preconfigure.PreConfigureSubTypeProcessor
 import gg.scala.flavor.inject.Inject
@@ -33,22 +35,8 @@ object AnnouncementConditions
     @Configure
     fun configure()
     {
-        Serializers.create {
-            serializeNulls()
-            setLongSerializationPolicy(LongSerializationPolicy.STRING)
-        }
-
         conditions[ServerScopedCondition.contextualKeyNamespace()] = ServerScopedCondition
-
-        PreConfigureSubTypeProcessor
-            .register<AnnouncementDisplayCondition> {
-                if (it.contextualKey())
-                {
-                    conditions[it.contextualKeyNamespace()] = it
-                    return@register
-                }
-
-                conditions[it.key().toString()] = it
-            }
+        conditions[RankWeightCondition.contextualKeyNamespace()] = RankWeightCondition
+        conditions[TimestampCondition.contextualKeyNamespace()] = TimestampCondition
     }
 }

@@ -10,6 +10,6 @@ enum class LogicCondition(
 {
     And(5, "AND", ChatColor.GREEN),
     Not(14, "NOT", ChatColor.RED),
-    Xor(11, "XOR", ChatColor.GOLD),
-    Or(1, "OR", ChatColor.BLUE)
+    Xor(1, "XOR", ChatColor.GOLD),
+    Or(11, "OR", ChatColor.BLUE)
 }

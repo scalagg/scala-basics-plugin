@@ -16,6 +16,7 @@ import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
 import net.kyori.adventure.key.Key
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.ClickType
 
 /**
  * @author GrowlyX
@@ -111,7 +112,7 @@ class AnnouncementMenu : PaginatedMenu()
                                         "${CC.WHITE} - ${CC.GRAY}(ctx)"
                                     else
                                         "${CC.WHITE} - ") + " ${
-                                             "${it.logicCondition.color}(${it.logicCondition.displayName}) "
+                                             it.getMenuPrefix()
                                         }${CC.WHITE}${it.namespace}:${it.value}"
                                 )
                             }
@@ -119,13 +120,14 @@ class AnnouncementMenu : PaginatedMenu()
                 }
                 .addToLore(
                     "",
-                    "${CC.GREEN}Left-Click to edit announcement.",
+                    "${CC.GREEN}Left-Click to edit lines.",
+                    "${CC.D_GREEN}Shift-Left-Click to edit conditions",
                     "${CC.GOLD}Shift-Click to apply condition.",
-                    "${CC.RED}Shift-Right-Click to clear condition.",
+                    "${CC.RED}Q to clear conditions.",
                     "${CC.D_RED}Right-Click to delete."
                 )
                 .toButton { _, type ->
-                    if (type!!.isShiftClick && type.isRightClick)
+                    if (type!! == ClickType.DROP)
                     {
                         announcement.conditions?.clear()
                         AnnouncementService.sync(model)
@@ -137,31 +139,33 @@ class AnnouncementMenu : PaginatedMenu()
 
                     if (type.isShiftClick)
                     {
-                        if (announcement.conditions == null)
+                        if (type.isLeftClick)
                         {
-                            announcement.conditions = mutableListOf()
-                        }
-
-                        player.closeInventory()
-
-                        InputPrompt()
-                            .withText("${CC.GREEN}Enter a condition key (namespace:key)")
-                            .acceptInput { _, input ->
-                                val parts = input.split(":")
-
-                                announcement.conditions!! += AnnouncementKey(parts[0], parts[1])
-                                AnnouncementService.sync(model)
-
-                                player.sendMessage("${CC.GREEN}Saved!")
-                                openMenu(player)
+                            AnnouncementEditorMenu(announcement).openMenu(player)
+                            return@toButton
+                        } else
+                        {
+                            if (announcement.conditions == null)
+                            {
+                                announcement.conditions = mutableListOf()
                             }
-                            .start(player)
-                        return@toButton
-                    }
 
-                    if (type.isLeftClick)
-                    {
-                        AnnouncementEditorMenu(announcement).openMenu(player)
+                            player.closeInventory()
+
+                            InputPrompt()
+                                .withText("${CC.GREEN}Enter a condition key (namespace:key)")
+                                .acceptInput { _, input ->
+                                    val parts = input.split(":")
+
+                                    announcement.conditions!! += AnnouncementKey(parts[0], parts[1])
+                                    AnnouncementService.sync(model)
+
+                                    player.sendMessage("${CC.GREEN}Saved!")
+                                    openMenu(player)
+                                }
+                                .start(player)
+                            return@toButton
+                        }
                     }
 
                     if (type.isRightClick)

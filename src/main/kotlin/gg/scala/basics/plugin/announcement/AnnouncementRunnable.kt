@@ -1,6 +1,8 @@
 package gg.scala.basics.plugin.announcement
 
 import gg.scala.basics.plugin.announcement.conditions.AnnouncementConditions
+import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
+import gg.scala.basics.plugin.announcement.keys.LogicCondition
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import me.lucko.helper.metadata.Metadata
@@ -32,22 +34,23 @@ object AnnouncementRunnable : Runnable
                         ?.all { key ->
                             AnnouncementConditions
                                 .let { conditions ->
-                                    if (key.namespace().startsWith("ctx"))
+                                    if (key.contextual)
                                         conditions.contextual(key) else conditions.condition(key)
                                 }
                                 ?.let { condition ->
                                     val id = if (condition.contextualKey())
                                         condition.contextualDisplay(
                                             player,
-                                            Key.key(
-                                                key.namespace().removePrefix("ctx").removePrefix("_not_"),
-                                                key.value()
+                                            AnnouncementKey(
+                                                key.namespace,
+                                                key.value
                                             )
                                         )
                                     else
                                         condition.shouldDisplay(player)
 
-                                    if (key.namespace().removePrefix("ctx").startsWith("_not_")) !id else id
+                                    if (key.isCondition(LogicCondition.Not)) !id
+                                    if (key.isCondition(LogicCondition.Or)) (id || key.checkReference(player)) else id
                                 }
                                 ?: true
                         }

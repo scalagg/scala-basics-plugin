@@ -2,6 +2,8 @@ package gg.scala.basics.plugin.announcement.menu
 
 import gg.scala.basics.plugin.announcement.Announcement
 import gg.scala.basics.plugin.announcement.AnnouncementService
+import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
+import gg.scala.basics.plugin.announcement.keys.LogicCondition
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.buttons.AddButton
 import net.evilblock.cubed.menu.buttons.TexturedHeadButton
@@ -105,25 +107,25 @@ class AnnouncementMenu : PaginatedMenu()
                         announcement.conditions!!
                             .forEach {
                                 addToLore(
-                                    (if (it.namespace().startsWith("ctx"))
+                                    (if (it.contextual)
                                         "${CC.WHITE} - ${CC.GRAY}(ctx)"
                                     else
                                         "${CC.WHITE} - ") + " ${
-                                            if (it.namespace().contains("_not_")) "${CC.RED}(NOT) " else "${CC.GREEN}(AND) "
-                                        }${CC.WHITE}${it.namespace().removePrefix("ctx").removePrefix("_not_")}:${it.value()}"
+                                             "${it.logicCondition.color}(${it.logicCondition.displayName}) "
+                                        }${CC.WHITE}${it.namespace}:${it.value}"
                                 )
                             }
                     }
                 }
                 .addToLore(
                     "",
-                    "${CC.GREEN}Left-Click to edit.",
+                    "${CC.GREEN}Left-Click to edit announcement.",
                     "${CC.GOLD}Shift-Click to apply condition.",
                     "${CC.RED}Shift-Right-Click to clear condition.",
                     "${CC.D_RED}Right-Click to delete."
                 )
                 .toButton { _, type ->
-                    if (type!!.isShiftClick && type!!.isRightClick)
+                    if (type!!.isShiftClick && type.isRightClick)
                     {
                         announcement.conditions?.clear()
                         AnnouncementService.sync(model)
@@ -145,7 +147,9 @@ class AnnouncementMenu : PaginatedMenu()
                         InputPrompt()
                             .withText("${CC.GREEN}Enter a condition key (namespace:key)")
                             .acceptInput { _, input ->
-                                announcement.conditions!! += Key.key(input)
+                                val parts = input.split(":")
+
+                                announcement.conditions!! += AnnouncementKey(parts[0], parts[1])
                                 AnnouncementService.sync(model)
 
                                 player.sendMessage("${CC.GREEN}Saved!")
@@ -155,7 +159,12 @@ class AnnouncementMenu : PaginatedMenu()
                         return@toButton
                     }
 
-                    if (type!!.isRightClick)
+                    if (type.isLeftClick)
+                    {
+                        AnnouncementEditorMenu(announcement).openMenu(player)
+                    }
+
+                    if (type.isRightClick)
                     {
                         ConfirmMenu(
                             title = "Deleting announcement #$index",

@@ -26,13 +26,18 @@ class ShutdownRunnable(seconds: Int) : DiminutionRunnable(seconds)
     override fun onEnd()
     {
         Tasks.sync {
-            Bukkit.getOnlinePlayers().forEach {
-                it.kickPlayer("${CC.RED}The server is rebooting!")
-            }
+            ServerShutdownEvent().callEvent()
 
-            Bukkit.getServer().dispatchCommand(
-                Bukkit.getConsoleSender(), "stop"
-            )
+            Tasks.delayed(5L) {
+                Bukkit.getOnlinePlayers().forEach {
+                    it.kickPlayer("${CC.RED}The server is rebooting!")
+                }
+
+                Bukkit.getServer().dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    "stop"
+                )
+            }
         }
     }
 

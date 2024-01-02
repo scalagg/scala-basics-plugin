@@ -23,11 +23,12 @@ import java.util.concurrent.CompletableFuture
  */
 @AutoRegister
 @CommandPermission("scbasics.player-commands")
-@CommandAlias("ignore|block|ignoring|blocked|ignorelist|il")
+@CommandAlias("ignore|block")
 object IgnoreCommand : ScalaCommand()
 {
     @Default
     @CommandCompletion("@players")
+    @CommandAlias("ignoring|blocked|ignorelist|il")
     fun onIgnore(
         player: ScalaPlayer, @Default("1") page: Int
     )

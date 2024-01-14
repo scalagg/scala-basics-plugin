@@ -23,7 +23,6 @@ import java.util.concurrent.CompletableFuture
  */
 @AutoRegister
 @CommandPermission("scbasics.player-commands")
-@CommandAlias("ignore|block")
 object IgnoreCommand : ScalaCommand()
 {
     @Default
@@ -53,8 +52,10 @@ object IgnoreCommand : ScalaCommand()
 
     @Default
     @CommandCompletion("@players")
+    @CommandAlias("ignore|block|i")
     fun onIgnore(
-        player: ScalaPlayer, @NoManualSelection lazyPlayer: AsyncLemonPlayer
+        player: ScalaPlayer,
+        @NoManualSelection lazyPlayer: AsyncLemonPlayer
     ): CompletableFuture<Void>
     {
         val profile = cachedBasicProfile(player)

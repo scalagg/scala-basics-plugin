@@ -25,7 +25,6 @@ import java.util.concurrent.CompletableFuture
 @CommandPermission("scbasics.player-commands")
 object IgnoreCommand : ScalaCommand()
 {
-    @CommandCompletion("@players")
     @CommandAlias("ignoring|blocked|ignorelist|il")
     fun onIgnore(
         player: ScalaPlayer, @Default("1") page: Int

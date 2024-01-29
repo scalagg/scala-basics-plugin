@@ -8,6 +8,7 @@ import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
 import gg.scala.friends.FriendsSpigotPlugin
+import gg.scala.friends.handler.KFriendHandler
 import gg.scala.friends.handler.KPlayerHandler
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.player.metadata.Metadata
@@ -64,18 +65,17 @@ object PrivateConversationMessageResponder : (PrivateConversationMessage) -> Pri
                 default = MessagingSettingValue.ENABLED
             )
 
-        if (Bukkit.getPluginManager().isPluginEnabled("Friends") && !message.dispatcherOverridesChecks)
+        if (
+            Bukkit.getPluginManager().isPluginEnabled("Friends") &&
+            !message.dispatcherOverridesChecks &&
+            messagingSettingValue == MessagingSettingValue.FRIENDS_ONLY
+        )
         {
-            val friendsPlayer = KPlayerHandler.find(bukkitPlayer)
-                ?: return PrivateConversationMessageResponse(
-                    message.uniqueId, null,
-                    PrivateConversationMessageResponseContext.TARGET_NOT_ONLINE
-                )
+            val friendship = KFriendHandler
+                .getFriendshipBetween(message.dispatcher, bukkitPlayer.uniqueId)
+                .join()
 
-            if (
-                messagingSettingValue == MessagingSettingValue.FRIENDS_ONLY &&
-                !friendsPlayer.friends.containsKey(message.dispatcher)
-            )
+            if (friendship == null)
             {
                 return PrivateConversationMessageResponse(
                     message.uniqueId, lemonPlayer.getColoredName(ignoreMinequest = true),

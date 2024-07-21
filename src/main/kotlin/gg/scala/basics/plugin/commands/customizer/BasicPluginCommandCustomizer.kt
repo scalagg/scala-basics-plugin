@@ -40,7 +40,7 @@ object BasicPluginCommandCustomizer
 
         manager.commandConditions
             .addCondition("not-game-server") {
-                if ("hub" !in ServerSync.getLocalGameServer().groups || "miplobby" !in ServerSync.getLocalGameServer().groups)
+                if ("miplobby" !in ServerSync.getLocalGameServer().groups)
                     throw ConditionFailedException(
                         "You can only run this command in a lobby."
                     )

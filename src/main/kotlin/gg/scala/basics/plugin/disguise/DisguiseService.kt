@@ -3,6 +3,10 @@ package gg.scala.basics.plugin.disguise
 import dev.iiahmed.disguise.Disguise
 import dev.iiahmed.disguise.DisguiseManager
 import dev.iiahmed.disguise.DisguiseResponse
+import gg.scala.aware.AwareBuilder
+import gg.scala.aware.codec.codecs.interpretation.AwareMessageCodec
+import gg.scala.aware.message.AwareMessage
+import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.disguise.events.AsyncPlayerDisguiseEvent
 import gg.scala.basics.plugin.disguise.sessionserver.SessionServerResponse
@@ -59,6 +63,22 @@ object DisguiseService
         DisguiseManager.setPlugin(plugin)
         provider
 
+        val aware = AwareBuilder
+            .of<AwareMessage>("disguise-pipe")
+            .codec(AwareMessageCodec)
+            .build()
+
+        aware.listen("force-undisguise") {
+            val uniqueId = UUID.fromString(retrieve<String>("uniqueId"))
+            val bukkitPlayer = Bukkit.getPlayer(uniqueId)
+                ?: return@listen
+
+            undisguise(bukkitPlayer, postUnDisguise = {
+                bukkitPlayer.sendMessage("${CC.RED}You were forcefully undisguised as your disguise's real account logged on the server.")
+            })
+        }
+        aware.connect()
+
         Schedulers
             .async()
             .runRepeating(Runnable {
@@ -89,16 +109,16 @@ object DisguiseService
                                 .completedFuture(null)
                         }
 
-                        val bukkitPlayer = Bukkit
-                            .getPlayer(
-                                UUID.fromString(usedProfile)
-                            )
-                            ?: return@thenComposeAsync CompletableFuture
-                                .completedFuture(null)
+                        AwareMessage.of(
+                            "force-undisguise",
+                            aware,
+                            "uniqueId" to usedProfile
+                        ).publish(
+                            AwareThreadContext.SYNC,
+                            "disguise-pipe"
+                        )
 
-                        undisguise(bukkitPlayer, postUnDisguise = {
-                            bukkitPlayer.sendMessage("${CC.RED}You were forcefully undisguised as your disguise's real account logged on the server.")
-                        })
+                        CompletableFuture.completedFuture(null)
                     }
                     .thenComposeAsync { _ ->
                         getApplicantProfileMapping(it.player.uniqueId)

@@ -10,16 +10,16 @@ import org.bukkit.entity.Player
  * a user has to meet before NPC and hologram entities are loaded in.
  *
  * The [EntityHooks] utility is used to override the
- * default <= 32.0D distance requirement with our configurable one.
+ * default <= 48.0D distance requirement with our configurable one.
  *
  * @author GrowlyX
  * @since 2/20/2023
  */
 enum class EntityVisibilitySettingValue(val distance: Double) : SettingValue
 {
-    High(32.0),
-    Medium(16.0),
-    Low(8.0),
+    High(48.0),
+    Medium(32.0),
+    Low(16.0),
     None(0.0);
 
     override val displayName = "$name${

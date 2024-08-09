@@ -18,7 +18,7 @@ object EntityVisibilityService
         EntityHooks
             .entityVisibilityDistance {
                 val profile = profileOf(it)
-                    ?: return@entityVisibilityDistance 32.0
+                    ?: return@entityVisibilityDistance 48.0
 
                 profile.setting(
                     id = "entity_render_distance",

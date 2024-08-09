@@ -8,6 +8,8 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.player.LemonPlayer
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
+import gg.scala.lemon.sessions.Session
+import gg.scala.lemon.sessions.SessionService
 import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.util.CC
 import org.apache.commons.lang.time.DurationFormatUtils
@@ -21,7 +23,6 @@ import java.time.ZonedDateTime
 import java.time.temporal.TemporalAdjusters
 import java.util.*
 import java.util.concurrent.CompletableFuture
-
 
 /**
  * @author GrowlyX
@@ -84,6 +85,7 @@ object PlaytimeCommand : ScalaCommand()
         player: Player, target: LemonPlayer
     )
     {
+        val sessions = SessionService.loadSessions(target.uniqueId)
         val zoneId = TimeZone.getDefault().toZoneId()
         val localDate = LocalDate.now(zoneId)
 
@@ -96,35 +98,33 @@ object PlaytimeCommand : ScalaCommand()
                 .nextOrSame(DayOfWeek.SUNDAY)
         )
 
-        val completePlaytime = target
-            .pastLogins.values.sum()
-        val completePlaytimeSessions = target
-            .pastLogins.size
+        val completePlaytime = sessions.values.sumOf(Session::length)
+        val completePlaytimeSessions = sessions.values.size
 
         val end = endOfDay()
         val start = startOfDay()
 
-        val currentWeek = target
-            .pastLogins.filter {
-                val current = Instant
-                    .ofEpochMilli(it.key.toLongOrNull() ?: 1L)
-                    .atZone(zoneId)
-                    .toLocalDate()
+        val currentWeek = sessions.values.filter {
+            val current = Instant
+                .ofEpochMilli(it.timestamp)
+                .atZone(zoneId)
+                .toLocalDate()
 
-                return@filter current.isAfter(weekStart)
-                        && current.isBefore(weekEnd)
-            }
-        val currentWeekPlaytime = currentWeek.values.sum()
+            return@filter current.isAfter(weekStart)
+                && current.isBefore(weekEnd)
+        }
+
+        val currentWeekPlaytime = currentWeek.sumOf(Session::length)
         val currentWeekPlaytimeSessions = currentWeek.size
 
-        val currentDay = target
-            .pastLogins.filter {
-                val current = (it.key.toLongOrNull() ?: 1000L) / 1000L
+        val currentDay = sessions.values.filter {
+            val current = it.timestamp / 1000L
 
-                return@filter start.toEpochSecond() < current
-                        && end.toEpochSecond() > current
-            }
-        val currentDayPlaytime = currentDay.values.sum()
+            return@filter start.toEpochSecond() < current
+                && end.toEpochSecond() > current
+        }
+
+        val currentDayPlaytime = currentDay.sumOf(Session::length)
         val currentDayPlaytimeSessions = currentDay.size
 
         val coloredName = QuickAccess.fetchColoredName(target.uniqueId)

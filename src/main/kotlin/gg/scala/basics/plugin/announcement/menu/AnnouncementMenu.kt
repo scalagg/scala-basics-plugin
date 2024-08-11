@@ -31,6 +31,7 @@ class AnnouncementMenu : PaginatedMenu()
     }
 
     override fun size(buttons: Map<Int, Button>) = 36
+    override fun getMaxItemsPerPage(player: Player) = 14
     override fun getAllPagesButtonSlots() = (10..16) + (19..25)
 
     override fun getGlobalButtons(player: Player): Map<Int, Button>

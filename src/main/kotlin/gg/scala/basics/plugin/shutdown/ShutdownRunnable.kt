@@ -2,6 +2,7 @@ package gg.scala.basics.plugin.shutdown
 
 import gg.scala.lemon.Lemon
 import gg.scala.lemon.util.task.DiminutionRunnable
+import me.lucko.helper.utils.Players
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Tasks
 import net.evilblock.cubed.util.time.TimeUtil
@@ -20,7 +21,11 @@ class ShutdownRunnable(seconds: Int) : DiminutionRunnable(seconds)
 
     override fun onRun()
     {
-        broadcast("${CC.SEC}The server will be rebooting in ${CC.PRI}${TimeUtil.formatIntoDetailedString(seconds)}${CC.SEC}.")
+        Players.all().forEach {
+            it.sendMessage("")
+            it.sendMessage("${CC.RED}The server is rebooting in ${CC.B_RED}${TimeUtil.formatIntoDetailedString(seconds)}${CC.RED}!")
+            it.sendMessage("")
+        }
     }
 
     override fun onEnd()

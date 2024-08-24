@@ -47,6 +47,11 @@ object ShutdownCommand : ScalaCommand()
             throw ConditionFailedException("You provided an invalid duration, please try again.")
         }
 
+        if (seconds <= 0)
+        {
+            throw ConditionFailedException("You provided an invalid duration, please try again.")
+        }
+
         player.sendMessage("${CC.GREEN}The shutdown has been initiated.")
 
         ShutdownService.initiateShutdown(seconds)

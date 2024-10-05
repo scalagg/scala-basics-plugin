@@ -12,6 +12,7 @@ import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import org.bukkit.command.ConsoleCommandSender
 
 /**
  * @author puugz
@@ -65,6 +66,30 @@ object TabListCommand : ScalaCommand()
                 )
             }
             .start(player.bukkit())
+    }
+
+    @AssignPermission
+    @Subcommand("consoleset")
+    @Description("Set a tab list part value.")
+    fun onSetConsole(player: ConsoleCommandSender, part: TabListPart, miniMessageText: String)
+    {
+        val component = MiniMessage
+            .miniMessage().deserialize(
+                miniMessageText.replace("<nl>", "\n")
+            )
+
+        val configuration = TabListService.cached()
+        when (part)
+        {
+            TabListPart.HEADER -> configuration.header = component
+            TabListPart.FOOTER -> configuration.footer = component
+        }
+
+        TabListService.sync(configuration)
+
+        player.sendMessage(
+            "${CC.GREEN}The tablist ${part.name} has been set to: ${LegacyComponentSerializer.legacySection().serialize(component)}"
+        )
     }
 
     @AssignPermission

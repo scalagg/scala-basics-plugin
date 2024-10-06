@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.announcement.menu
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.announcement.AnnouncementService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
@@ -33,7 +34,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
         val buttons = mutableMapOf<Int, Button>()
 
         buttons[buttons.size] = ItemBuilder
-            .of(Material.BOW)
+            .of(XMaterial.BOW)
             .name("${CC.B_GREEN}Padding")
             .addToLore(
                 "${CC.WHITE}State:",
@@ -47,7 +48,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
             }
 
         buttons[buttons.size] = ItemBuilder
-            .of(Material.EMERALD)
+            .of(XMaterial.EMERALD)
             .name("${CC.B_GREEN}Line Prefix")
             .addToLore(
                 "${CC.WHITE}State:",
@@ -83,7 +84,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
             }
 
         buttons[buttons.size] = ItemBuilder
-            .of(Material.APPLE)
+            .of(XMaterial.APPLE)
             .name("${CC.B_GREEN}Iteration Speed")
             .addToLore(
                 "${CC.WHITE}State:",
@@ -112,7 +113,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
             }
 
         buttons[buttons.size] = ItemBuilder
-            .of(Material.ANVIL)
+            .of(XMaterial.ANVIL)
             .name("${CC.B_GREEN}Iteration Speed Time Unit")
             .addToLore(
                 "${CC.WHITE}State:",
@@ -161,10 +162,7 @@ class AnnouncementConfigMenu : Menu("Announcement Config")
             }
 
         buttons[8] = ItemBuilder
-            .of(Material.WOOL)
-            .data(
-                if (allowsUpdate) 5 else 8
-            )
+            .of(if (allowsUpdate) XMaterial.GREEN_WOOL else XMaterial.RED_WOOL)
             .name("${
                 if (allowsUpdate) CC.B_GREEN else CC.RED
             }Save")

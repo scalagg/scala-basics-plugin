@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.chatfilter.menu
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.chatfilter.ChatFilterService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.pagination.PaginatedMenu
@@ -33,7 +34,7 @@ class ChatFilterMenu : PaginatedMenu()
         ChatFilterService.cached()
             .chatFilters.forEach {
                 buttons[buttons.size] = ItemBuilder
-                    .of(Material.BOOK)
+                    .of(XMaterial.BOOK)
                     .name("${CC.PRI}${it.id}")
                     .addToLore(
                         "${CC.WHITE}Regex pattern:",

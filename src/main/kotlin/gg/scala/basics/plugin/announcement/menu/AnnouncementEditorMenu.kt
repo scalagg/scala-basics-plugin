@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.announcement.menu
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.announcement.Announcement
 import gg.scala.basics.plugin.announcement.AnnouncementService
 import gg.scala.basics.plugin.announcement.keys.LogicCondition
@@ -32,7 +33,7 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
         for ((i, condition) in announcement.conditions.entries)
         {
             buttons[buttons.size] =
-                ItemBuilder.of(Material.WOOL)
+                ItemBuilder.of(XMaterial.WHITE_WOOL)
                     .data(condition.logicCondition.data)
                     .addToLore(
                         "${CC.GRAY}Condition Type: ${CC.WHITE}${condition.logicCondition.color}${condition.logicCondition.displayName}",

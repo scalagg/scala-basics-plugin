@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.announcement.menu
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.announcement.Announcement
 import gg.scala.basics.plugin.announcement.AnnouncementService
 import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
@@ -92,7 +93,7 @@ class AnnouncementMenu : PaginatedMenu()
         for ((index, announcement) in model.announcements.entries)
         {
             buttons[buttons.size] = ItemBuilder
-                .of(Material.PAPER)
+                .of(XMaterial.PAPER)
                 .name("${CC.B_GREEN}#${index}")
                 .setLore(announcement.lines.map { "${CC.WHITE}$it" })
                 .addToLore(

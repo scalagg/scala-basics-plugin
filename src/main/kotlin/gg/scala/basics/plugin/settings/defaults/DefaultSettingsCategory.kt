@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.settings.defaults
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.SettingCategory
@@ -35,7 +36,7 @@ object DefaultSettingsCategory : SettingCategory
             description += "direct messages through"
             description += "/message."
 
-            item = ItemBuilder.of(Material.BOOK)
+            item = ItemBuilder.of(XMaterial.BOOK)
         },
         entry {
             id = "messages_sounds"
@@ -48,7 +49,7 @@ object DefaultSettingsCategory : SettingCategory
             description += "sound that is played when you"
             description += "receive a private message."
 
-            item = ItemBuilder.of(Material.JUKEBOX)
+            item = ItemBuilder.of(XMaterial.JUKEBOX)
         },
         entry {
             id = "announcements"
@@ -61,7 +62,7 @@ object DefaultSettingsCategory : SettingCategory
             description += "periodical server"
             description += "announcements."
 
-            item = ItemBuilder.of(Material.ARROW)
+            item = ItemBuilder.of(XMaterial.ARROW)
         },
         entry {
             id = "global_chat"
@@ -74,7 +75,7 @@ object DefaultSettingsCategory : SettingCategory
             description += "messages sent through"
             description += "the server's global chat."
 
-            item = ItemBuilder.of(Material.SIGN)
+            item = ItemBuilder.of(XMaterial.OAK_WALL_SIGN)
         },
         entry {
             id = "time_of_day"
@@ -90,7 +91,7 @@ object DefaultSettingsCategory : SettingCategory
                 TimeOfDayService.toggleToDFromProfile(player)
             }
 
-            item = ItemBuilder.of(Material.WATCH)
+            item = ItemBuilder.of(XMaterial.CLOCK)
         },
         entry {
             id = "auto_disguise"
@@ -108,7 +109,7 @@ object DefaultSettingsCategory : SettingCategory
             }
 
             item = ItemBuilder
-                .of(Material.POTION)
+                .of(XMaterial.POTION)
                 .data(8270)
         },
         entry {
@@ -129,7 +130,7 @@ object DefaultSettingsCategory : SettingCategory
                 )
             }
 
-            item = ItemBuilder.of(Material.MOB_SPAWNER)
+            item = ItemBuilder.of(XMaterial.SPAWNER)
         }
     )
 

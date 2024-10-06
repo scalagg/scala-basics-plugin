@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.settings.defaults
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.SettingCategory
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
@@ -31,7 +32,7 @@ object DefaultAdminSettingsCategory : SettingCategory
             description += "cloudsync plugin update"
             description += "notifications."
 
-            item = ItemBuilder.of(Material.GOLDEN_APPLE)
+            item = ItemBuilder.of(XMaterial.GOLDEN_APPLE)
         },
         entry {
             id = "ss_notifications"
@@ -44,7 +45,7 @@ object DefaultAdminSettingsCategory : SettingCategory
             description += "serversync update"
             description += "notifications."
 
-            item = ItemBuilder.of(Material.GOLDEN_CARROT)
+            item = ItemBuilder.of(XMaterial.GOLDEN_CARROT)
         }
     )
 

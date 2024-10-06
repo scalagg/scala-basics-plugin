@@ -1,5 +1,6 @@
 package gg.scala.basics.plugin.settings
 
+import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
@@ -73,7 +74,7 @@ class SettingMenu(
             val color = colors[index]
 
             val pane = ItemBuilder
-                .of(Material.STAINED_GLASS_PANE)
+                .of(XMaterial.WHITE_STAINED_GLASS_PANE)
                 .data(color.second.toShort())
                 .name(
                     "${color.first}${

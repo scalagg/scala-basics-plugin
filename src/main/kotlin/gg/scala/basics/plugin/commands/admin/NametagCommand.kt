@@ -23,7 +23,6 @@ import org.bukkit.entity.Player
  * @author GrowlyX
  * @since 11/25/2021
  */
-@AutoRegister
 @CommandAlias("nametag")
 @CommandPermission("scbasics.command.nametag")
 object NametagCommand : ScalaCommand()

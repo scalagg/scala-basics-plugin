@@ -1,8 +1,5 @@
 package gg.scala.basics.plugin.nametag
 
-import gg.scala.commons.annotations.runnables.Repeating
-import gg.scala.flavor.service.Configure
-import gg.scala.flavor.service.Service
 import me.lucko.helper.Events
 import net.evilblock.cubed.nametag.NametagHandler
 import net.evilblock.cubed.nametag.NametagProvider
@@ -15,8 +12,6 @@ import java.util.*
  * @author GrowlyX
  * @since 10/13/2022
  */
-@Service
-@Repeating(20L)
 object RainbowNametagService : Runnable
 {
     var index = 0
@@ -67,7 +62,6 @@ object RainbowNametagService : Runnable
         currentColor.toString(), ""
     )
 
-    @Configure
     fun configure()
     {
         Events.subscribe(PlayerQuitEvent::class.java)

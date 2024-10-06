@@ -31,7 +31,7 @@ class ShutdownRunnable(seconds: Int) : DiminutionRunnable(seconds)
     override fun onEnd()
     {
         Tasks.sync {
-            ServerShutdownEvent().callEvent()
+            Bukkit.getPluginManager().callEvent(ServerShutdownEvent())
 
             Tasks.delayed(5L) {
                 Bukkit.getOnlinePlayers().forEach {

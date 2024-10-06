@@ -266,7 +266,7 @@ object DisguiseService
                         profile = it.second
                     )
 
-                    event.callEvent()
+                    Bukkit.getPluginManager().callEvent(event)
 
                     if (event.isCancelled)
                     {

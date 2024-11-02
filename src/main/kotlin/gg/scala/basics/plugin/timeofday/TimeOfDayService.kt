@@ -58,7 +58,7 @@ object TimeOfDayService
             player,
             profile.setting(
                 "time_of_day",
-                TimeOfDaySettingValue.Day
+                TimeOfDaySettingValue.Local
             )
         )
     }
@@ -72,6 +72,7 @@ object TimeOfDayService
         {
             TimeOfDaySettingValue.Sunset -> player.setPlayerTime(12500L, false)
             TimeOfDaySettingValue.Night -> player.setPlayerTime(21000L, false)
+            TimeOfDaySettingValue.Local -> player.resetPlayerTime()
             else -> player.setPlayerTime(1000L, false)
         }
     }

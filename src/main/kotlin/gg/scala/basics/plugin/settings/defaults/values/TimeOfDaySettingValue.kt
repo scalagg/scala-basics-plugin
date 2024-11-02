@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
  */
 enum class TimeOfDaySettingValue : SettingValue
 {
-    Day, Sunset, Night;
+    Day, Sunset, Night, Local;
 
     override val displayName = name
     override fun display(player: Player) = true

@@ -56,6 +56,14 @@ object TimeOfDayCommands : ScalaCommand()
         player.sendMessage("${CC.GREEN}Your time has been set to day!")
     }
 
+    @CommandAlias("resettime")
+    fun onOff(player: ScalaPlayer)
+    {
+        preCommand(player)
+        TimeOfDayService.setToDForProfile(player.bukkit(), TimeOfDaySettingValue.Local)
+        player.sendMessage("${CC.GREEN}Your time has been reset to the server's time!")
+    }
+
     @CommandAlias("sunset")
     fun onSunset(player: ScalaPlayer)
     {

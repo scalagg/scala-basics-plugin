@@ -2,6 +2,7 @@ package gg.scala.basics.plugin.commands.essentials
 
 import gg.scala.commons.acf.annotation.*
 import gg.scala.commons.annotations.commands.AutoRegister
+import gg.scala.commons.command.ScalaCommand
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemUtils
 import net.evilblock.cubed.util.bukkit.enchantment.EnchantmentWrapper
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player
  * @date 11/30/2024
  */
 @AutoRegister
-object EnchantCommand {
+object EnchantCommand : ScalaCommand() {
 
     @CommandAlias("enchant")
     @Syntax("<enchantment> <level> [-h]")

@@ -18,6 +18,7 @@ object EnchantCommand : ScalaCommand() {
 
     @CommandAlias("enchant")
     @Syntax("<enchantment> <level> [-h]")
+    @CommandCompletion("@enchantments 1")
     @CommandPermission("scbasics.command.enchant")
     fun enchant(sender: Player, enchantment: Enchantment, level: Int) {
         if (level <= 0) {

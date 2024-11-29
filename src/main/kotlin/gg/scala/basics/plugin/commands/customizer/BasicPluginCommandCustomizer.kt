@@ -10,8 +10,11 @@ import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.annotations.commands.customizer.CommandManagerCustomizer
 import gg.scala.commons.command.ScalaCommandManager
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.enchantment.EnchantmentWrapper
+import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.World
+import org.bukkit.enchantments.Enchantment
 
 /**
  * @author GrowlyX
@@ -64,6 +67,30 @@ object BasicPluginCommandCustomizer
                 ChatFilterService.cached().chatFilters.map(ChatFilter::id)
             }
 
+        manager.commandCompletions
+            .registerAsyncCompletion("enchantments") {
+                val input = it.input
+                val completions = mutableListOf<String>()
+
+                for (enchantment in EnchantmentWrapper.entries) {
+                    for (str in enchantment.parse) {
+                        if (StringUtils.startsWithIgnoreCase(str, input)) {
+                            completions.add(str)
+                        }
+                    }
+
+                    if (StringUtils.startsWithIgnoreCase(enchantment.friendlyName, input)) {
+                        completions.add(enchantment.friendlyName.lowercase())
+                    }
+
+                    if (StringUtils.startsWithIgnoreCase(enchantment.bukkitEnchantment.name, input)) {
+                        completions.add(enchantment.friendlyName.lowercase())
+                    }
+                }
+
+                completions
+            }
+
         manager.commandContexts
             .registerContext(World::class.java) {
                 val arg = it.popFirstArg()
@@ -86,6 +113,15 @@ object BasicPluginCommandCustomizer
                     .findById(arg)
                     ?: throw ConditionFailedException(
                         "No chat filter matching ${CC.YELLOW}$arg${CC.RED} could be found."
+                    )
+            }
+        manager.commandContexts
+            .registerContext(Enchantment::class.java) {
+                val arg = it.popFirstArg()
+
+                EnchantmentWrapper.parse(arg)?.bukkitEnchantment
+                    ?: throw ConditionFailedException(
+                        "No enchantment with the name ${CC.YELLOW}$arg${CC.RED} found."
                     )
             }
     }

@@ -82,7 +82,7 @@ object DefaultSettingsCategory : SettingCategory
             displayName = "Time of day"
 
             clazz = TimeOfDaySettingValue::class.java
-            default = TimeOfDaySettingValue.Local
+            default = TimeOfDaySettingValue.Day
 
             description += "Allows you to change"
             description += "the time of day in-game."

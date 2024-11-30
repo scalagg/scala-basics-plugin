@@ -58,7 +58,7 @@ object TimeOfDayService
             player,
             profile.setting(
                 "time_of_day",
-                TimeOfDaySettingValue.Local
+                TimeOfDaySettingValue.Day
             )
         )
     }

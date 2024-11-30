@@ -45,7 +45,6 @@ object EnchantCommand : ScalaCommand() {
             return
         }
 
-        // Handle hotbar enchantments
         var enchantedCount = 0
         for (slot in 0..8) {
             val item = sender.inventory.getItem(slot)

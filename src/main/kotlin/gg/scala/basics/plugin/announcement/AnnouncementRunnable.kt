@@ -5,6 +5,7 @@ import gg.scala.basics.plugin.announcement.keys.AnnouncementKey
 import gg.scala.basics.plugin.announcement.keys.LogicCondition
 import gg.scala.basics.plugin.profile.BasicsProfileService
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
+import gg.scala.commons.agnostic.sync.ServerSync
 import me.lucko.helper.metadata.Metadata
 import me.lucko.helper.utils.Players
 import net.evilblock.cubed.util.bukkit.Tasks
@@ -31,7 +32,8 @@ object AnnouncementRunnable : Runnable
 
             val announcements = AnnouncementService.cached()
                 .announcements.filter {
-                    it.value.conditions.values.all { key ->
+                    ServerSync.getLocalGameServer().groups.contains(it.value.targetServerGroup?.lowercase()) &&
+                            it.value.conditions.values.all { key ->
                             AnnouncementConditions
                                 .let { conditions ->
                                     if (key.contextual)

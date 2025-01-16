@@ -13,25 +13,20 @@ import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
-class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
-{
-    init
-    {
+class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu() {
+    init {
         updateAfterClick = true
     }
 
-    override fun size(buttons: Map<Int, Button>): Int
-    {
+    override fun size(buttons: Map<Int, Button>): Int {
         return 27
     }
 
-    override fun getAllPagesButtons(player: Player): Map<Int, Button>
-    {
+    override fun getAllPagesButtons(player: Player): Map<Int, Button> {
         val buttons = mutableMapOf<Int, Button>()
         val model = AnnouncementService.cached()
 
-        for ((i, condition) in announcement.conditions.entries)
-        {
+        for ((i, condition) in announcement.conditions.entries) {
             buttons[buttons.size] =
                 ItemBuilder.of(XMaterial.WHITE_WOOL)
                     .data(condition.logicCondition.data)
@@ -44,48 +39,58 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
                         "",
                         "${CC.GREEN}Left-Click to change condition type",
                         "${CC.YELLOW}Right-Click to change reference condition",
-                        "${CC.RED}Shift-Right-Click to change contextual status"
+                        "${CC.RED}Shift-Right-Click to change contextual status",
+                        "${CC.AQUA}Shift-Left-Click to change the target server group"
                     )
                     .name("${CC.WHITE}Condition #${buttons.size}")
                     .toButton { _, type ->
-                        if (type!!.isLeftClick)
-                        {
-                            InputPrompt()
-                                .withText("${CC.GREEN}Type in the condition that you want to make this key!")
-                                .acceptInput { _, s ->
-                                    when (s.lowercase())
-                                    {
-                                        "and" ->
-                                        {
-                                            condition.logicCondition = LogicCondition.And
+                        if (type!!.isLeftClick) {
+                            if (type.isShiftClick) {
+                                InputPrompt()
+                                    .withText("${CC.GREEN}Type in the id of the server group that you want this announcement to target!")
+                                    .acceptInput { _, input ->
+                                        announcement.targetServerGroup = input
+                                        model.announcements[announcement.id] = announcement
+
+                                        AnnouncementService.sync(
+                                            model
+                                        )
+
+                                        AnnouncementEditorMenu(announcement).openMenu(player)
+                                        player.sendMessage("${CC.GREEN}You have changed the target server group of this announcement to ${CC.WHITE}$input")
+                                    }.start(player)
+                            } else {
+                                InputPrompt()
+                                    .withText("${CC.GREEN}Type in the condition that you want to make this key!")
+                                    .acceptInput { _, s ->
+                                        when (s.lowercase()) {
+                                            "and" -> {
+                                                condition.logicCondition = LogicCondition.And
+                                            }
+
+                                            "not" -> {
+                                                condition.logicCondition = LogicCondition.Not
+                                            }
+
+                                            "or" -> {
+                                                condition.logicCondition = LogicCondition.Or
+                                            }
                                         }
 
-                                        "not" ->
-                                        {
-                                            condition.logicCondition = LogicCondition.Not
-                                        }
+                                        player.sendMessage("${CC.GREEN}Updated the condition of this announcement key")
 
-                                        "or" ->
-                                        {
-                                            condition.logicCondition = LogicCondition.Or
-                                        }
-                                    }
+                                        announcement.conditions[i] = condition
+                                        model.announcements[announcement.id] = announcement
 
-                                    player.sendMessage("${CC.GREEN}Updated the condition of this announcement key")
+                                        AnnouncementService.sync(
+                                            model
+                                        )
 
-                                    announcement.conditions[i] = condition
-                                    model.announcements[announcement.id] = announcement
-
-                                    AnnouncementService.sync(
-                                        model
-                                    )
-
-                                    AnnouncementEditorMenu(announcement).openMenu(player)
-                                }.start(player)
-                        } else if (type.isRightClick)
-                        {
-                            if (type.isShiftClick)
-                            {
+                                        AnnouncementEditorMenu(announcement).openMenu(player)
+                                    }.start(player)
+                            }
+                        } else if (type.isRightClick) {
+                            if (type.isShiftClick) {
                                 condition.contextual = !condition.contextual
 
                                 announcement.conditions[i] = condition
@@ -94,8 +99,7 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
                                 AnnouncementService.sync(
                                     model
                                 )
-                            } else
-                            {
+                            } else {
                                 InputPrompt()
                                     .withText("${CC.GREEN}Enter another condition to used in OR/XOR statements...")
                                     .acceptInput { _, s ->
@@ -122,10 +126,8 @@ class AnnouncementEditorMenu(val announcement: Announcement) : PaginatedMenu()
 
     override fun getPrePaginatedTitle(player: Player): String = "Editing Announcement"
 
-    override fun onClose(player: Player, manualClose: Boolean)
-    {
-        if (manualClose)
-        {
+    override fun onClose(player: Player, manualClose: Boolean) {
+        if (manualClose) {
             Tasks.delayed(1L) {
                 AnnouncementMenu().openMenu(player)
             }

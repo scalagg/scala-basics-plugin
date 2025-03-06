@@ -503,9 +503,7 @@ object DisguiseService
             )
 
         QuickAccess.reloadPlayer(
-            player.uniqueId,
-            recalculateGrants = false,
-            updateVisibility = false
+            player.uniqueId, false
         )
     }
 
@@ -536,8 +534,7 @@ object DisguiseService
 
                     QuickAccess.reloadPlayer(
                         player.uniqueId,
-                        recalculateGrants = false,
-                        updateVisibility = false
+                        recalculateGrants = false
                     )
 
                     audiences

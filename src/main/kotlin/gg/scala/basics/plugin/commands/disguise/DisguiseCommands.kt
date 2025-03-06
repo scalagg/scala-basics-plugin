@@ -2,6 +2,7 @@ package gg.scala.basics.plugin.commands.disguise
 
 import gg.scala.basics.plugin.ScalaBasicsPlugin
 import gg.scala.basics.plugin.disguise.DisguiseService
+import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
@@ -10,10 +11,14 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.flavor.inject.Inject
+import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import net.evilblock.cubed.util.CC
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.entity.Player
 import java.util.*
 
 /**
@@ -53,6 +58,31 @@ object DisguiseCommands : ScalaCommand()
                     )
                 }
         }
+
+    @CommandAlias("dgl|disguiselist")
+    @CommandCompletion("@players")
+    @CommandPermission("lemon.command.disguise.list")
+    fun onDisguiseList(player: Player)
+    {
+        val disguised = Bukkit.getOnlinePlayers()
+            .filter { it.hasMetadata("disguised") }
+
+        if (disguised.isEmpty())
+        {
+            throw ConditionFailedException("No online players are disguised.")
+        }
+
+        player.sendMessage("${CC.B_PRI}Online Disguised Players")
+
+        disguised.forEach {
+            val lemonPlayer = PlayerHandler.findPlayer(it).orElse(null)
+
+            if (lemonPlayer != null)
+            {
+                player.sendMessage("${CC.GRAY} - ${lemonPlayer.getColoredName()} ${CC.WHITE}(${lemonPlayer.name})")
+            }
+        }
+    }
 
     @CommandAlias("undisguise|ud|undis|unnick")
     @CommandPermission("scbasics.command.undisguise")

@@ -10,6 +10,5 @@ import net.kyori.adventure.key.Key
 data class Announcement(
     val id: Int,
     val lines: MutableList<String>,
-    var targetServerGroup: String? = null,
     val conditions: MutableMap<String, AnnouncementKey> = mutableMapOf()
 )

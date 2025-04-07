@@ -18,9 +18,9 @@ data class ServerTabList(
     var footer: List<String> = listOf(
         "",
         "${CC.GRAY}Currently ${CC.WHITE}{playerCount}${CC.GRAY} players globally",
-        "${CC.GRAY}     ${CC.WHITE}www${CC.GRAY}.${CC.WHITE}scala${CC.GRAY}.${CC.WHITE}gg ${CC.D_RED}${Constants.SMALL_DOT_SYMBOL} ${
+        "${CC.GRAY}     ${CC.WHITE}www${CC.GRAY}.${CC.WHITE}scala${CC.GRAY}.${CC.WHITE}gg ${CC.B_PRI}${Constants.SMALL_DOT_SYMBOL} ${
             "${CC.WHITE}store${CC.GRAY}.${CC.WHITE}scala${CC.GRAY}.${CC.WHITE}gg"
-        } ${CC.D_RED}${Constants.SMALL_DOT_SYMBOL} ${
+        } ${CC.B_PRI}${Constants.SMALL_DOT_SYMBOL} ${
             "${CC.WHITE}discord${CC.GRAY}.${CC.WHITE}gg${CC.GRAY}/${CC.WHITE}potpvp"
         }     ${CC.GRAY}",
         "",

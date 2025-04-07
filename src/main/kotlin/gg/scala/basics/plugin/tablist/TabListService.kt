@@ -51,11 +51,10 @@ object TabListService : DataSyncService<TabListConfig>()
             .runRepeating(Runnable {
                 globalPlayerCount = ScalaCommonsSpigot
                     .instance.kvConnection
-                    .sync().hgetall(
-                        "symphony:instances"
+                    .sync().get(
+                        "global-player-count"
                     )
-                    .values
-                    .sumOf { it.toIntOrNull() ?: 0 }
+                    ?.toIntOrNull() ?: 0
             }, 0L, 10L)
 
         Schedulers.async()

@@ -6,7 +6,7 @@ plugins {
 }
 
 group "gg.scala.basics.plugin"
-version "1.1.5"
+version "1.1.6"
 
 repositories {
     mavenCentral()
@@ -38,8 +38,8 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
 
-    compileOnly "gg.scala.commons:bukkit:4.0.5"
-    kapt "gg.scala.commons:bukkit:4.0.5"
+    compileOnly "gg.scala.commons:bukkit:4.0.7"
+    kapt "gg.scala.commons:bukkit:4.0.7"
 
     compileOnly "gg.scala.friends:scala-friends:2.0.1"
 

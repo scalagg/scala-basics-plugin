@@ -34,21 +34,6 @@ infix fun ScalaPlayer.performed(message: String)
     bukkit().performed(message)
 }
 
-fun <T : ServerScoped> Player.editScopesButton(
-    scoped: T,
-    onClose: (Player) -> Unit,
-    onSave: (Player, T) -> Unit
-) = ItemBuilder
-    .of(XMaterial.BOOK)
-    .name("${CC.YELLOW}Scopes:")
-    .setLore(scoped.scopes.toList().map { "${CC.WHITE}- $it" })
-    .toButton { _, _ ->
-        EditScopesMenu(scoped, onClose, onSave).openMenu(player)
-    }
-
-fun <T : ServerScoped> Collection<T>.selectScoped() = firstOrNull { it.isScopedLocally() }
-    ?: firstOrNull { it.isGlobal() }
-
 infix fun CommandSender.performed(message: String)
 {
     Players.all()

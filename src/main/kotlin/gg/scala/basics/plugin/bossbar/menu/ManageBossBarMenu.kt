@@ -3,7 +3,7 @@ package gg.scala.basics.plugin.bossbar.menu
 import com.cryptomorin.xseries.XMaterial
 import gg.scala.basics.plugin.bossbar.BossBarService
 import gg.scala.basics.plugin.bossbar.ServerBossBar
-import gg.scala.basics.plugin.commands.editScopesButton
+import gg.scala.commons.scoping.editScopesButton
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
 import net.evilblock.cubed.menu.menus.ConfirmMenu

@@ -1,13 +1,20 @@
 package gg.scala.basics.plugin.tablist
 
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.commons.scoping.selectScoped
 import gg.scala.commons.persist.datasync.DataSyncService
 import gg.scala.commons.persist.datasync.DataSyncSource
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import me.lucko.helper.Events
+import me.lucko.helper.Schedulers
+import me.lucko.helper.utils.Players
+import net.evilblock.cubed.ScalaCommonsSpigot
+import net.evilblock.cubed.util.math.Numbers
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 
 /**
@@ -15,7 +22,7 @@ import org.bukkit.event.player.PlayerJoinEvent
  * @since 10/16/2022
  */
 @Service
-object TabListService : DataSyncService<TabListConfigModel>()
+object TabListService : DataSyncService<TabListConfig>()
 {
     @Inject
     lateinit var plugin: ScalaBasicsPlugin
@@ -25,20 +32,77 @@ object TabListService : DataSyncService<TabListConfigModel>()
 
     override fun locatedIn() = DataSyncSource.Mongo
 
+    private var globalPlayerCount = 0
+
+    fun localConfig() = cached().configs().selectScoped()
+
     @Configure
     fun configure()
     {
         Events
             .subscribe(PlayerJoinEvent::class.java)
             .handler {
-                val audience = audiences.player(it.player)
-                audience.sendPlayerListHeaderAndFooter(
-                    cached().header, cached().footer
-                )
+                updateFor(it.player)
             }
             .bindWith(plugin)
+
+        Schedulers
+            .async()
+            .runRepeating(Runnable {
+                globalPlayerCount = ScalaCommonsSpigot
+                    .instance.kvConnection
+                    .sync().hgetall(
+                        "symphony:instances"
+                    )
+                    .values
+                    .sumOf { it.toIntOrNull() ?: 0 }
+            }, 0L, 10L)
+
+        Schedulers.async()
+            .runRepeating(Runnable {
+                val local = localConfig()
+                    ?: return@Runnable
+
+                if (local.shouldAutoUpdate)
+                {
+                    updateForAll()
+                }
+            }, 0L, 20L)
+    }
+
+    override fun postReload()
+    {
+        updateForAll()
+    }
+
+    fun updateForAll()
+    {
+        Players.all().forEach { player ->
+            updateFor(player)
+        }
+    }
+
+    fun updateFor(player: Player)
+    {
+        val local = localConfig()
+            ?: return
+
+        val audience = audiences.player(player)
+        val formattedHeader = LegacyComponentSerializer.legacySection().deserialize(
+            local.header.joinToString("\n") {
+                it.replace("{playerCount}", Numbers.format(globalPlayerCount))
+            }
+        )
+
+        val formattedFooter = LegacyComponentSerializer.legacySection().deserialize(
+            local.footer.joinToString("\n") {
+                it.replace("{playerCount}", Numbers.format(globalPlayerCount))
+            }
+        )
+
+        audience.sendPlayerListHeaderAndFooter(formattedHeader, formattedFooter)
     }
 
     override fun keys() = TabListKeys
-    override fun type() = TabListConfigModel::class.java
+    override fun type() = TabListConfig::class.java
 }

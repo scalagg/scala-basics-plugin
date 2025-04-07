@@ -1,7 +1,7 @@
 package gg.scala.basics.plugin.bossbar
 
 import gg.scala.basics.plugin.ScalaBasicsPlugin
-import gg.scala.basics.plugin.commands.selectScoped
+import gg.scala.commons.scoping.selectScoped
 import gg.scala.commons.persist.datasync.DataSyncService
 import gg.scala.commons.persist.datasync.DataSyncSource
 import gg.scala.flavor.inject.Inject

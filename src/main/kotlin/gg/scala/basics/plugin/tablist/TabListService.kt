@@ -1,6 +1,9 @@
 package gg.scala.basics.plugin.tablist
 
 import gg.scala.basics.plugin.ScalaBasicsPlugin
+import gg.scala.basics.plugin.tablist.animation.TabAnimationService
+import gg.scala.commons.agnostic.sync.server.ServerContainer
+import gg.scala.commons.agnostic.sync.server.impl.GameServer
 import gg.scala.commons.scoping.selectScoped
 import gg.scala.commons.persist.datasync.DataSyncService
 import gg.scala.commons.persist.datasync.DataSyncSource
@@ -33,6 +36,10 @@ object TabListService : DataSyncService<TabListConfig>()
     override fun locatedIn() = DataSyncSource.Mongo
 
     private var globalPlayerCount = 0
+    private var mipWaiting = 0
+    private var mipPlaying = 0
+    val gameServers = ServerContainer
+        .getServersInGroupCasted<GameServer>("mipgame")
 
     fun localConfig() = cached().configs().selectScoped()
 
@@ -55,7 +62,14 @@ object TabListService : DataSyncService<TabListConfig>()
                         "global-player-count"
                     )
                     ?.toIntOrNull() ?: 0
-            }, 0L, 10L)
+                mipWaiting = ScalaCommonsSpigot
+                    .instance.kvConnection
+                    .sync().hlen(
+                        "scalapractice:queue-states"
+                    )
+                    .toInt()
+                mipPlaying = gameServers.sumOf { it.getPlayersCount() ?: 0 }
+            }, 0L, 1L)
 
         Schedulers.async()
             .runRepeating(Runnable {
@@ -66,7 +80,7 @@ object TabListService : DataSyncService<TabListConfig>()
                 {
                     updateForAll()
                 }
-            }, 0L, 20L)
+            }, 0L, 1L)
     }
 
     override fun postReload()
@@ -89,7 +103,11 @@ object TabListService : DataSyncService<TabListConfig>()
         val audience = audiences.player(player)
         val formattedHeader = LegacyComponentSerializer.legacySection().deserialize(
             local.header.joinToString("\n") {
-                it.replace("{playerCount}", Numbers.format(globalPlayerCount))
+                it
+                    .replace("{playerCount}", Numbers.format(globalPlayerCount))
+                    .replace("{animatedServerName}", TabAnimationService.getCurrentTitle())
+                    .replace("{mipWaiting}", Numbers.format(mipWaiting))
+                    .replace("{mipPlaying}", Numbers.format(mipPlaying))
             }
         )
 

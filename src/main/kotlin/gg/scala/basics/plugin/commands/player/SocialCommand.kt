@@ -10,10 +10,6 @@ import gg.scala.lemon.metadata.NetworkMetadataDataSync
 import net.evilblock.cubed.util.CC
 import org.bukkit.command.CommandSender
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandPermission("scbasics.player-commands")
 object SocialCommand : ScalaCommand()

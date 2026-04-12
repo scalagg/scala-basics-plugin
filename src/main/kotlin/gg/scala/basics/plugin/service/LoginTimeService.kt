@@ -11,10 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @Service
 object LoginTimeService
 {

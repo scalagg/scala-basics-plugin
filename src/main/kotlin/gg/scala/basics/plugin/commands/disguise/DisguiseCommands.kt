@@ -21,10 +21,6 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 2/5/2023
- */
 @AutoRegister
 object DisguiseCommands : ScalaCommand()
 {

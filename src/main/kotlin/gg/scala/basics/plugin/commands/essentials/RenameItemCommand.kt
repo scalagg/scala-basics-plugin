@@ -11,10 +11,6 @@ import net.evilblock.cubed.util.Color.translate
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 object RenameItemCommand : ScalaCommand()
 {

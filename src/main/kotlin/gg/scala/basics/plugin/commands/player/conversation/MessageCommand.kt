@@ -26,10 +26,6 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @AutoRegister
 object MessageCommand : ScalaCommand()
 {

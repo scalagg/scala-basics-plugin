@@ -7,10 +7,6 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @AutoRegister
 object ColorCommand : ScalaCommand()
 {

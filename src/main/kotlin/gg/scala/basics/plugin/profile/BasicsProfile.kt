@@ -6,10 +6,6 @@ import gg.scala.store.storage.storable.IDataStoreObject
 import gg.scala.store.storage.type.DataStoreStorageType
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 class BasicsProfile(
     override val identifier: UUID
 ) : IDataStoreObject
@@ -19,6 +15,18 @@ class BasicsProfile(
 
     var lastRecipient: UUID? = null
     var lastRecipientMessageTimestamp: Long? = null
+
+    var totalPlaytime: Long = 0L
+    var lastLoginTimestamp: Long = 0L
+
+    fun playtime(): Long
+    {
+        if (lastLoginTimestamp > 0L)
+        {
+            return totalPlaytime + (System.currentTimeMillis() - lastLoginTimestamp)
+        }
+        return totalPlaytime
+    }
 
     inline fun <reified T : Enum<T>> setting(id: String) =
         settings[id]?.map<T>()

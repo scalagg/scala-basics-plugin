@@ -16,10 +16,6 @@ import net.evilblock.cubed.util.bukkit.prompt.NumberPrompt
 import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 1/18/2025
- */
 data class ManageBossBarMenu(private val bossBar: ServerBossBar) : Menu("Managing boss bar...")
 {
     init

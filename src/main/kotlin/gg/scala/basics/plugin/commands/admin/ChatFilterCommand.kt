@@ -20,10 +20,6 @@ import net.evilblock.cubed.util.CC
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 2/4/2023
- */
 @AutoRegister
 @CommandAlias("chatfilter|cf")
 @CommandPermission("scbasics.command.chatfilter")

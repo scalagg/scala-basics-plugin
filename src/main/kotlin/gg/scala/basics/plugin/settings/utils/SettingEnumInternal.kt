@@ -2,12 +2,6 @@ package gg.scala.basics.plugin.settings.utils
 
 import com.google.common.base.Preconditions
 
-/**
- * @author fakeneth
- * @project prodity-commons
- *
- * TODO: Move to commons plugin
- */
 object SettingEnumInternal
 {
     fun <T : Enum<T>> getFirstConstant(enumClass: Class<T>): T?
@@ -40,12 +34,6 @@ object SettingEnumInternal
         throw IllegalStateException("could not find enum constant index of constant=$constant")
     }
 
-    /**
-     * Gets the next constant of the specified enumeration.
-     *
-     * @param constant the constant, or null in which case the returned constant is the first of the enum
-     * @return the next constant, or null if there is no next constant.
-     */
     fun <T : Enum<T>> getNextConstant(enumClass: Class<T>, constant: T?): T?
     {
         Preconditions.checkNotNull(enumClass, "enumClass")
@@ -59,12 +47,6 @@ object SettingEnumInternal
         return if (index == constants.size - 1) null else constants[index + 1]
     }
 
-    /**
-     * Gets the previous constant of the specified enumeration.
-     *
-     * @param constant the constant, or null in which case the returned constant is the last of the enum
-     * @return the previous constant, or null if there is no previous constant
-     */
     fun <T : Enum<T>> getPreviousConstant(enumClass: Class<T>, constant: T?): T?
     {
         Preconditions.checkNotNull(enumClass, "enumClass")

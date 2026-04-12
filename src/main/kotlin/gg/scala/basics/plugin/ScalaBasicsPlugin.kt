@@ -12,21 +12,19 @@ import gg.scala.commons.ExtendedScalaPlugin
 import gg.scala.commons.annotations.container.ContainerEnable
 import gg.scala.commons.core.plugin.Plugin
 import gg.scala.commons.core.plugin.PluginAuthor
+import gg.scala.commons.core.plugin.PluginApiVersion
 import gg.scala.commons.core.plugin.PluginDependency
 import gg.scala.commons.core.plugin.PluginWebsite
 import gg.scala.commons.preconfigure.PreConfigureSubTypeProcessor
 import me.lucko.helper.Schedulers
 import net.evilblock.cubed.util.ServerVersion
 
-/**
- * @author GrowlyX
- * @since 7/24/2022
- */
 @Plugin(
     name = "ScBasics",
     version = "%remote%/%branch%/%id%"
 )
 @PluginAuthor("Scala")
+@PluginApiVersion("1.21")
 @PluginWebsite("https://scala.gg")
 
 @PluginDependency("Lemon")
@@ -64,7 +62,7 @@ class ScalaBasicsPlugin : ExtendedScalaPlugin()
                 Schedulers
                     .sync()
                     .runRepeating(RainbowNametagService, 20L, 20L)
-                
+
                 commandManager.registerCommand(NametagCommand)
             }
         }

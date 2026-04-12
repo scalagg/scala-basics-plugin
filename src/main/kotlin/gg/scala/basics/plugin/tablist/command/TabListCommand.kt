@@ -8,10 +8,6 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 
-/**
- * @author puugz
- * @since 27/08/2021 20:02
- */
 @AutoRegister
 @CommandAlias("managetablist|tablist|tabconfig|tablistconfig|tabconf|tab")
 @CommandPermission("scbasics.command.tablist")

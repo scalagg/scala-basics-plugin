@@ -3,10 +3,6 @@ package gg.scala.basics.plugin.settings
 import gg.scala.basics.plugin.settings.utils.SettingEnumInternal
 import net.kyori.adventure.util.TriState
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 data class MutableSettingEntryReference(
     val clazz: String,
     var value: String

@@ -8,10 +8,6 @@ import net.evilblock.cubed.util.bukkit.Tasks
 import net.evilblock.cubed.util.time.TimeUtil
 import org.bukkit.Bukkit
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 class ShutdownRunnable(seconds: Int) : DiminutionRunnable(seconds)
 {
     init

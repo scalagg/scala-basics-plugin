@@ -11,10 +11,6 @@ import net.evilblock.cubed.util.Color.translate
 import org.bukkit.command.CommandSender
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 11/12/2021
- */
 @AutoRegister
 object AlertCommand : ScalaCommand()
 {

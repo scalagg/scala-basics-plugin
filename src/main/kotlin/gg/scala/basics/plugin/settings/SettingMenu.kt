@@ -12,10 +12,6 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 class SettingMenu(
     private val player: Player
 ) : PaginatedMenu()
@@ -27,7 +23,6 @@ class SettingMenu(
             "gg.scala.basics.plugin.settings.defaults.values.StateSettingValue"
     }
 
-    // yes, this is meant to be a list
     private val colors = listOf(
         ChatColor.GOLD to 1,
         ChatColor.YELLOW to 4,
@@ -65,6 +60,22 @@ class SettingMenu(
         updateAfterClick = true
     }
 
+    private fun paneMaterial(color: ChatColor): XMaterial
+    {
+        return when (color)
+        {
+            ChatColor.GOLD -> XMaterial.ORANGE_STAINED_GLASS_PANE
+            ChatColor.YELLOW -> XMaterial.YELLOW_STAINED_GLASS_PANE
+            ChatColor.GREEN -> XMaterial.LIME_STAINED_GLASS_PANE
+            ChatColor.DARK_AQUA -> XMaterial.CYAN_STAINED_GLASS_PANE
+            ChatColor.LIGHT_PURPLE -> XMaterial.MAGENTA_STAINED_GLASS_PANE
+            ChatColor.DARK_PURPLE -> XMaterial.PURPLE_STAINED_GLASS_PANE
+            ChatColor.BLUE -> XMaterial.BLUE_STAINED_GLASS_PANE
+            ChatColor.AQUA -> XMaterial.LIGHT_BLUE_STAINED_GLASS_PANE
+            else -> XMaterial.WHITE_STAINED_GLASS_PANE
+        }
+    }
+
     override fun getGlobalButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
@@ -74,8 +85,7 @@ class SettingMenu(
             val color = colors[index]
 
             val pane = ItemBuilder
-                .of(XMaterial.WHITE_STAINED_GLASS_PANE)
-                .data(color.second.toShort())
+                .of(paneMaterial(color.first))
                 .name(
                     "${color.first}${
                         category.displayName

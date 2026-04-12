@@ -18,10 +18,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-/**
- * @author GrowlyX
- * @since 10/16/2022
- */
 @Service
 object BossBarService : DataSyncService<BossBarConfig>()
 {

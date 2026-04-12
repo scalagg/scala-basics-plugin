@@ -12,10 +12,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/9/2022
- */
 @AutoRegister
 object MassayCommand : ScalaCommand()
 {

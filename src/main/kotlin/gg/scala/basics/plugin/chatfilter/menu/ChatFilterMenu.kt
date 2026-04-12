@@ -12,10 +12,6 @@ import net.md_5.bungee.api.chat.ClickEvent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 2/4/2023
- */
 class ChatFilterMenu : PaginatedMenu()
 {
     init

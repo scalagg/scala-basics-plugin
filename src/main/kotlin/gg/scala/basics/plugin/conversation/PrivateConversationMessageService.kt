@@ -11,10 +11,6 @@ import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 1/17/2022
- */
 @Service
 object PrivateConversationMessageService
 {

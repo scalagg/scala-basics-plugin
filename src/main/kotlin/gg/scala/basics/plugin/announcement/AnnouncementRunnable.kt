@@ -10,10 +10,6 @@ import me.lucko.helper.utils.Players
 import net.evilblock.cubed.util.bukkit.Tasks
 import net.kyori.adventure.key.Key
 
-/**
- * @author GrowlyX
- * @since 2/10/2023
- */
 object AnnouncementRunnable : Runnable
 {
     override fun run()

@@ -5,16 +5,6 @@ import net.evilblock.cubed.entity.hooks.EntityHooks
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * Represents the distance requirement (in the number of Minecraft blocks)
- * a user has to meet before NPC and hologram entities are loaded in.
- *
- * The [EntityHooks] utility is used to override the
- * default <= 48.0D distance requirement with our configurable one.
- *
- * @author GrowlyX
- * @since 2/20/2023
- */
 enum class EntityVisibilitySettingValue(val distance: Double) : SettingValue
 {
     High(48.0),

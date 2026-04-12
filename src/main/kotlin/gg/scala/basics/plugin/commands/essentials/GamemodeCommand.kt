@@ -13,10 +13,6 @@ import gg.scala.lemon.player.LemonPlayer
 import net.evilblock.cubed.util.CC
 import org.bukkit.GameMode
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @AutoRegister
 object GamemodeCommand : ScalaCommand()
 {

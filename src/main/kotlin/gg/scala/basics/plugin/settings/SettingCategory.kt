@@ -4,10 +4,6 @@ import gg.scala.basics.plugin.settings.interfaces.DisplayEnsure
 import gg.scala.basics.plugin.settings.interfaces.DisplayAttributes
 import me.lucko.helper.terminable.Terminable
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 interface SettingCategory : DisplayEnsure, DisplayAttributes, Terminable
 {
     val items: List<SettingEntry>

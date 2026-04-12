@@ -5,10 +5,6 @@ import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.PaginatedResult
 import java.util.UUID
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 object IgnoreListFormatter : PaginatedResult<UUID>()
 {
     override fun format(result: UUID, resultIndex: Int): String

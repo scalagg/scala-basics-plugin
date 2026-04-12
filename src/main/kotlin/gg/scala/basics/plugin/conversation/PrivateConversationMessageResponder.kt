@@ -16,10 +16,6 @@ import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
-/**
- * @author GrowlyX
- * @since 3/11/2022
- */
 object PrivateConversationMessageResponder : (PrivateConversationMessage) -> PrivateConversationMessageResponse
 {
     override fun invoke(

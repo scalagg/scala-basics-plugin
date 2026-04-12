@@ -6,10 +6,6 @@ import gg.scala.commons.persist.datasync.DataSyncSource
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Service
 
-/**
- * @author GrowlyX
- * @since 10/16/2022
- */
 @Service
 object ChatFilterService : DataSyncService<ChatFilterConfigModel>()
 {

@@ -10,10 +10,6 @@ import gg.scala.lemon.Lemon
 import net.evilblock.cubed.util.CC
 import org.apache.commons.lang.time.DurationFormatUtils
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 object WhatServerCommand : ScalaCommand()
 {

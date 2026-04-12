@@ -13,10 +13,6 @@ import gg.scala.flavor.service.Service
 import net.evilblock.cubed.serializers.Serializers
 import net.kyori.adventure.key.Key
 
-/**
- * @author GrowlyX
- * @since 12/12/2022
- */
 @Service
 object AnnouncementConditions
 {

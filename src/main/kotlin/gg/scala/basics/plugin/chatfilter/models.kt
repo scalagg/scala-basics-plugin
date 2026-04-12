@@ -4,10 +4,6 @@ import com.google.gson.*
 import net.evilblock.cubed.serializers.Serializers
 import java.lang.reflect.Type
 
-/**
- * @author GrowlyX
- * @since 10/12/2022
- */
 data class ChatFilterConfigModel(
     val chatFilters: MutableList<ChatFilter> = mutableListOf()
 )

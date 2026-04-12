@@ -15,10 +15,6 @@ import net.evilblock.cubed.util.CC
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandAlias("teleportposition|teleportpos|tppos|tpposition")
 @CommandPermission("scbasics.command.teleportposition")

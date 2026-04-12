@@ -9,10 +9,6 @@ import gg.scala.commons.command.ScalaCommand
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 1/22/2022
- */
 @AutoRegister
 object SpeedCommand : ScalaCommand()
 {

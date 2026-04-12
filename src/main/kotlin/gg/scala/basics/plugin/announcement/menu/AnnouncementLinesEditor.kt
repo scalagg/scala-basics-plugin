@@ -7,10 +7,6 @@ import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/16/2022
- */
 class AnnouncementLinesEditor(
     private val announcement: Announcement
 ) : TextEditorMenu(announcement.lines)

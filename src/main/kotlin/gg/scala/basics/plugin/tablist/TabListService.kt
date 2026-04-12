@@ -20,10 +20,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 
-/**
- * @author GrowlyX
- * @since 10/16/2022
- */
 @Service
 object TabListService : DataSyncService<TabListConfig>()
 {
@@ -40,6 +36,32 @@ object TabListService : DataSyncService<TabListConfig>()
     private var mipPlaying = 0
     val gameServers = ServerContainer
         .getServersInGroupCasted<GameServer>("mipgame")
+
+    private val perPlayerPlaceholderProviders =
+        mutableMapOf<String, (Player) -> String>()
+
+    private var headerOverride: ((Player) -> List<String>?)? = null
+    private var footerOverride: ((Player) -> List<String>?)? = null
+
+    fun registerPlaceholder(key: String, provider: (Player) -> String)
+    {
+        perPlayerPlaceholderProviders[key] = provider
+    }
+
+    fun unregisterPlaceholder(key: String)
+    {
+        perPlayerPlaceholderProviders.remove(key)
+    }
+
+    fun provideHeaderOverride(provider: ((Player) -> List<String>?)?)
+    {
+        headerOverride = provider
+    }
+
+    fun provideFooterOverride(provider: ((Player) -> List<String>?)?)
+    {
+        footerOverride = provider
+    }
 
     fun localConfig() = cached().configs().selectScoped()
 
@@ -100,24 +122,41 @@ object TabListService : DataSyncService<TabListConfig>()
         val local = localConfig()
             ?: return
 
+        val headerLines = headerOverride?.invoke(player) ?: local.header
+        val footerLines = footerOverride?.invoke(player) ?: local.footer
+
         val audience = audiences.player(player)
         val formattedHeader = LegacyComponentSerializer.legacySection().deserialize(
-            local.header.joinToString("\n") {
-                it
-                    .replace("{playerCount}", Numbers.format(globalPlayerCount))
-                    .replace("{animatedServerName}", TabAnimationService.getCurrentTitle())
-                    .replace("{mipWaiting}", Numbers.format(mipWaiting))
-                    .replace("{mipPlaying}", Numbers.format(mipPlaying))
+            headerLines.joinToString("\n") {
+                applyPlaceholders(it, player)
             }
         )
 
         val formattedFooter = LegacyComponentSerializer.legacySection().deserialize(
-            local.footer.joinToString("\n") {
-                it.replace("{playerCount}", Numbers.format(globalPlayerCount))
+            footerLines.joinToString("\n") {
+                applyPlaceholders(it, player)
             }
         )
 
         audience.sendPlayerListHeaderAndFooter(formattedHeader, formattedFooter)
+    }
+
+    private fun applyPlaceholders(text: String, player: Player): String
+    {
+        var result = text
+            .replace("{playerCount}", Numbers.format(globalPlayerCount))
+            .replace("{animatedServerName}", TabAnimationService.getCurrentTitle())
+            .replace("{mipWaiting}", Numbers.format(mipWaiting))
+            .replace("{mipPlaying}", Numbers.format(mipPlaying))
+
+        perPlayerPlaceholderProviders.forEach { (key, provider) ->
+            if (result.contains("{$key}"))
+            {
+                result = result.replace("{$key}", provider(player))
+            }
+        }
+
+        return result
     }
 
     override fun keys() = TabListKeys

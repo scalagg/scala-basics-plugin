@@ -6,10 +6,6 @@ import gg.scala.lemon.filter.ChatMessageFilterHandler
 import gg.scala.lemon.filter.phrase.MessagePhraseFilter
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 2/4/2023
- */
 @Service
 object ChatFilterPhraseDetectService : MessagePhraseFilter
 {

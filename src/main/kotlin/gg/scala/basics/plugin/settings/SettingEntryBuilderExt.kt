@@ -3,10 +3,6 @@ package gg.scala.basics.plugin.settings
 import gg.scala.basics.plugin.settings.utils.SettingEnumInternal
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 inline fun entry(conf: SettingEntryBuilderConf.() -> Unit): SettingEntry
 {
     val config = SettingEntryBuilderConf()

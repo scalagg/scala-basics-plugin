@@ -5,10 +5,6 @@ import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import net.evilblock.cubed.entity.hooks.EntityHooks
 
-/**
- * @author GrowlyX
- * @since 2/20/2023
- */
 @Service
 object EntityVisibilityService
 {

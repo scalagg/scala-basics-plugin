@@ -11,10 +11,6 @@ import gg.scala.lemon.redirection.impl.VelocityRedirectSystem
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 12/14/2021 14:28
- */
 @AutoRegister
 object JoinCommand : ScalaCommand()
 {

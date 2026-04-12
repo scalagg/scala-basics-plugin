@@ -9,10 +9,6 @@ import gg.scala.lemon.util.QuickAccess
 import net.kyori.adventure.key.Key
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 4/16/2023
- */
 @Service
 object RankWeightCondition : AnnouncementDisplayCondition
 {

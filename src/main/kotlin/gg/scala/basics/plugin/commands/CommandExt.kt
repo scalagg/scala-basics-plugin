@@ -15,10 +15,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 fun LemonPlayer.bukkit() = Bukkit.getPlayer(this.uniqueId)!!
 
 fun cachedBasicProfile(player: ScalaPlayer) = BasicsProfileService

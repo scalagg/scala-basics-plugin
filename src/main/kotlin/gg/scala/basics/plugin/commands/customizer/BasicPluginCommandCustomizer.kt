@@ -16,10 +16,6 @@ import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.enchantments.Enchantment
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 object BasicPluginCommandCustomizer
 {
     @CommandManagerCustomizer

@@ -14,10 +14,6 @@ import gg.scala.lemon.player.LemonPlayer
 import net.evilblock.cubed.util.CC
 import org.bukkit.command.CommandSender
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandAlias("workbench|wb|craft|crafting")
 @CommandPermission("scbasics.command.workbench")

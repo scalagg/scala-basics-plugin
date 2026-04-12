@@ -4,10 +4,6 @@ import gg.scala.commons.scoping.ServerScoped
 import net.evilblock.cubed.util.CC
 import net.kyori.adventure.bossbar.BossBar
 
-/**
- * @author GrowlyX
- * @since 10/12/2022
- */
 data class ServerBossBar(
     val id: String,
     var contents: List<String> = listOf(

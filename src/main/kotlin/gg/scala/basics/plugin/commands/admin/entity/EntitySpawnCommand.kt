@@ -12,10 +12,6 @@ import me.lucko.helper.utils.entityspawner.EntitySpawner
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.EntityType
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 object EntitySpawnCommand : ScalaCommand()
 {

@@ -7,10 +7,6 @@ import gg.scala.flavor.service.Service
 import net.kyori.adventure.key.Key
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 4/16/2023
- */
 @Service
 object ServerScopedCondition : AnnouncementDisplayCondition
 {

@@ -7,10 +7,6 @@ import gg.scala.flavor.service.Service
 import net.kyori.adventure.util.TriState
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @Service
 object BasicsProfileService : ProfileOrchestrator<BasicsProfile>()
 {

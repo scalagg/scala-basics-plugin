@@ -4,10 +4,6 @@ import gg.scala.basics.plugin.settings.SettingValue
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 enum class MessagingSettingValue : SettingValue
 {
     ENABLED

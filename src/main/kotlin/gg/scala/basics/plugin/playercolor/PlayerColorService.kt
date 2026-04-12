@@ -5,10 +5,6 @@ import gg.scala.flavor.service.Service
 import org.bukkit.ChatColor
 import org.bukkit.Color
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @Service
 object PlayerColorService
 {

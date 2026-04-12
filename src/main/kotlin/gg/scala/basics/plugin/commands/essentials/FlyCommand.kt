@@ -15,10 +15,6 @@ import net.evilblock.cubed.util.CC
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandAlias("fly|iamabird")
 @CommandPermission("scbasics.command.fly")

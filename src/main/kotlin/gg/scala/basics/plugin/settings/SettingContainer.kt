@@ -1,9 +1,5 @@
 package gg.scala.basics.plugin.settings
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 object SettingContainer
 {
     private val categories = mutableListOf<SettingCategory>()

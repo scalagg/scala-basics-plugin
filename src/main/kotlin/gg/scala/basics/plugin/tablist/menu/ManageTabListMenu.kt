@@ -14,10 +14,6 @@ import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 1/18/2025
- */
 data class ManageTabListMenu(private val tabList: ServerTabList) : Menu("Managing tab list...")
 {
     init

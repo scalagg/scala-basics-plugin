@@ -14,10 +14,6 @@ import gg.scala.lemon.player.LemonPlayer
 import net.evilblock.cubed.util.CC
 import org.bukkit.command.CommandSender
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandAlias("heal")
 @CommandPermission("scbasics.command.heal")
@@ -43,7 +39,6 @@ object HealCommand : ScalaCommand()
     )
     {
         player.bukkit().health = player.bukkit().maxHealth
-
 
         sender.sendMessage(
             "${CC.SEC}You've healed ${player.getOriginalColoredName()}${CC.SEC}."

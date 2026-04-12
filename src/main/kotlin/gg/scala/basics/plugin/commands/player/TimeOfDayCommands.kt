@@ -20,10 +20,6 @@ import org.bukkit.event.block.BlockPlaceEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 1/9/2023
- */
 @AutoRegister
 @CommandPermission("scbasics.player-commands")
 object TimeOfDayCommands : ScalaCommand()

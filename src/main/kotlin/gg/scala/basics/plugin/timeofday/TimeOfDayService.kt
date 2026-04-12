@@ -10,10 +10,6 @@ import me.lucko.helper.Events
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 
-/**
- * @author GrowlyX
- * @since 1/9/2023
- */
 @Service
 object TimeOfDayService
 {

@@ -21,10 +21,6 @@ import java.io.File
 import java.net.URL
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 5/14/2023
- */
 @AutoRegister
 @CommandAlias("dga|disguiseadmin")
 @CommandPermission("scbasics.command.disguiseadmin")

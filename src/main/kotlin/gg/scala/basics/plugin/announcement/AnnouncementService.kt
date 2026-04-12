@@ -10,10 +10,6 @@ import me.lucko.helper.metadata.MetadataKey
 import me.lucko.helper.scheduler.Task
 import me.lucko.helper.utils.Players
 
-/**
- * @author GrowlyX
- * @since 10/12/2022
- */
 @Service
 object AnnouncementService : DataSyncService<AnnouncementConfigModel>()
 {
@@ -50,8 +46,8 @@ object AnnouncementService : DataSyncService<AnnouncementConfigModel>()
             .async()
             .runRepeating(
                 AnnouncementRunnable,
-                // we're starting this delayed because we don't want the
-                // initial announcement being sent EVERY time the new models are saved.
+
+                
                 cached.iterationSpeed, cached.iterationTimeUnit,
                 cached.iterationSpeed, cached.iterationTimeUnit
             )

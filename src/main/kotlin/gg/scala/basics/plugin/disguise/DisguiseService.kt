@@ -38,10 +38,6 @@ import java.net.URL
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 2/5/2023
- */
 @Service
 object DisguiseService
 {
@@ -270,7 +266,7 @@ object DisguiseService
 
                     if (event.isCancelled)
                     {
-                        // We're assuming the event handled anything needed for cancellation
+
                         return@context CompletableFuture
                             .completedFuture(null)
                     }

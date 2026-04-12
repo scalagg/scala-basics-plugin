@@ -12,10 +12,6 @@ import gg.scala.lemon.player.LemonPlayer
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @AutoRegister
 object InspectCommand : ScalaCommand()
 {

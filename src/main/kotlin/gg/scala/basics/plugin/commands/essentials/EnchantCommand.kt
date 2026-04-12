@@ -10,7 +10,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 
 /**
- * @author Topu
  * @date 11/30/2024
  */
 @AutoRegister

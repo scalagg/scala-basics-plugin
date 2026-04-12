@@ -2,10 +2,6 @@ package gg.scala.basics.plugin.conversation.message
 
 import net.evilblock.cubed.util.CC
 
-/**
- * @author GrowlyX
- * @since 1/17/2022
- */
 enum class PrivateConversationMessageResponseContext(
     val responseMessage: String
 )

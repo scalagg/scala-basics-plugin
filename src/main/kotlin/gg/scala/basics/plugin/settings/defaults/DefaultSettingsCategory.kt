@@ -17,10 +17,6 @@ import net.evilblock.cubed.util.bukkit.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 @Service
 object DefaultSettingsCategory : SettingCategory
 {
@@ -75,7 +71,7 @@ object DefaultSettingsCategory : SettingCategory
             description += "messages sent through"
             description += "the server's global chat."
 
-            item = ItemBuilder.of(XMaterial.OAK_WALL_SIGN)
+            item = ItemBuilder.of(XMaterial.OAK_SIGN)
         },
         entry {
             id = "time_of_day"

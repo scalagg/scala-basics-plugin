@@ -4,10 +4,6 @@ import gg.scala.commons.scoping.ServerScoped
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Constants
 
-/**
- * @author GrowlyX
- * @since 10/12/2022
- */
 data class ServerTabList(
     val id: String,
     var header: List<String> = listOf(

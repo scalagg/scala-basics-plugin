@@ -17,10 +17,6 @@ import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.util.CC
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandPermission("scbasics.player-commands")
 object IgnoreCommand : ScalaCommand()

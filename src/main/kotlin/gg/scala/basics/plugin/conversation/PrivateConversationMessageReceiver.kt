@@ -11,10 +11,6 @@ import gg.scala.lemon.util.CubedCacheUtil
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
 
-/**
- * @author GrowlyX
- * @since 1/17/2022
- */
 object PrivateConversationMessageReceiver : (PrivateConversationMessage, PrivateConversationMessageResponse) -> ConversationContinuation
 {
     override fun invoke(

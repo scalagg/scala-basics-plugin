@@ -12,10 +12,6 @@ import net.evilblock.cubed.util.bukkit.ItemBuilder
 import org.bukkit.entity.Player
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 1/18/2025
- */
 class ViewTabListMenu : PaginatedMenu()
 {
     init

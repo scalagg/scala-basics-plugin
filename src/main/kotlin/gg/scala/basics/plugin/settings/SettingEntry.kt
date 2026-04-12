@@ -5,10 +5,6 @@ import gg.scala.basics.plugin.settings.interfaces.DisplayAttributes
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/14/2022
- */
 interface SettingEntry : DisplayEnsure, DisplayAttributes
 {
     val id: String

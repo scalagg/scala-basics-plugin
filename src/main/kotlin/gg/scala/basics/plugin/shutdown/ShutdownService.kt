@@ -2,10 +2,6 @@ package gg.scala.basics.plugin.shutdown
 
 import gg.scala.commons.acf.ConditionFailedException
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 object ShutdownService
 {
     var shutdownRunnable: ShutdownRunnable? = null

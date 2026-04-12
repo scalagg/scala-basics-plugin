@@ -4,10 +4,6 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
-/**
- * @author GrowlyX
- * @since 2/10/2025
- */
 data class PlayerBossBarView(
     val audience: Audience,
     var iteration: Int = 0,

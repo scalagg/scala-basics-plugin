@@ -11,10 +11,6 @@ import org.bukkit.command.CommandSender
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 
-/**
- * @author GrowlyX
- * @since 3/30/2023
- */
 @AutoRegister
 object SetMaxPlayersCommand : ScalaCommand()
 {

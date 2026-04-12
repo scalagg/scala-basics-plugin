@@ -24,10 +24,6 @@ import java.time.temporal.TemporalAdjusters
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 9/26/2021
- */
 @AutoRegister
 object PlaytimeCommand : ScalaCommand()
 {

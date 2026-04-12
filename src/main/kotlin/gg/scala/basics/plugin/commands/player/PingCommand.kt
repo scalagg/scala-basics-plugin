@@ -12,12 +12,7 @@ import gg.scala.lemon.player.LemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.math.Numbers
-import net.evilblock.cubed.util.nms.MinecraftReflection
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 @CommandAlias("ping|latency")
 @CommandPermission("scbasics.player-commands")
@@ -28,8 +23,7 @@ object PingCommand : ScalaCommand()
     {
         val ping = Numbers
             .format(
-                MinecraftReflection
-                    .getPing(player.bukkit())
+                player.bukkit().ping
             )
 
         player.sendMessage(
@@ -43,8 +37,7 @@ object PingCommand : ScalaCommand()
     {
         val ping = Numbers
             .format(
-                MinecraftReflection
-                    .getPing(target.bukkit())
+                target.bukkit().ping
             )
 
         player.sendMessage(

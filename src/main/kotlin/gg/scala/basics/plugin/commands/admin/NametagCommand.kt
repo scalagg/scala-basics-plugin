@@ -19,10 +19,6 @@ import net.evilblock.cubed.nametag.NametagHandler
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 11/25/2021
- */
 @CommandAlias("nametag")
 @CommandPermission("scbasics.command.nametag")
 object NametagCommand : ScalaCommand()

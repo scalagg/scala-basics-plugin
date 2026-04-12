@@ -13,10 +13,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 11/12/2021
- */
 @AutoRegister
 object BroadcastCommand : ScalaCommand()
 {

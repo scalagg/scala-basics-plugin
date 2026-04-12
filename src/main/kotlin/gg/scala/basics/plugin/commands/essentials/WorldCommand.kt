@@ -22,10 +22,6 @@ import org.bukkit.generator.BlockPopulator
 import org.bukkit.generator.ChunkGenerator
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 5/27/2022
- */
 @AutoRegister
 @CommandAlias("world")
 @CommandPermission("scbasics.command.world")

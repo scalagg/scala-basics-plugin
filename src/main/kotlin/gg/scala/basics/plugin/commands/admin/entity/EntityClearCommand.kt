@@ -12,10 +12,6 @@ import org.bukkit.World
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 object EntityClearCommand : ScalaCommand()
 {
@@ -37,7 +33,6 @@ object EntityClearCommand : ScalaCommand()
                 it.remove()
             }
             .count()
-
 
         sender.sendMessage("${CC.SEC}Removed ${CC.PRI}${
             Numbers.format(removed)

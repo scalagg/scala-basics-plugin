@@ -13,10 +13,6 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import net.evilblock.cubed.util.CC
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 @AutoRegister
 object SettingsCommand : ScalaCommand()
 {

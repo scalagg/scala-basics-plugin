@@ -11,7 +11,6 @@ import org.bukkit.ChatColor
 import java.util.*
 
 /**
- * @author Topu
  * @date 4/8/2025
  */
 @Service

@@ -14,10 +14,6 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 10/12/2022
- */
 class AnnouncementConfigMenu : Menu("Announcement Config")
 {
     private val model = AnnouncementService.cached().copy()

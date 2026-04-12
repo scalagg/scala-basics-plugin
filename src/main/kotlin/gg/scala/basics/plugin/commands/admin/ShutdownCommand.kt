@@ -13,10 +13,6 @@ import net.evilblock.cubed.util.time.TimeUtil
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author puugz
- * @since 27/08/2021 20:02
- */
 @AutoRegister
 @CommandAlias("shutdown|shutdowntimer")
 @CommandPermission("scbasics.command.shutdown")

@@ -13,10 +13,6 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
 
-/**
- * @author GrowlyX
- * @since 11/12/2021
- */
 class PlayerColorMenu : PaginatedMenu()
 {
     companion object

@@ -8,10 +8,6 @@ import org.bukkit.ChatColor
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 10/13/2022
- */
 object RainbowNametagService : Runnable
 {
     var index = 0
